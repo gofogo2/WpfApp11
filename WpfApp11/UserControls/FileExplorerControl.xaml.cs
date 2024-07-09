@@ -120,6 +120,7 @@ namespace WpfApp9
         {
             try
             {
+
                 _rightItems.Clear();
                 if (path != "/")
                 {
@@ -166,8 +167,10 @@ namespace WpfApp9
             var item = ((ListView)sender).SelectedItem as FileSystemItem;
             if (item != null && (item.Type == "Folder" || item.Type == "Parent Directory"))
             {
-                LoadFtpDirectory(item.FullPath);
-                e.Handled = true;
+                
+                    LoadFtpDirectory(item.FullPath);
+                    e.Handled = true;
+                
             }
         }
         private long CalculateTotalSize(string path)

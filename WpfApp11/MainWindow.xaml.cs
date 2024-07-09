@@ -230,6 +230,8 @@ namespace WpfApp9
         private void TotalPowerBtn_Click(object sender, RoutedEventArgs e)
         {
             bool newState = TotalPowerBtn.Content.ToString() == "전체 전원 ON";
+
+            PowerProgressBar.Foreground = newState ? Brushes.Green : Brushes.Red;
             PowerStatusText.Text = newState ? "전원 ON" : "전원 OFF";
             PowerOverlay.Visibility = Visibility.Visible;
             powerProgress = 0;
@@ -412,6 +414,9 @@ namespace WpfApp9
         public string DeviceType { get; set; }
         public bool IsOn { get; set; }
         public string FtpAddress { get; set; }
+        public string MacAddress { get; set; }
+        public string IpAddress { get; set; }
+        public string Description { get; set; }
         public int Row { get; set; }
         public int Column { get; set; }
         public int ZIndex { get; set; }
