@@ -381,17 +381,6 @@ namespace WpfApp9
             };
         }
 
-        //private void PopulateDaySettings()
-        //{
-        //    string[] days = { "월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일" };
-        //    DaySettingsPanel.Children.Clear();
-
-        //    foreach (var day in days)
-        //    {
-        //        DaySettingsPanel.Children.Add(CreateDaySettingControl(day));
-        //    }
-        //}
-
         private UIElement CreateDaySettingControl(string day)
         {
             var panel = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 5, 0, 5) };
@@ -410,22 +399,6 @@ namespace WpfApp9
 
             return panel;
         }
-
-        //private void ApplyAutoPowerSettings_Click(object sender, RoutedEventArgs e)
-        //{
-        //    // 여기에 설정을 저장하는 로직을 구현하세요
-        //    AutoPowerSettingsOverlay.Visibility = Visibility.Collapsed;
-        //}
-
-        //private void CancelAutoPowerSettings_Click(object sender, RoutedEventArgs e)
-        //{
-        //    AutoPowerSettingsOverlay.Visibility = Visibility.Collapsed;
-        //}
-
-
-
-
-
     }
 
 

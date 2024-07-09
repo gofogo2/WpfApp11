@@ -11,6 +11,7 @@ namespace WpfApp9
 {
     public partial class DraggableItemControl : UserControl
     {
+        string vncViewerPath = @"C:\Program Files\TightVNC\tvnviewer.exe"; // TightVNC 뷰어 경로
         public ItemConfiguration Configuration { get; private set; }
 
         public DraggableItemControl(ItemConfiguration config)
@@ -25,14 +26,15 @@ namespace WpfApp9
         private void PowerToggle_Unchecked(object sender, RoutedEventArgs e)
         {
             Configuration.IsOn = true; StatusIndicator.Fill = Brushes.Red;
-            Debug.WriteLine("종료되었습니다.");
-            GlobalMessageService.ShowMessage("This is a global message");
+            Debug.WriteLine("전원이 꺼졌습니다.");
+            GlobalMessageService.ShowMessage("전원이 꺼졌습니다.");
         }
 
         private void PowerToggle_Checked(object sender, RoutedEventArgs e)
         {
             Configuration.IsOn = true; StatusIndicator.Fill = Brushes.Green;
-            Debug.WriteLine("종료되었습니다.");
+            Debug.WriteLine("전원이 켜졌습니다.");
+            GlobalMessageService.ShowMessage("전원이 켜졌습니다.");
         }
 
 
@@ -63,15 +65,23 @@ namespace WpfApp9
 
         private void VNC_Button_Click(object sender, RoutedEventArgs e)
         {
-            // Handle VNC button click
-            MessageBox.Show("VNC button clicked");
+            try
+            {
+                Process.Start(vncViewerPath, $"{Configuration.IpAddress} -password=1015");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"연결 오류: {ex.Message}", "오류", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            Debug.WriteLine(Configuration.IpAddress);
             OverlayGrid.Visibility = Visibility.Collapsed;
         }
 
         private void FTP_Button_Click(object sender, RoutedEventArgs e)
         {
             // Handle FTP button click
-            MessageBox.Show("FTP button clicked");
+            Debug.WriteLine(Configuration.FtpAddress);
             OverlayGrid.Visibility = Visibility.Collapsed;
         }
 
