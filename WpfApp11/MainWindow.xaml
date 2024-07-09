@@ -28,6 +28,9 @@
                     <StackPanel Grid.Column="0" Orientation="Vertical" x:Name="sp_auto" >
                         <TextBlock Text="자동 전원 설정" VerticalAlignment="Center"/>
                         <TextBlock Text="요일 별 시간 설정" FontSize="10" VerticalAlignment="Center" Margin="0,0,0,0"/>
+                        <Button>
+                            
+                        </Button>
                     </StackPanel>
                 </Border>
                 <ToggleButton x:Name="AutoPowerToggle" Grid.Column="0" Width="50" Height="25" HorizontalAlignment="Center" Margin="30,0,0,0" Checked="AutoPowerToggle_Checked" Unchecked="AutoPowerToggle_Unchecked">
