@@ -61,6 +61,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Helpers\PJLinkHelper.cs" />
     <Compile Include="UserControls\DraggableItemControl.xaml.cs">
       <DependentUpon>DraggableItemControl.xaml</DependentUpon>
     </Compile>
@@ -130,9 +131,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Helpers\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Images\pc.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
