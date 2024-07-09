@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using System.Linq;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 
 namespace WpfApp9
 {
@@ -27,6 +28,8 @@ namespace WpfApp9
         private int highestZIndex = 1;
         private DateTime lastClickTime = DateTime.MinValue;
         private const double DoubleClickTime = 300; // 밀리초
+        private DispatcherTimer powerTimer;
+        private double powerProgress = 0;
 
         public MainWindow()
         {
@@ -227,13 +230,36 @@ namespace WpfApp9
         private void TotalPowerBtn_Click(object sender, RoutedEventArgs e)
         {
             bool newState = TotalPowerBtn.Content.ToString() == "전체 전원 ON";
-            foreach (var item in dragItems)
+            PowerStatusText.Text = newState ? "전원 ON" : "전원 OFF";
+            PowerOverlay.Visibility = Visibility.Visible;
+            powerProgress = 0;
+            PowerProgressBar.Value = 0;
+
+            powerTimer = new DispatcherTimer();
+            powerTimer.Interval = TimeSpan.FromMilliseconds(30); // 3초 동안 100번 업데이트
+            powerTimer.Tick += PowerTimer_Tick;
+            powerTimer.Start();
+        }
+
+        private void PowerTimer_Tick(object sender, EventArgs e)
+        {
+            powerProgress += 1;
+            PowerProgressBar.Value = powerProgress;
+
+            if (powerProgress >= 100)
             {
-                item.Configuration.IsOn = newState;
-                UpdateItemPowerState(item, newState);
+                powerTimer.Stop();
+                PowerOverlay.Visibility = Visibility.Collapsed;
+
+                bool newState = PowerStatusText.Text == "전원 ON";
+                foreach (var item in dragItems)
+                {
+                    item.Configuration.IsOn = newState;
+                    UpdateItemPowerState(item, newState);
+                }
+                TotalPowerBtn.Content = newState ? "전체 전원 OFF" : "전체 전원 ON";
+                SaveItemConfigurations();
             }
-            TotalPowerBtn.Content = newState ? "전체 전원 OFF" : "전체 전원 ON";
-            SaveItemConfigurations();
         }
 
         private void UpdateItemPowerState(DraggableItemControl item, bool isOn)
