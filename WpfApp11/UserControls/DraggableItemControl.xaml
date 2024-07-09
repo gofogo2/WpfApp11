@@ -1,0 +1,38 @@
+﻿<UserControl x:Class="WpfApp9.DraggableItemControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="200" d:DesignWidth="180" Background="White">
+    <Border BorderThickness="0.5" BorderBrush="Black">
+        <Grid x:Name="MainGrid" Width="160" Height="180">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Rectangle Fill="#E8F5E9" Height="80" Grid.Row="1" />
+            <TextBlock Grid.Row="0" x:Name="TitleTextBlock" Text="Title" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,0"/>
+            <Image  Grid.Row="1" x:Name="IconImage" Width="40" Height="40" Stretch="Uniform" 
+                   HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0"/>
+            <Ellipse Grid.Row="1" x:Name="StatusIndicator" Width="15" Height="15" 
+                     HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0"
+                     MouseLeftButtonDown="StatusIndicator_MouseLeftButtonDown"/>
+            <ToggleButton Grid.Row="2" x:Name="PowerToggle" Width="70" Height="30" 
+                          VerticalAlignment="Bottom" HorizontalAlignment="Center" 
+                          Margin="0,0,0,5" Style="{StaticResource PowerToggleStyle}"/>
+
+            <!-- Overlay for dimming and buttons -->
+            <Grid Grid.Row="1" x:Name="OverlayGrid" Visibility="Collapsed">
+                <Rectangle Fill="Black" Opacity="0.5"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Button Content="VNC" Width="40" Height="30" Margin="0,0,10,0" Click="VNC_Button_Click"/>
+                    <Button Content="FTP" Width="40" Height="30" Margin="0,0,10,0" Click="FTP_Button_Click"/>
+                    <Button Content="X" Width="40" Height="30" Click="Button_Click"  />
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>

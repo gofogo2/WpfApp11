@@ -1,0 +1,168 @@
+﻿<UserControl x:Class="WpfApp9.FileExplorerControl"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         Height="800" Width="1280">
+    <UserControl.Resources>
+        <Style x:Key="FileItemStyle" TargetType="ListViewItem">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Top"/>
+            <Setter Property="Padding" Value="2"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListViewItem">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="#FFD5E8FF"/>
+                                <Setter Property="BorderBrush" Value="#FF7DA2CE"/>
+                                <Setter Property="BorderThickness" Value="1"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- 로컬 파일 시스템 패널 -->
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0" Background="#FFE0E0E0" Padding="5">
+                    <TextBlock Text="CMS PC" FontWeight="Bold"/>
+                </Border>
+
+                <ListView x:Name="LeftFileListView" Grid.Row="1" BorderThickness="0"
+                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                          ScrollViewer.VerticalScrollBarVisibility="Auto"
+                          ItemContainerStyle="{StaticResource FileItemStyle}">
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="4" VerticalAlignment="Top"/>
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Width="70" Height="90">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Image Grid.Row="0" Width="32" Height="32" Source="{Binding IconSource}" 
+                                       HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                                <TextBlock Grid.Row="1" Text="{Binding Name}" TextWrapping="Wrap" TextAlignment="Center" 
+                                           HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <Grid Grid.Row="2" Background="#FFE0E0E0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="LocalCreateFolderButton" Content="폴더 생성" Margin="5" Padding="5,2" Grid.Column="0" Click="LocalCreateFolder_Click"/>
+                    <Button x:Name="LocalEditButton" Content="수정" Margin="5" Padding="5,2" Grid.Column="1" Click="LocalEdit_Click"/>
+                    <Button x:Name="LocalDeleteButton" Content="삭제" Margin="5" Padding="5,2" Grid.Column="2" Click="LocalDelete_Click"/>
+                    <Button x:Name="TransferButton" Content="전송" Margin="5" Padding="5,2" Grid.Column="3" Click="TransferButton_Click"/>
+                </Grid>
+            </Grid>
+
+            <!-- 경계선 -->
+            <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Center" VerticalAlignment="Stretch" Background="#FFC0C0C0"/>
+
+            <!-- FTP 파일 시스템 패널 -->
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                
+
+                <Border Grid.Row="0" Background="#FFE0E0E0" Padding="5">
+                    <TextBlock Text="LED PC #1" FontWeight="Bold"/>
+                    
+                </Border>
+                <Button Grid.Row="0" x:Name="CloseButton" Content="X" HorizontalAlignment="Right" VerticalAlignment="Top" 
+                Width="30" Height="30" Margin="0,5,5,0" Click="CloseButton_Click"/>
+
+                <ListView x:Name="RightFileListView" Grid.Row="1" BorderThickness="0"
+                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                          ScrollViewer.VerticalScrollBarVisibility="Auto"
+                          ItemContainerStyle="{StaticResource FileItemStyle}">
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="4" VerticalAlignment="Top"/>
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Width="70" Height="90">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Image Grid.Row="0" Width="32" Height="32" Source="{Binding IconSource}" 
+                                       HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                                <TextBlock Grid.Row="1" Text="{Binding Name}" TextWrapping="Wrap" TextAlignment="Center" 
+                                           HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <Grid Grid.Row="2" Background="#FFE0E0E0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="FtpCreateFolderButton" Content="폴더 생성" Margin="5" Padding="5,2" Grid.Column="0" Click="FtpCreateFolder_Click"/>
+                    <Button x:Name="FtpEditButton" Content="수정" Margin="5" Padding="5,2" Grid.Column="1" Click="FtpEdit_Click"/>
+                    <Button x:Name="FtpDeleteButton" Content="삭제" Margin="5" Padding="5,2" Grid.Column="2" Click="FtpDelete_Click"/>
+                    <Button x:Name="FtpToLocalTransferButton" Content="로컬로 전송" Margin="5" Padding="5,2" Grid.Column="3" Click="FtpToLocalTransferButton_Click"/>
+                </Grid>
+            </Grid>
+        </Grid>
+
+        <!-- 프로그레스 바 -->
+        <Grid Grid.Row="1" Background="#FFE0E0E0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <ProgressBar x:Name="TransferProgressBar" Height="20" Margin="5" Visibility="Collapsed"/>
+            <TextBlock x:Name="TransferProgressText" Grid.Column="1" VerticalAlignment="Center" Margin="5,0"/>
+        </Grid>
+    </Grid>
+</UserControl>

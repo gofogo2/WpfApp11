@@ -1,0 +1,46 @@
+﻿<Application x:Class="WpfApp11.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:WpfApp11"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <Style x:Key="PowerToggleStyle" TargetType="ToggleButton">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border x:Name="border" BorderThickness="0" CornerRadius="15">
+                            <Grid>
+                                <Rectangle x:Name="PART_Track" Width="60" Height="30" RadiusX="15" RadiusY="15"/>
+                                <Ellipse x:Name="PART_Thumb" Width="26" Height="26" Fill="White" HorizontalAlignment="Left" Margin="2,0,0,0"/>
+                                <ContentPresenter x:Name="contentPresenter" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="PART_Track" Property="Fill" Value="#4CAF50"/>
+                                <Setter TargetName="PART_Thumb" Property="HorizontalAlignment" Value="Right"/>
+                                <Setter TargetName="PART_Thumb" Property="Margin" Value="0,0,2,0"/>
+                                <Setter Property="Content" Value="ON" />
+                                <Setter Property="FontSize" Value="10" />
+                                <Setter TargetName="contentPresenter" Property="HorizontalAlignment" Value="Left"/>
+                                <Setter TargetName="contentPresenter" Property="Margin" Value="20,0,0,0"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="False">
+                                <Setter TargetName="PART_Track" Property="Fill" Value="#E0E0E0"/>
+                                <Setter TargetName="PART_Thumb" Property="HorizontalAlignment" Value="Left"/>
+                                <Setter TargetName="PART_Thumb" Property="Margin" Value="2,0,0,0"/>
+                                <Setter Property="Content" Value="OFF"/>
+                                <Setter Property="FontSize" Value="10" />
+                                <Setter TargetName="contentPresenter" Property="HorizontalAlignment" Value="Right"/>
+                                <Setter TargetName="contentPresenter" Property="Margin" Value="0,0,20,0"/>
+                                <Setter Property="Foreground" Value="Black"/>
+                                
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Application.Resources>
+</Application>
