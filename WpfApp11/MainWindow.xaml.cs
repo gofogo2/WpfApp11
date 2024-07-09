@@ -20,6 +20,7 @@ namespace WpfApp9
     public partial class MainWindow : Window
     {
         private List<DraggableItemControl> dragItems = new List<DraggableItemControl>();
+        private const string SettingsFile = "settings.json";
         private Point offset;
         private DraggableItemControl draggedItem;
         private const string ConfigFile = "itemConfig.json";
@@ -39,10 +40,45 @@ namespace WpfApp9
             InitializeComponent();
             occupiedCells = new bool[GridRows, GridColumns];
             CreateGrid();
+            LoadSettings();
             LoadItemConfigurations();
             InitializeAutoPowerSettings();
             GlobalMessageService.MessageReceived += OnGlobalMessageReceived;
             FileExplorerControl.CloseRequested += FileExplorerControl_CloseRequested;
+        }
+        private void LoadSettings()
+        {
+            if (File.Exists(SettingsFile))
+            {
+                string json = File.ReadAllText(SettingsFile);
+                var settings = JsonConvert.DeserializeObject<Dictionary<string, bool>>(json);
+                if (settings.TryGetValue("AutoPowerEnabled", out bool isEnabled))
+                {
+                    AutoPowerToggle.IsChecked = isEnabled;
+                }
+            }
+        }
+
+        private void SaveSettings()
+        {
+            var settings = new Dictionary<string, bool>
+        {
+            { "AutoPowerEnabled", AutoPowerToggle.IsChecked ?? false }
+        };
+            string json = JsonConvert.SerializeObject(settings, Formatting.Indented);
+            File.WriteAllText(SettingsFile, json);
+        }
+
+        private void AutoPowerToggle_Checked(object sender, RoutedEventArgs e)
+        {
+            SaveSettings();
+            // 자동 전원 기능 활성화 로직 추가
+        }
+
+        private void AutoPowerToggle_Unchecked(object sender, RoutedEventArgs e)
+        {
+            SaveSettings();
+            // 자동 전원 기능 비활성화 로직 추가
         }
 
         private void OnGlobalMessageReceived(object sender, string message)
@@ -95,8 +131,9 @@ namespace WpfApp9
 
         private const int ItemMargin = 10; // 그리드 셀과 아이템 사이의 여백
 
-        private void CreateDraggableItem(ItemConfiguration config)
+        private async void CreateDraggableItem(ItemConfiguration config)
         {
+
             var itemControl = new DraggableItemControl(config)
             {
                 Width = GridCellWidth - (ItemMargin * 2),
@@ -119,6 +156,20 @@ namespace WpfApp9
             ItemCanvas.Children.Add(itemControl);
             dragItems.Add(itemControl);
         }
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            foreach (var item in dragItems)
+            {
+                item.StopPingCheck();
+            }
+        }
+        public void ShowFileExplorer(string ftpAddress)
+        {
+            FileExplorerControl.Initialize(ftpAddress);
+            OverlayGrid.Visibility = Visibility.Visible;
+        }
+
 
         private void Item_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -316,12 +367,6 @@ namespace WpfApp9
             return null;
         }
 
-        private void ShowFileExplorer(string ftpAddress)
-        {
-            FileExplorerControl.Initialize(ftpAddress);
-            OverlayGrid.Visibility = Visibility.Visible;
-        }
-
         private void FileExplorerControl_CloseRequested(object sender, EventArgs e)
         {
             OverlayGrid.Visibility = Visibility.Collapsed;
@@ -399,7 +444,15 @@ namespace WpfApp9
 
             return panel;
         }
+        public void RemoveDevice(DraggableItemControl deviceControl)
+        {
+            ItemCanvas.Children.Remove(deviceControl);
+            dragItems.Remove(deviceControl);
+            SaveItemConfigurations();
+        }
     }
+
+
 
 
 

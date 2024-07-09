@@ -72,6 +72,9 @@
     <Compile Include="UserControls\DraggableItemControl.xaml.cs">
       <DependentUpon>DraggableItemControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\EditDeviceWindow.xaml.cs">
+      <DependentUpon>EditDeviceWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\GlobalMessageControl.xaml.cs">
       <DependentUpon>GlobalMessageControl.xaml</DependentUpon>
     </Compile>
@@ -91,6 +94,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\DraggableItemControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\EditDeviceWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

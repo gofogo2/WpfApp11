@@ -23,8 +23,6 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-
-            
                 <StackPanel Orientation="Horizontal" >
                 <Border Grid.Column="0" BorderBrush="DarkGray" BorderThickness="0.8" Padding="5">
                     <StackPanel Grid.Column="0" Orientation="Vertical" x:Name="sp_auto" >
@@ -32,15 +30,35 @@
                         <TextBlock Text="요일 별 시간 설정" FontSize="10" VerticalAlignment="Center" Margin="0,0,0,0"/>
                     </StackPanel>
                 </Border>
-                <ToggleButton Grid.Column="0" Content="OFF" Width="50" Height="25" HorizontalAlignment="Center" Margin="30,0,0,0"/>
-                    
-                </StackPanel>
-            
-
-            
-
+                <ToggleButton x:Name="AutoPowerToggle" Grid.Column="0" Width="50" Height="25" HorizontalAlignment="Center" Margin="30,0,0,0" Checked="AutoPowerToggle_Checked" Unchecked="AutoPowerToggle_Unchecked">
+                    <ToggleButton.Style>
+                        <Style TargetType="ToggleButton">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ToggleButton">
+                                        <Grid>
+                                            <Border x:Name="Border" CornerRadius="10" Background="LightGray">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                            </Border>
+                                        </Grid>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsChecked" Value="True">
+                                                <Setter TargetName="Border" Property="Background" Value="LightGreen"/>
+                                                <Setter Property="Content" Value="ON"/>
+                                            </Trigger>
+                                            <Trigger Property="IsChecked" Value="False">
+                                                <Setter TargetName="Border" Property="Background" Value="LightGray"/>
+                                                <Setter Property="Content" Value="OFF"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ToggleButton.Style>
+                </ToggleButton>
+            </StackPanel>
             <TextBlock Grid.Column="1" Text="PROJECT TITLE" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold"/>
-
             <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Content="전체 전원 ON" x:Name="TotalPowerBtn" Width="100" Height="30" Background="Green" Foreground="Black" Margin="0,0,10,0" Click="TotalPowerBtn_Click"/>
                 <Button Content="전체 전원 OFF" Width="100" Height="30" Background="white" Foreground="black" Click="TotalPowerBtn_Click" />
@@ -52,9 +70,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-
             <TextBlock Grid.Column="1" Text="기기 관리" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"   />
-
             <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" >
                 <Button  Width="80" Height="25" Margin="0,0,10,0" Click="AddDevice_Click">
                     <Button.Content>
@@ -83,7 +99,6 @@
                 </Grid>
             </ScrollViewer>
         </Border>
-
         <!-- Overlay for FileExplorer -->
         <Grid x:Name="OverlayGrid" Grid.RowSpan="3" Visibility="Collapsed">
             <Rectangle Fill="Black" Opacity="0.5"/>
@@ -91,32 +106,6 @@
                 <local:FileExplorerControl x:Name="FileExplorerControl"/>
             </Border>
         </Grid>
-
-        <!--<Grid x:Name="AutoPowerSettingsOverlay" Grid.RowSpan="3" Visibility="Collapsed">
-            <Rectangle Fill="Black" Opacity="0.5"/>
-            <Border Background="White" Width="800" Height="400" CornerRadius="10">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-
-                    <TextBlock Text="자동 전원 시간 설정" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="10"/>
-
-                    
-                        <StackPanel Grid.Row="1" Margin="10" x:Name="DaySettingsPanel" HorizontalAlignment="Center" VerticalAlignment="Center" >
-                            --><!-- 요일별 설정이 여기에 동적으로 추가됩니다 --><!--
-                        </StackPanel>
-                    
-
-                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
-                        <Button Content="적용" Width="100" Height="30" Margin="0,0,10,0" Click="ApplyAutoPowerSettings_Click"/>
-                        <Button Content="취소" Width="100" Height="30" Click="CancelAutoPowerSettings_Click"/>
-                    </StackPanel>
-                </Grid>
-            </Border>
-        </Grid>-->
         <local:AutoPowerSettingsControl x:Name="AutoPowerSettingsControl" Visibility="Collapsed" Grid.RowSpan="3"/>
         <Grid x:Name="PowerOverlay" Visibility="Collapsed" Grid.RowSpan="3">
             <Rectangle Fill="Black" Opacity="0.5"/>
@@ -131,10 +120,8 @@
                 </Grid>
             </Border>
         </Grid>
-
             <usercontrols:GlobalMessageControl x:Name="GlobalMessage" VerticalAlignment="Top" 
                           Height="0" Panel.ZIndex="9999"/>
-        
     </Grid>
     
 </Window>
