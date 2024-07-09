@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WpfApp9"
+        xmlns:local="clr-namespace:WpfApp9" xmlns:usercontrols="clr-namespace:WpfApp11.UserControls"
         mc:Ignorable="d"
         Title="Test" Height="1080" Width="1920">
     <Window.Resources>
@@ -92,7 +92,7 @@
             </Border>
         </Grid>
 
-        <Grid x:Name="AutoPowerSettingsOverlay" Grid.RowSpan="3" Visibility="Collapsed">
+        <!--<Grid x:Name="AutoPowerSettingsOverlay" Grid.RowSpan="3" Visibility="Collapsed">
             <Rectangle Fill="Black" Opacity="0.5"/>
             <Border Background="White" Width="800" Height="400" CornerRadius="10">
                 <Grid>
@@ -106,7 +106,7 @@
 
                     
                         <StackPanel Grid.Row="1" Margin="10" x:Name="DaySettingsPanel" HorizontalAlignment="Center" VerticalAlignment="Center" >
-                            <!-- 요일별 설정이 여기에 동적으로 추가됩니다 -->
+                            --><!-- 요일별 설정이 여기에 동적으로 추가됩니다 --><!--
                         </StackPanel>
                     
 
@@ -116,7 +116,8 @@
                     </StackPanel>
                 </Grid>
             </Border>
-        </Grid>
+        </Grid>-->
+        <local:AutoPowerSettingsControl x:Name="AutoPowerSettingsControl" Visibility="Collapsed" Grid.RowSpan="3"/>
         <Grid x:Name="PowerOverlay" Visibility="Collapsed" Grid.RowSpan="3">
             <Rectangle Fill="Black" Opacity="0.5"/>
             <Border Background="White" Width="300" Height="150" CornerRadius="10">
@@ -130,6 +131,10 @@
                 </Grid>
             </Border>
         </Grid>
+
+            <usercontrols:GlobalMessageControl x:Name="GlobalMessage" VerticalAlignment="Top" 
+                          Height="0" Panel.ZIndex="9999"/>
+        
     </Grid>
     
 </Window>

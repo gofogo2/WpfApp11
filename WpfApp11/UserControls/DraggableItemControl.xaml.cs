@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using WpfApp11.Helpers;
 
 namespace WpfApp9
 {
@@ -16,9 +18,27 @@ namespace WpfApp9
             InitializeComponent();
             Configuration = config;
             UpdateUI();
-            PowerToggle.Checked += (s, e) => { Configuration.IsOn = true; StatusIndicator.Fill = Brushes.Green; };
-            PowerToggle.Unchecked += (s, e) => { Configuration.IsOn = false; StatusIndicator.Fill = Brushes.Red; };
+            PowerToggle.Checked += PowerToggle_Checked;
+            PowerToggle.Unchecked += PowerToggle_Unchecked; ;
         }
+
+        private void PowerToggle_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Configuration.IsOn = true; StatusIndicator.Fill = Brushes.Red;
+            Debug.WriteLine("종료되었습니다.");
+            GlobalMessageService.ShowMessage("This is a global message");
+        }
+
+        private void PowerToggle_Checked(object sender, RoutedEventArgs e)
+        {
+            Configuration.IsOn = true; StatusIndicator.Fill = Brushes.Green;
+            Debug.WriteLine("종료되었습니다.");
+        }
+
+
+
+
+
 
         private void UpdateUI()
         {

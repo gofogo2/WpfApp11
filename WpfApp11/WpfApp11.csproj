@@ -61,14 +61,32 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Helpers\GlobalMessageService.cs" />
     <Compile Include="Helpers\PJLinkHelper.cs" />
+    <Compile Include="UserControls\AutoPowerSettingsControl.xaml.cs">
+      <DependentUpon>AutoPowerSettingsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\DaySettingControl.xaml.cs">
+      <DependentUpon>DaySettingControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\DraggableItemControl.xaml.cs">
       <DependentUpon>DraggableItemControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\GlobalMessageControl.xaml.cs">
+      <DependentUpon>GlobalMessageControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\RemoveDeviceWindow.xaml.cs">
       <DependentUpon>RemoveDeviceWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="UserControls\AddDeviceWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\AutoPowerSettingsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\DaySettingControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -99,6 +117,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UserControls\GlobalMessageControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\RemoveDeviceWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

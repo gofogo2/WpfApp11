@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="WpfApp9.AutoPowerSettingsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:WpfApp9">
+    <Grid>
+        <Rectangle Fill="Black" Opacity="0.5"/>
+        <Border Background="White" Width="800" Height="400" CornerRadius="10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="자동 전원 시간 설정" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="10"/>
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                    <StackPanel x:Name="DaySettingsPanel" Margin="10"/>
+                </ScrollViewer>
+                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+                    <Button Content="적용" Width="100" Height="30" Margin="0,0,10,0" Click="ApplyButton_Click"/>
+                    <Button Content="취소" Width="100" Height="30" Click="CancelButton_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

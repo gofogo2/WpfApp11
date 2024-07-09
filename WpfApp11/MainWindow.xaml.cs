@@ -11,6 +11,9 @@ using System.Linq;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using WpfApp11.Helpers;
+using System.Windows.Media.Animation;
+using System.Threading.Tasks;
 
 namespace WpfApp9
 {
@@ -38,7 +41,33 @@ namespace WpfApp9
             CreateGrid();
             LoadItemConfigurations();
             InitializeAutoPowerSettings();
+            GlobalMessageService.MessageReceived += OnGlobalMessageReceived;
             FileExplorerControl.CloseRequested += FileExplorerControl_CloseRequested;
+        }
+
+        private void OnGlobalMessageReceived(object sender, string message)
+        {
+            GlobalMessage.SetMessage(message);
+            AnimateMessage(true);
+        }
+
+        private void AnimateMessage(bool show)
+        {
+            DoubleAnimation animation = new DoubleAnimation
+            {
+                To = show ? 30 : 0,
+                Duration = TimeSpan.FromSeconds(0.3)
+            };
+
+            animation.Completed += (s, e) =>
+            {
+                if (show)
+                {
+                    Task.Delay(1000).ContinueWith(_ => Dispatcher.Invoke(() => AnimateMessage(false)));
+                }
+            };
+
+            GlobalMessage.BeginAnimation(HeightProperty, animation);
         }
 
         private void CreateGrid()
@@ -330,15 +359,7 @@ namespace WpfApp9
                 }
             }
         }
-        private void InitializeAutoPowerSettings()
-        {
-            sp_auto.MouseLeftButtonDown += AutoPowerSettings_MouseLeftButtonDown;
-            //var autoPowerSettingsPanel = FindName("StackPanel") as StackPanel;
-            //if (autoPowerSettingsPanel != null)
-            //{
-            //    autoPowerSettingsPanel.MouseLeftButtonDown += AutoPowerSettings_MouseLeftButtonDown;
-            //}
-        }
+      
         private void AutoPowerSettings_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ClickCount == 2)
@@ -346,23 +367,30 @@ namespace WpfApp9
                 ShowAutoPowerSettingsOverlay();
             }
         }
-
         private void ShowAutoPowerSettingsOverlay()
         {
-            AutoPowerSettingsOverlay.Visibility = Visibility.Visible;
-            PopulateDaySettings();
+            AutoPowerSettingsControl.Visibility = Visibility.Visible;
         }
 
-        private void PopulateDaySettings()
+        private void InitializeAutoPowerSettings()
         {
-            string[] days = { "월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일" };
-            DaySettingsPanel.Children.Clear();
-
-            foreach (var day in days)
+            sp_auto.MouseLeftButtonDown += AutoPowerSettings_MouseLeftButtonDown;
+            AutoPowerSettingsControl.CloseRequested += (sender, e) =>
             {
-                DaySettingsPanel.Children.Add(CreateDaySettingControl(day));
-            }
+                AutoPowerSettingsControl.Visibility = Visibility.Collapsed;
+            };
         }
+
+        //private void PopulateDaySettings()
+        //{
+        //    string[] days = { "월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일" };
+        //    DaySettingsPanel.Children.Clear();
+
+        //    foreach (var day in days)
+        //    {
+        //        DaySettingsPanel.Children.Add(CreateDaySettingControl(day));
+        //    }
+        //}
 
         private UIElement CreateDaySettingControl(string day)
         {
@@ -383,16 +411,16 @@ namespace WpfApp9
             return panel;
         }
 
-        private void ApplyAutoPowerSettings_Click(object sender, RoutedEventArgs e)
-        {
-            // 여기에 설정을 저장하는 로직을 구현하세요
-            AutoPowerSettingsOverlay.Visibility = Visibility.Collapsed;
-        }
+        //private void ApplyAutoPowerSettings_Click(object sender, RoutedEventArgs e)
+        //{
+        //    // 여기에 설정을 저장하는 로직을 구현하세요
+        //    AutoPowerSettingsOverlay.Visibility = Visibility.Collapsed;
+        //}
 
-        private void CancelAutoPowerSettings_Click(object sender, RoutedEventArgs e)
-        {
-            AutoPowerSettingsOverlay.Visibility = Visibility.Collapsed;
-        }
+        //private void CancelAutoPowerSettings_Click(object sender, RoutedEventArgs e)
+        //{
+        //    AutoPowerSettingsOverlay.Visibility = Visibility.Collapsed;
+        //}
 
 
 
