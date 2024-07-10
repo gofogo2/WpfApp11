@@ -37,6 +37,7 @@ namespace WpfApp9
 
         public MainWindow()
         {
+            MessageBox.Show("Helloworld");
             InitializeComponent();
             occupiedCells = new bool[GridRows, GridColumns];
             CreateGrid();
