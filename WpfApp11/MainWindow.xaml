@@ -27,7 +27,7 @@
                 <Border Grid.Column="0" BorderBrush="DarkGray" BorderThickness="0.8" Padding="5">
                     <StackPanel Grid.Column="0" Orientation="Vertical" x:Name="sp_auto" >
                         <TextBlock Text="자동 전원 설정" VerticalAlignment="Center"/>
-                        <TextBlock Text="요일 별 시간 설정" FontSize="10" VerticalAlignment="Center" Margin="0,0,0,0"/>
+                        <TextBlock Text="요일 별    시간 설정" FontSize="10" VerticalAlignment="Center" Margin="0,0,0,0"/>
                         <Button>
                             
                         </Button>
