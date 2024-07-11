@@ -19,13 +19,16 @@ namespace WpfApp9
         private CancellationTokenSource pingCancellationTokenSource;
         string vncViewerPath = @"C:\Program Files\TightVNC\tvnviewer.exe"; // TightVNC 뷰어 경로
         public ItemConfiguration Configuration { get; private set; }
- 
+        SolidColorBrush onColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E8F5E9"));
+        SolidColorBrush offColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E0E0E0"));
 
         public void UpdatePowerState(bool isOn)
         {
             Configuration.IsOn = isOn;
             PowerToggle.IsChecked = isOn;
             StatusIndicator.Fill = isOn ? Brushes.Green : Brushes.Red;
+
+            PowerState.Fill = isOn ? onColor : offColor;
             Debug.WriteLine($"{Configuration.Name}의 전원이 {(isOn ? "켜졌습니다" : "꺼졌습니다")}.");
         }
 

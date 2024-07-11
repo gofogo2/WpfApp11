@@ -14,6 +14,7 @@ using System.Windows.Threading;
 using WpfApp11.Helpers;
 using System.Windows.Media.Animation;
 using System.Threading.Tasks;
+using WpfApp11.UserControls;
 
 namespace WpfApp9
 {
@@ -120,11 +121,23 @@ namespace WpfApp9
                     {
                         Width = GridCellWidth,
                         Height = GridCellHeight,
+                        //Width = 10,
+                        //Height = 10,
                         Stroke = Brushes.White,
                         StrokeThickness = 1
                     };
                     Canvas.SetLeft(cell, j * GridCellWidth);
                     Canvas.SetTop(cell, i * GridCellHeight);
+
+                    var gs = new grid_background();
+
+                    var vb = new VisualBrush();
+                    
+                    vb.Visual = gs;
+
+                    
+                    cell.Fill = vb;
+
                     GridCanvas.Children.Add(cell);
                 }
             }
@@ -420,11 +433,17 @@ namespace WpfApp9
 
         private void InitializeAutoPowerSettings()
         {
-            sp_auto.MouseLeftButtonDown += AutoPowerSettings_MouseLeftButtonDown;
+            //sp_auto.MouseLeftButtonDown += AutoPowerSettings_MouseLeftButtonDown;
             AutoPowerSettingsControl.CloseRequested += (sender, e) =>
             {
                 AutoPowerSettingsControl.Visibility = Visibility.Collapsed;
             };
+            auto_wol_btn.Click += Auto_wol_btn_Click;
+        }
+
+        private void Auto_wol_btn_Click(object sender, RoutedEventArgs e)
+        {
+            ShowAutoPowerSettingsOverlay();
         }
 
         private UIElement CreateDaySettingControl(string day)

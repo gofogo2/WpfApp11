@@ -8,6 +8,7 @@
         Title="Test" Height="1080" Width="1920">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
+       
     </Window.Resources>
     
     <Grid x:Name="MainGrid">
@@ -24,11 +25,24 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
                 <StackPanel Orientation="Horizontal" >
-                <Border Grid.Column="0" BorderBrush="DarkGray" BorderThickness="0.8" Padding="5">
+                <Border Grid.Column="0" BorderBrush="DarkGray" BorderThickness="0.0" Padding="5">
                     <StackPanel Grid.Column="0" Orientation="Vertical" x:Name="sp_auto" >
-                        <TextBlock Text="자동 전원 설정" VerticalAlignment="Center"/>
-                        <TextBlock Text="요일 별    시간 설정" FontSize="10" VerticalAlignment="Center" Margin="0,0,0,0"/>
-                        <Button>
+                        <!--<TextBlock Text="자동 전원 설정" VerticalAlignment="Center"/>
+                        <TextBlock Text="요일 별 시간 설정" FontSize="10" VerticalAlignment="Center" Margin="0,0,0,0"/>-->
+                      
+                        <Button x:Name="auto_wol_btn" Background="White" Padding="10,2,10,2">
+                            
+                            <StackPanel Orientation="Horizontal">
+
+                                <Image Source="Images/time.png">
+                                    
+                                </Image>
+                                <StackPanel >
+                                    <TextBlock Text="자동 전원 설정" VerticalAlignment="Center"/>
+                                    <TextBlock Text="요일 별 시간 설정" FontSize="10" VerticalAlignment="Center" Margin="0,0,0,0"/>
+                                </StackPanel>
+                            </StackPanel>
+                            
                             
                         </Button>
                     </StackPanel>

@@ -7,11 +7,25 @@ namespace WpfApp9
     {
         public string Day { get; private set; }
 
-        public DaySettingControl(string day)
+        public DaySettingControl()
         {
             InitializeComponent();
+        }
+
+
+        //public DaySettingControl(string day)
+        //{
+        //    InitializeComponent();
+        //    Day = day;
+        //    DayCheckBox.Content = day;
+        //    PopulateComboBoxes();
+        //}
+
+        public void settingControl(string day)
+        {
             Day = day;
             DayCheckBox.Content = day;
+            DayCheckBox.Foreground = new System.Windows.Media.SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#FFFFFF"));
             PopulateComboBoxes();
         }
 

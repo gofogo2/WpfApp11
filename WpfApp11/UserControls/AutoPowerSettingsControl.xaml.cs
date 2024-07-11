@@ -23,13 +23,35 @@ namespace WpfApp9
 
         private void PopulateDaySettings()
         {
-            string[] days = { "월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일" };
-            foreach (var day in days)
-            {
-                var daySettingControl = new DaySettingControl(day);
-                DaySettingsPanel.Children.Add(daySettingControl);
-                daySettings.Add(daySettingControl);
-            }
+            //string[] days = { "월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일" };
+            //foreach (var day in days)
+            //{
+            //    var daySettingControl = new DaySettingControl(day);
+            //    DaySettingsPanel.Children.Add(daySettingControl);
+            //    daySettings.Add(daySettingControl);
+            //}
+
+            w1.settingControl("월요일");
+            daySettings.Add(w1);
+
+            w2.settingControl("화요일");
+            daySettings.Add(w2);
+
+            w3.settingControl("수요일");
+            daySettings.Add(w3);
+
+            w4.settingControl("목요일");
+            daySettings.Add(w4);
+
+            w5.settingControl("금요일");
+            daySettings.Add(w5);
+
+            w6.settingControl("토요일");
+            daySettings.Add(w6);
+
+            w7.settingControl("일요일");
+            daySettings.Add(w7);
+
         }
 
         private void LoadSchedule()
