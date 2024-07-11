@@ -154,7 +154,7 @@ namespace WpfApp9
         {
             try
             {
-                Process.Start(vncViewerPath, $"{Configuration.IpAddress} -password=1015");
+                Process.Start(vncViewerPath, $"{Configuration.IpAddress} -password={Configuration.VncPw}");
             }
             catch (Exception ex)
             {
@@ -174,8 +174,10 @@ namespace WpfApp9
         private void EditMenuItem_Click(object sender, RoutedEventArgs e)
         {
             EditDeviceWindow editWindow = new EditDeviceWindow(Configuration);
+            editWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             if (editWindow.ShowDialog() == true)
             {
+                
                 Configuration = editWindow.EditedDeviceConfig;
                 UpdateUI();
             }

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace WpfApp9
 {
@@ -7,9 +9,131 @@ namespace WpfApp9
     {
         public string Day { get; private set; }
 
+        string starttime_hour = string.Empty;
+        string endtime_hour = string.Empty;
+        string starttime_min = string.Empty;
+        string endtime_min = string.Empty;
         public DaySettingControl()
         {
             InitializeComponent();
+
+            DayCheckBox.Checked += DayCheckBox_Checked;
+            DayCheckBox.Unchecked += DayCheckBox_Unchecked;
+
+            StartHourComboBox.SelectionChanged += StartHourComboBox_SelectionChanged;
+            StartMinuteComboBox.SelectionChanged += StartMinuteComboBox_SelectionChanged;
+
+            EndHourComboBox.SelectionChanged += EndHourComboBox_SelectionChanged;
+            EndMinuteComboBox.SelectionChanged += EndMinuteComboBox_SelectionChanged;
+        }
+
+        private void EndMinuteComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            endtime_min = e.AddedItems[0].ToString();
+            //checkTimeSet_enable();
+        }
+
+        private void EndHourComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count != 0)
+            {
+                endtime_hour = e.AddedItems[0].ToString();
+                checkTimeSet_enable("endhour");
+            }
+            
+        }
+
+        private void StartMinuteComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            starttime_min = e.AddedItems[0].ToString();
+            //checkTimeSet_enable();
+        }
+
+        private void StartHourComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count != 0)
+            {
+                starttime_hour = e.AddedItems[0].ToString();
+                checkTimeSet_enable("starthour");
+            }
+        }
+
+
+
+        void checkTimeSet_enable(string select_state)
+        {
+
+
+            if (select_state == "endhour")
+            {
+                if (starttime_hour != string.Empty && endtime_hour != string.Empty)
+                {
+                    int sh = Convert.ToInt32(starttime_hour);
+                    int eh = Convert.ToInt32(endtime_hour);
+                    if (sh > eh)
+                    {
+                        MessageBox.Show("종료시간이 시작시간보다 빠를 수 없습니다.");
+                        EndHourComboBox.SelectedIndex = -1;
+                    }
+                }
+            }
+            else if (select_state == "starthour")
+            {
+                if (starttime_hour != string.Empty && endtime_hour != string.Empty)
+                {
+                    int sh = Convert.ToInt32(starttime_hour);
+                    int eh = Convert.ToInt32(endtime_hour);
+                    if (sh > eh)
+                    {
+                        MessageBox.Show("시작시간이 종료시간보다 늦을 수 없습니다.");
+                        StartHourComboBox.SelectedIndex = -1;
+                    }
+                }
+            }
+            //else if (select_state == "endmin")
+            //{
+            //    if (starttime_hour != string.Empty && endtime_hour != string.Empty)
+            //    {
+            //        int sh = Convert.ToInt32(starttime_hour);
+            //        int eh = Convert.ToInt32(endtime_hour);
+            //        if (sh > eh)
+            //        {
+            //            MessageBox.Show("종료시간이 시작시간보다 빠를 수 없습니다.");
+            //            EndHourComboBox.SelectedIndex = -1;
+            //        }
+            //    }
+            //}
+
+
+        }
+
+        private void DayCheckBox_Checked(object sender, System.Windows.RoutedEventArgs e)
+        {
+            CheckBox checkBox = sender as CheckBox;
+            if (checkBox != null)
+            {
+                if (checkBox.IsChecked == true)
+                {
+                        
+                    Day_bg.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#2E75B6"));
+                }
+                else
+                {
+                    Day_bg.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#7F7F7F"));
+                }
+            }
+
+        }
+        private void DayCheckBox_Unchecked(object sender, System.Windows.RoutedEventArgs e)
+        {
+            CheckBox checkBox = sender as CheckBox;
+            if (checkBox != null)
+            {
+                if (checkBox.IsChecked == false)
+                {
+                    Day_bg.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#7F7F7F"));
+                }
+            }
         }
 
 
@@ -24,14 +148,13 @@ namespace WpfApp9
         public void settingControl(string day)
         {
             Day = day;
-            DayCheckBox.Content = day;
-            DayCheckBox.Foreground = new System.Windows.Media.SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#FFFFFF"));
+            DayName.Text = day;
             PopulateComboBoxes();
         }
 
         private void PopulateComboBoxes()
         {
-            for (int i = 0; i < 24; i++)
+            for (int i = 1; i < 25; i++)
             {
                 StartHourComboBox.Items.Add(i.ToString("D2"));
                 EndHourComboBox.Items.Add(i.ToString("D2"));
@@ -51,6 +174,11 @@ namespace WpfApp9
             StartMinuteComboBox.SelectedItem = schedule.StartTime.Minutes.ToString("D2");
             EndHourComboBox.SelectedItem = schedule.EndTime.Hours.ToString("D2");
             EndMinuteComboBox.SelectedItem = schedule.EndTime.Minutes.ToString("D2");
+
+
+
+
+
         }
 
         public DaySchedule GetSchedule()

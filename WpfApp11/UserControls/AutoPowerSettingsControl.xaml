@@ -4,10 +4,10 @@
              xmlns:local="clr-namespace:WpfApp9">
     <Grid>
         <Rectangle Fill="Black" Opacity="0.8"/>
-        <Border Background="Transparent" Width="800" Height="550" CornerRadius="10">
+        <Border Background="Transparent" Width="800" Height="680" CornerRadius="10">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="80"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
@@ -24,8 +24,8 @@
                     </StackPanel>
                 </ScrollViewer>
                 <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-                    <Button Content="적용" Width="100" Height="30" Margin="0,0,10,0" Click="ApplyButton_Click"/>
-                    <Button Content="취소" Width="100" Height="30" Click="CancelButton_Click">
+                    <Button Content="적용" Width="80" Height="40" Margin="0,0,20,0" Click="ApplyButton_Click"/>
+                    <Button Content="취소" Width="80" Height="40" Click="CancelButton_Click">
                         <Button.Style>
                             <Style TargetType="Button">
                                 <Setter Property="Background" Value="#7F7F7F"/>

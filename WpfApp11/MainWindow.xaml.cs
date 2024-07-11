@@ -494,5 +494,6 @@ namespace WpfApp9
         public int Row { get; set; }
         public int Column { get; set; }
         public int ZIndex { get; set; }
+        public string VncPw { get; set; }
     }
 }

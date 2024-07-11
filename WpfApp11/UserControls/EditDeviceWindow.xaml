@@ -1,6 +1,7 @@
 ﻿<Window x:Class="WpfApp9.EditDeviceWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        WindowStartupLocation="CenterScreen"
         Title="기기 수정" Height="450" Width="400">
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -32,6 +33,7 @@
         <TextBox Grid.Row="3" Grid.Column="1" x:Name="MacAddressTextBox" Margin="0,5,0,5"/>
         <Label Grid.Row="4" Grid.Column="0" Content="IP 주소:"/>
         <TextBox Grid.Row="4" Grid.Column="1" x:Name="IpAddressTextBox" Margin="0,5,0,5"/>
+        
         <Label Grid.Row="5" Grid.Column="0" Content="설명:"/>
         <TextBox Grid.Row="5" Grid.Column="1" x:Name="DescriptionTextBox" Margin="0,5,0,5" 
                  AcceptsReturn="True" TextWrapping="Wrap" Height="60" VerticalScrollBarVisibility="Auto"/>
