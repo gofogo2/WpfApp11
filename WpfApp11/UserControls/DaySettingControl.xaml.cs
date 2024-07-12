@@ -30,7 +30,6 @@ namespace WpfApp9
         private void EndMinuteComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             endtime_min = e.AddedItems[0].ToString();
-            //checkTimeSet_enable();
         }
 
         private void EndHourComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -46,7 +45,6 @@ namespace WpfApp9
         private void StartMinuteComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             starttime_min = e.AddedItems[0].ToString();
-            //checkTimeSet_enable();
         }
 
         private void StartHourComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -62,8 +60,6 @@ namespace WpfApp9
 
         void checkTimeSet_enable(string select_state)
         {
-
-
             if (select_state == "endhour")
             {
                 if (starttime_hour != string.Empty && endtime_hour != string.Empty)
@@ -90,21 +86,6 @@ namespace WpfApp9
                     }
                 }
             }
-            //else if (select_state == "endmin")
-            //{
-            //    if (starttime_hour != string.Empty && endtime_hour != string.Empty)
-            //    {
-            //        int sh = Convert.ToInt32(starttime_hour);
-            //        int eh = Convert.ToInt32(endtime_hour);
-            //        if (sh > eh)
-            //        {
-            //            MessageBox.Show("종료시간이 시작시간보다 빠를 수 없습니다.");
-            //            EndHourComboBox.SelectedIndex = -1;
-            //        }
-            //    }
-            //}
-
-
         }
 
         private void DayCheckBox_Checked(object sender, System.Windows.RoutedEventArgs e)
@@ -183,12 +164,26 @@ namespace WpfApp9
 
         public DaySchedule GetSchedule()
         {
-            return new DaySchedule
+            var ds = new DaySchedule();
+            ds.IsEnabled = DayCheckBox.IsChecked ?? false;
+
+            if (StartHourComboBox.SelectedItem != null && StartMinuteComboBox.SelectedItem != null && EndHourComboBox.SelectedItem != null && EndMinuteComboBox.SelectedItem != null)
             {
-                IsEnabled = DayCheckBox.IsChecked ?? false,
-                StartTime = new TimeSpan(int.Parse(StartHourComboBox.SelectedItem as string), int.Parse(StartMinuteComboBox.SelectedItem as string), 0),
-                EndTime = new TimeSpan(int.Parse(EndHourComboBox.SelectedItem as string), int.Parse(EndMinuteComboBox.SelectedItem as string), 0)
-            };
+                ds.StartTime = new TimeSpan(int.Parse(StartHourComboBox.SelectedItem as string), int.Parse(StartMinuteComboBox.SelectedItem as string), 0);
+                ds.EndTime = new TimeSpan(int.Parse(EndHourComboBox.SelectedItem as string), int.Parse(EndMinuteComboBox.SelectedItem as string), 0);
+            }
+            else
+            {
+            }
+            return ds;
+
+
+            //    return new DaySchedule
+            //{
+            //    IsEnabled = DayCheckBox.IsChecked ?? false,
+            //    StartTime = new TimeSpan(int.Parse(StartHourComboBox.SelectedItem as string), int.Parse(StartMinuteComboBox.SelectedItem as string), 0),
+            //    EndTime = new TimeSpan(int.Parse(EndHourComboBox.SelectedItem as string), int.Parse(EndMinuteComboBox.SelectedItem as string), 0)
+            //};
         }
     }
 }

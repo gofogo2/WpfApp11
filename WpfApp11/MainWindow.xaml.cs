@@ -36,6 +36,10 @@ namespace WpfApp9
         private DispatcherTimer powerTimer;
         private double powerProgress = 0;
 
+
+        DispatcherTimer pow_timer;
+
+
         public MainWindow()
         {
             
@@ -47,7 +51,13 @@ namespace WpfApp9
             InitializeAutoPowerSettings();
             GlobalMessageService.MessageReceived += OnGlobalMessageReceived;
             FileExplorerControl.CloseRequested += FileExplorerControl_CloseRequested;
+
+            pow_timer.Tick += Pow_timer_Tick;
+            pow_timer.Interval = TimeSpan.FromMinutes(1);
         }
+
+       
+
         private void LoadSettings()
         {
             if (File.Exists(SettingsFile))
@@ -74,14 +84,51 @@ namespace WpfApp9
         private void AutoPowerToggle_Checked(object sender, RoutedEventArgs e)
         {
             SaveSettings();
+
             // 자동 전원 기능 활성화 로직 추가
+
+            pow_timer = new DispatcherTimer();
+            pow_timer.Start();
         }
 
         private void AutoPowerToggle_Unchecked(object sender, RoutedEventArgs e)
         {
             SaveSettings();
+
             // 자동 전원 기능 비활성화 로직 추가
+
+            pow_timer.Stop();
         }
+
+        private void Pow_timer_Tick(object sender, EventArgs e)
+        {
+            Console.WriteLine(AutoPowerSettingsControl.pow_schedule.Values);
+
+            DateTime now = DateTime.Now;
+
+          if (now.DayOfWeek == DayOfWeek.Saturday)
+            {
+                if (AutoPowerSettingsControl.pow_schedule["토요일"].IsEnabled)
+                {
+                    if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["토요일"].StartTime.ToString().Substring(0, 5))
+                    {
+                        //켜지게
+                        MessageBox.Show("on");
+                    }
+                    else if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["토요일"].EndTime.ToString().Substring(0, 5))
+                    {
+                        //꺼지게
+                        MessageBox.Show("off");
+                    }
+                    else
+                    {
+                        Console.WriteLine(now.ToString("HH:mm"));
+                        Console.WriteLine(AutoPowerSettingsControl.pow_schedule["토요일"].StartTime.ToString().Substring(0, 5));
+                    }
+                }
+            }
+        }
+      
 
         private void OnGlobalMessageReceived(object sender, string message)
         {
@@ -121,8 +168,6 @@ namespace WpfApp9
                     {
                         Width = GridCellWidth,
                         Height = GridCellHeight,
-                        //Width = 10,
-                        //Height = 10,
                         Stroke = Brushes.White,
                         StrokeThickness = 1
                     };
@@ -134,7 +179,6 @@ namespace WpfApp9
                     var vb = new VisualBrush();
                     
                     vb.Visual = gs;
-
                     
                     cell.Fill = vb;
 

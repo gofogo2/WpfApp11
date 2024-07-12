@@ -14,6 +14,9 @@ namespace WpfApp9
 
         public event EventHandler CloseRequested;
 
+
+        public Dictionary<string, DaySchedule> pow_schedule = new Dictionary<string, DaySchedule>();
+
         public AutoPowerSettingsControl()
         {
             InitializeComponent();
@@ -60,6 +63,7 @@ namespace WpfApp9
             {
                 string json = File.ReadAllText(ScheduleFile);
                 var schedule = JsonConvert.DeserializeObject<Dictionary<string, DaySchedule>>(json);
+                pow_schedule = schedule;
                 foreach (var daySetting in daySettings)
                 {
                     if (schedule.TryGetValue(daySetting.Day, out var daySchedule))
@@ -73,10 +77,13 @@ namespace WpfApp9
         private void SaveSchedule()
         {
             var schedule = new Dictionary<string, DaySchedule>();
+            
             foreach (var daySetting in daySettings)
             {
                 schedule[daySetting.Day] = daySetting.GetSchedule();
             }
+
+            pow_schedule = schedule;
             string json = JsonConvert.SerializeObject(schedule, Formatting.Indented);
             File.WriteAllText(ScheduleFile, json);
         }
