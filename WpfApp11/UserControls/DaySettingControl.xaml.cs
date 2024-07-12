@@ -55,7 +55,7 @@ namespace WpfApp9
             {
                 starttime_hour = e.AddedItems[0].ToString();
                 checkTimeSet_enable("starthour");
-            }
+            }  
         }
 
 
