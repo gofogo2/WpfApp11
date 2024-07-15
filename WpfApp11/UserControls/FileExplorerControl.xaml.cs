@@ -30,7 +30,7 @@ namespace WpfApp9
         private ObservableCollection<FileSystemItem> _rightItems;
         private FtpClient _ftpClient;
         private string _currentLocalPath = @"C:\dw";
-        private string _currentFtpPath = "/";
+        private string _currentFtpPath = "/www/";
 
         public FileExplorerControl()
         {
@@ -120,7 +120,6 @@ namespace WpfApp9
         {
             try
             {
-
                 _rightItems.Clear();
                 if (path != "/")
                 {
@@ -133,7 +132,12 @@ namespace WpfApp9
                     });
                 }
 
-                foreach (var item in _ftpClient.GetListing(path))
+                var listing = _ftpClient.GetListing(path);
+                var sortedListing = listing
+                    .OrderByDescending(item => item.Type == FtpObjectType.Directory)
+                    .ThenBy(item => item.Name);
+
+                foreach (var item in sortedListing)
                 {
                     _rightItems.Add(new FileSystemItem
                     {
