@@ -3,21 +3,35 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:WpfApp9">
     <Grid>
-        <Rectangle Fill="Black" Opacity="0.5"/>
-        <Border Background="White" Width="800" Height="400" CornerRadius="10">
+        <Rectangle Fill="Black" Opacity="0.8"/>
+        <Border Background="Transparent" Width="800" Height="680" CornerRadius="10">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="80"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <TextBlock Text="자동 전원 시간 설정" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="10"/>
+                <TextBlock Text="자동 전원 시간 설정" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="10" Foreground="White"/>
                 <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                    <StackPanel x:Name="DaySettingsPanel" Margin="10"/>
+                    <StackPanel x:Name="DaySettingsPanel" Margin="10" HorizontalAlignment="Center" >
+                        <local:DaySettingControl x:Name="w1" Margin="10" />
+                        <local:DaySettingControl x:Name="w2" Margin="10" />
+                        <local:DaySettingControl x:Name="w3" Margin="10" />
+                        <local:DaySettingControl x:Name="w4" Margin="10" />
+                        <local:DaySettingControl x:Name="w5" Margin="10" />
+                        <local:DaySettingControl x:Name="w6" Margin="10" />
+                        <local:DaySettingControl x:Name="w7" Margin="10" />
+                    </StackPanel>
                 </ScrollViewer>
-                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
-                    <Button Content="적용" Width="100" Height="30" Margin="0,0,10,0" Click="ApplyButton_Click"/>
-                    <Button Content="취소" Width="100" Height="30" Click="CancelButton_Click"/>
+                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+                    <Button Content="적용" Width="80" Height="40" Margin="0,0,20,0" Click="ApplyButton_Click"/>
+                    <Button Content="취소" Width="80" Height="40" Click="CancelButton_Click">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="#7F7F7F"/>
+                            </Style>
+                        </Button.Style>
+                    </Button>
                 </StackPanel>
             </Grid>
         </Border>
