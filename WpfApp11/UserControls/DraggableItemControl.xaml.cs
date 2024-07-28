@@ -14,7 +14,7 @@ namespace WpfApp9
 {
     public partial class DraggableItemControl : UserControl
     {
-        private const int PingInterval = 100000; // 5초마다 핑 체크
+        private const int PingInterval = 5000; // 5초마다 핑 체크
         private bool isPinging = false;
         private CancellationTokenSource pingCancellationTokenSource;
         string vncViewerPath = @"C:\Program Files\TightVNC\tvnviewer.exe"; // TightVNC 뷰어 경로
@@ -22,11 +22,14 @@ namespace WpfApp9
         SolidColorBrush onColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E8F5E9"));
         SolidColorBrush offColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E0E0E0"));
 
+        public bool ispow = false;
+
         public void UpdatePowerState(bool isOn)
         {
+            ispow = isOn;
             Configuration.IsOn = isOn;
             PowerToggle.IsChecked = isOn;
-            StatusIndicator.Fill = isOn ? Brushes.Green : Brushes.Red;
+            //StatusIndicator.Fill = isOn ? Brushes.Green : Brushes.Red;
 
             PowerState.Fill = isOn ? onColor : offColor;
             Debug.WriteLine($"{Configuration.Name}의 전원이 {(isOn ? "켜졌습니다" : "꺼졌습니다")}.");
@@ -125,7 +128,7 @@ namespace WpfApp9
         {
             TitleTextBlock.Text = Configuration.Name;
             IconImage.Source = new BitmapImage(new Uri($"pack://application:,,,/Images/{Configuration.DeviceType}.png"));
-            StatusIndicator.Fill = Configuration.IsOn ? Brushes.Green : Brushes.Red;
+            //StatusIndicator.Fill = Configuration.IsOn ? Brushes.Green : Brushes.Red;
             PowerToggle.IsChecked = Configuration.IsOn;
         }
 
@@ -145,23 +148,31 @@ namespace WpfApp9
             var mainWindow = Window.GetWindow(this) as MainWindow;
             if (mainWindow != null)
             {
-                mainWindow.ShowFileExplorer(Configuration.FtpAddress);
+                if (ispow == true)
+                {
+                    mainWindow.ShowFileExplorer(Configuration.FtpAddress, Configuration.Name);
+                }
+                
             }
             OverlayGrid.Visibility = Visibility.Collapsed;
         }
 
         private void VNC_Button_Click(object sender, RoutedEventArgs e)
         {
-            try
+            if (ispow)
             {
-                Process.Start(vncViewerPath, $"{Configuration.IpAddress} -password={Configuration.VncPw}");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"연결 오류: {ex.Message}", "오류", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+                try
+                {
+                    Process.Start(vncViewerPath, $"{Configuration.IpAddress} -password={Configuration.VncPw}");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"연결 오류: {ex.Message}", "오류", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
 
-            Debug.WriteLine(Configuration.IpAddress);
+                Debug.WriteLine(Configuration.IpAddress);
+            }
+            
             OverlayGrid.Visibility = Visibility.Collapsed;
         }
     

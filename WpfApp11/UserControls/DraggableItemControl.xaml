@@ -13,6 +13,7 @@
             <MenuItem Header="정보" Click="InfoMenuItem_Click"/>
         </ContextMenu>
     </UserControl.ContextMenu>
+    <Grid>
     <Border BorderThickness="0.5" BorderBrush="Black">
         <Grid x:Name="MainGrid" Width="160" Height="180">
             <Grid.RowDefinitions>
@@ -29,9 +30,13 @@
             
             <Image  Grid.Row="1" x:Name="IconImage" Width="40" Height="40" Stretch="Uniform" 
                    HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0"/>
-            <Ellipse Grid.Row="1" x:Name="StatusIndicator" Width="15" Height="15" 
-                     HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0"
-                     MouseLeftButtonDown="StatusIndicator_MouseLeftButtonDown"/>
+            <Ellipse Grid.Row="1" x:Name="StatusIndicator" Width="25" Height="25"  Fill="White"
+                     HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,5,6,80"
+                     MouseLeftButtonDown="StatusIndicator_MouseLeftButtonDown">
+                
+            </Ellipse>
+            <TextBlock Text="..."  Grid.Row="1" Width="15" Height="15" IsHitTestVisible="False" TextAlignment="Center"
+                     HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,4,11,91"/>
             <ToggleButton Grid.Row="2" x:Name="PowerToggle" Width="70" Height="30" 
                           VerticalAlignment="Bottom" HorizontalAlignment="Center" 
                           Margin="0,0,0,5" Style="{StaticResource PowerToggleStyle}"/>
@@ -45,6 +50,18 @@
                     <Button Content="X" Width="40" Height="30" Click="Button_Click"  />
                 </StackPanel>
             </Grid>
+        
+            
         </Grid>
+        
     </Border>
+        <Grid x:Name="delete_select" Visibility="Collapsed">
+            <Grid Background="Transparent">
+            </Grid>
+
+            <ToggleButton Width="80" Height="80" x:Name="d_select" >
+                
+            </ToggleButton>
+        </Grid>
+    </Grid>
 </UserControl>

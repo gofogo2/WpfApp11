@@ -105,8 +105,108 @@ namespace WpfApp9
             Console.WriteLine(AutoPowerSettingsControl.pow_schedule.Values);
 
             DateTime now = DateTime.Now;
+            if (now.DayOfWeek == DayOfWeek.Monday)
+            {
+                if (AutoPowerSettingsControl.pow_schedule["월요일"].IsEnabled)
+                {
+                    if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["월요일"].StartTime.ToString().Substring(0, 5))
+                    {
+                        //켜지게
+                        MessageBox.Show("on");
+                    }
+                    else if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["월요일"].EndTime.ToString().Substring(0, 5))
+                    {
+                        //꺼지게
+                        MessageBox.Show("off");
+                    }
+                    else
+                    {
+                        Console.WriteLine(now.ToString("HH:mm"));
+                        Console.WriteLine(AutoPowerSettingsControl.pow_schedule["월요일"].StartTime.ToString().Substring(0, 5));
+                    }
+                }
+            }
+            else if (now.DayOfWeek == DayOfWeek.Tuesday)
+            {
+                if (AutoPowerSettingsControl.pow_schedule["화요일"].IsEnabled)
+                {
+                    if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["화요일"].StartTime.ToString().Substring(0, 5))
+                    {
+                        //켜지게
+                        MessageBox.Show("on");
+                    }
+                    else if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["화요일"].EndTime.ToString().Substring(0, 5))
+                    {
+                        //꺼지게
+                        MessageBox.Show("off");
+                    }
+                    else
+                    {
+                       
+                    }
+                }
+            }
+            else if (now.DayOfWeek == DayOfWeek.Wednesday)
+            {
+                if (AutoPowerSettingsControl.pow_schedule["수요일"].IsEnabled)
+                {
+                    if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["수요일"].StartTime.ToString().Substring(0, 5))
+                    {
+                        //켜지게
+                        MessageBox.Show("on");
+                    }
+                    else if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["수요일"].EndTime.ToString().Substring(0, 5))
+                    {
+                        //꺼지게
+                        MessageBox.Show("off");
+                    }
+                    else
+                    {
 
-          if (now.DayOfWeek == DayOfWeek.Saturday)
+                    }
+                }
+            }
+            else if (now.DayOfWeek == DayOfWeek.Thursday)
+            {
+                if (AutoPowerSettingsControl.pow_schedule["목요일"].IsEnabled)
+                {
+                    if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["목요일"].StartTime.ToString().Substring(0, 5))
+                    {
+                        //켜지게
+                        MessageBox.Show("on");
+                    }
+                    else if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["목요일"].EndTime.ToString().Substring(0, 5))
+                    {
+                        //꺼지게
+                        MessageBox.Show("off");
+                    }
+                    else
+                    {
+
+                    }
+                }
+            }
+            else if (now.DayOfWeek == DayOfWeek.Friday)
+            {
+                if (AutoPowerSettingsControl.pow_schedule["금요일"].IsEnabled)
+                {
+                    if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["금요일"].StartTime.ToString().Substring(0, 5))
+                    {
+                        //켜지게
+                        MessageBox.Show("on");
+                    }
+                    else if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["금요일"].EndTime.ToString().Substring(0, 5))
+                    {
+                        //꺼지게
+                        MessageBox.Show("off");
+                    }
+                    else
+                    {
+
+                    }
+                }
+            }
+            else if (now.DayOfWeek == DayOfWeek.Saturday)
             {
                 if (AutoPowerSettingsControl.pow_schedule["토요일"].IsEnabled)
                 {
@@ -124,6 +224,26 @@ namespace WpfApp9
                     {
                         Console.WriteLine(now.ToString("HH:mm"));
                         Console.WriteLine(AutoPowerSettingsControl.pow_schedule["토요일"].StartTime.ToString().Substring(0, 5));
+                    }
+                }
+            }
+            else if (now.DayOfWeek == DayOfWeek.Sunday)
+            {
+                if (AutoPowerSettingsControl.pow_schedule["일요일"].IsEnabled)
+                {
+                    if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["일요일"].StartTime.ToString().Substring(0, 5))
+                    {
+                        //켜지게
+                        MessageBox.Show("on");
+                    }
+                    else if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["일요일"].EndTime.ToString().Substring(0, 5))
+                    {
+                        //꺼지게
+                        MessageBox.Show("off");
+                    }
+                    else
+                    {
+
                     }
                 }
             }
@@ -222,9 +342,11 @@ namespace WpfApp9
                 item.StopPingCheck();
             }
         }
-        public void ShowFileExplorer(string ftpAddress)
+        public void ShowFileExplorer(string ftpAddress, string name)
         {
+
             FileExplorerControl.Initialize(ftpAddress);
+            FileExplorerControl.targetname.Text = name;
             OverlayGrid.Visibility = Visibility.Visible;
         }
 
@@ -238,7 +360,11 @@ namespace WpfApp9
                 var item = sender as DraggableItemControl;
                 if (item != null)
                 {
-                    ShowFileExplorer(item.Configuration.FtpAddress);
+                    if (item.ispow)
+                    {
+                        ShowFileExplorer(item.Configuration.FtpAddress, item.Configuration.Name); //더블클릭
+                    }
+                    
                 }
                 e.Handled = true;
             }
@@ -443,26 +569,73 @@ namespace WpfApp9
 
         private void RemoveDevice_Click(object sender, RoutedEventArgs e)
         {
-            if (dragItems.Count == 0)
+            editpanel.Visibility = Visibility.Visible;
+            for (int i = 0; i < dragItems.Count; i++)
             {
-                MessageBox.Show("삭제할 기기가 없습니다.", "알림", MessageBoxButton.OK, MessageBoxImage.Information);
-                return;
+                dragItems[i].delete_select.Visibility = Visibility.Visible;
             }
+            //if (dragItems.Count == 0)
+            //{
+            //    MessageBox.Show("삭제할 기기가 없습니다.", "알림", MessageBoxButton.OK, MessageBoxImage.Information);
+            //    return;
+            //}
 
-            RemoveDeviceWindow removeDeviceWindow = new RemoveDeviceWindow(dragItems.Select(i => i.Configuration).ToList());
-            if (removeDeviceWindow.ShowDialog() == true)
+            //RemoveDeviceWindow removeDeviceWindow = new RemoveDeviceWindow(dragItems.Select(i => i.Configuration).ToList());
+            //if (removeDeviceWindow.ShowDialog() == true)
+            //{
+            //    var configToRemove = removeDeviceWindow.SelectedConfig;
+            //    var itemToRemove = dragItems.FirstOrDefault(i => i.Configuration == configToRemove);
+            //    if (itemToRemove != null)
+            //    {
+            //        ItemCanvas.Children.Remove(itemToRemove);
+            //        dragItems.Remove(itemToRemove);
+            //        SaveItemConfigurations();
+            //    }
+            //}
+        }
+
+
+
+        private void item_delete(object sender, RoutedEventArgs e)
+        {
+            //for (int i = 0; i < dragItems.Count; i++)
+            //{
+            //    if (dragItems[i].d_select.IsChecked == true)
+            //    {
+            //                ItemCanvas.Children.Remove(dragItems[i]);
+            //                dragItems.Remove(dragItems[i]);
+
+            //    }
+            //}
+
+            for (int i = dragItems.Count - 1; i >= 0; i--)
             {
-                var configToRemove = removeDeviceWindow.SelectedConfig;
-                var itemToRemove = dragItems.FirstOrDefault(i => i.Configuration == configToRemove);
-                if (itemToRemove != null)
+                if (dragItems[i].d_select.IsChecked == true)
                 {
-                    ItemCanvas.Children.Remove(itemToRemove);
-                    dragItems.Remove(itemToRemove);
-                    SaveItemConfigurations();
+                    ItemCanvas.Children.Remove(dragItems[i]);
+                    dragItems.RemoveAt(i);
                 }
             }
+
+            SaveItemConfigurations();
+
+
+
+            editpanel.Visibility = Visibility.Collapsed;
+            for (int i = 0; i < dragItems.Count; i++)
+            {
+                dragItems[i].delete_select.Visibility = Visibility.Collapsed;
+                dragItems[i].d_select.IsChecked = false;
+            }
         }
-      
+        private void editpanel_close(object sender, RoutedEventArgs e)
+        {
+            editpanel.Visibility = Visibility.Collapsed;
+            for (int i = 0; i < dragItems.Count; i++)
+            {
+                dragItems[i].delete_select.Visibility = Visibility.Collapsed;
+            }
+        }
         private void AutoPowerSettings_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ClickCount == 2)

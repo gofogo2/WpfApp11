@@ -43,6 +43,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -169,7 +170,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\time.png" />
+    <Resource Include="Images\time.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\pc.png">
@@ -189,6 +192,22 @@
     <Resource Include="Images\projector.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\to_ftp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\to_local.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\icons\icon_bat.png" />
+    <Resource Include="Images\icons\icon_doc.png" />
+    <Resource Include="Images\icons\icon_img.png" />
+    <Resource Include="Images\icons\icon_pdf.png" />
+    <Resource Include="Images\icons\icon_ppt.png" />
+    <Resource Include="Images\icons\icon_txt.png" />
+    <Resource Include="Images\icons\icon_video.png" />
+    <Resource Include="Images\icons\icon_xls.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

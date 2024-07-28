@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using System.Linq;
 using System.Diagnostics;
 using WpfApp11;
+using System.Drawing;
+using System.Windows.Interop;
 
 namespace WpfApp9
 {
@@ -30,7 +32,8 @@ namespace WpfApp9
         private ObservableCollection<FileSystemItem> _rightItems;
         private FtpClient _ftpClient;
         private string _currentLocalPath = @"C:\dw";
-        private string _currentFtpPath = "/www/";
+        private string _currentFtpPath = "/";
+        //private string _currentFtpPath = "ftp://192.168.0.5";
 
         public FileExplorerControl()
         {
@@ -56,8 +59,10 @@ namespace WpfApp9
             {
                 Uri ftpUri = new Uri(ftpAddress);
                 string host = ftpUri.Host;
-                string username = ftpUri.UserInfo.Split(':')[0];
-                string password = ftpUri.UserInfo.Split(':')[1];
+                //string username = ftpUri.UserInfo.Split(':')[0];
+                //string password = ftpUri.UserInfo.Split(':')[1];
+                string username = "ftp1234";
+                string password = "1234";
 
                 _ftpClient = new FtpClient(host, username, password);
                 _ftpClient.Connect();
@@ -106,6 +111,9 @@ namespace WpfApp9
                         FullPath = file.FullName,
                         IconSource = GetIconForFileType(file.FullName)
                     });
+
+
+              
                 }
 
                 _currentLocalPath = path;
@@ -139,13 +147,100 @@ namespace WpfApp9
 
                 foreach (var item in sortedListing)
                 {
-                    _rightItems.Add(new FileSystemItem
+                   
+                    FileSystemItem fs = new FileSystemItem();
+                    fs.Name = item.Name;
+                    fs.Type = item.Type == FtpObjectType.Directory ? "Folder" : "File";
+                    fs.FullPath = item.FullName;
+
+
+
+                    string extension = Path.GetExtension(fs.FullPath).ToLower();
+
+
+                    if (extension == "")
                     {
-                        Name = item.Name,
-                        Type = item.Type == FtpObjectType.Directory ? "Folder" : "File",
-                        FullPath = item.FullName,
-                        IconSource = GetIconForFileType(item.Type == FtpObjectType.Directory ? "folder" : item.Name)
-                    });
+                        fs.IconSource = GetIconForFileType(item.Type == FtpObjectType.Directory ? "folder" : item.Name);
+                    }
+                    else if (extension == ".exe")
+                    {
+                        System.Drawing.Icon errorIcon = SystemIcons.Application;
+                        BitmapSource bitmapSource = Imaging.CreateBitmapSourceFromHIcon(
+                            errorIcon.Handle,
+                            Int32Rect.Empty,
+                            BitmapSizeOptions.FromEmptyOptions());
+                        fs.IconSource = bitmapSource;
+                    }
+                    else if (extension == ".txt")
+                    {
+
+
+                        BitmapSource bitmapSource = new BitmapImage(new Uri("../Images/icons/icon_txt.png", UriKind.Relative));
+                        fs.IconSource = bitmapSource;
+
+
+
+                        //================================================================================================================
+
+                        //Icon icon = GetIconFromDll(@"C:\Windows\System32\shell32.dll", 97); // 예시로 4번째 아이콘 가져오기
+
+                        //// Icon을 BitmapSource로 변환
+                        //BitmapSource bitmapSource = Imaging.CreateBitmapSourceFromHIcon(
+                        //    icon.Handle,
+                        //    Int32Rect.Empty,
+                        //    BitmapSizeOptions.FromEmptyOptions());
+
+                        //// 이미지를 표시하는 Image 컨트롤에 설정
+                        //fs.IconSource = bitmapSource;
+
+                        //// Icon 핸들 해제
+                        //icon.Dispose();
+
+
+                        //================================================================================================================
+
+
+                        //Icon shellIcon = GetShellIcon(5); // 예시로 Shell32.dll의 5번째 아이콘 가져오기
+
+                        //// Icon을 BitmapSource로 변환
+                        //BitmapSource bitmapSource = Imaging.CreateBitmapSourceFromHIcon(
+                        //    shellIcon.Handle,
+                        //    Int32Rect.Empty,
+                        //    BitmapSizeOptions.FromEmptyOptions());
+
+                        //// 이미지를 표시하는 Image 컨트롤에 설정
+                        //fs.IconSource = bitmapSource;
+
+                        //// Icon 핸들 해제
+                        //shellIcon.Dispose();
+
+                        //================================================================================================================
+
+
+                    }
+                    else if (extension == ".bat")
+                    {
+
+
+                        BitmapSource bitmapSource = new BitmapImage(new Uri("../Images/icons/icon_bat.png", UriKind.Relative));
+                        fs.IconSource = bitmapSource;
+
+                    }
+                    else
+                    {
+                        System.Drawing.Icon errorIcon = SystemIcons.Application;
+                        BitmapSource bitmapSource = Imaging.CreateBitmapSourceFromHIcon(
+                            errorIcon.Handle,
+                            Int32Rect.Empty,
+                            BitmapSizeOptions.FromEmptyOptions());
+                        fs.IconSource = bitmapSource;
+
+                        //BitmapSource bitmapSource = new BitmapImage(new Uri("../Images/time.png", UriKind.Relative));
+                    }
+
+
+
+                    _rightItems.Add(fs);
                 }
 
                 _currentFtpPath = path;
@@ -155,6 +250,65 @@ namespace WpfApp9
                 MessageBox.Show("Error loading FTP directory: " + ex.Message);
             }
         }
+
+
+
+
+
+        //=======================================
+
+        private Icon GetShellIcon(int index)
+        {
+            IntPtr hIcon;
+            hIcon = NativeMethods.ExtractIcon(IntPtr.Zero, @"C:\Windows\System32\shell32.dll", index);
+            if (hIcon != IntPtr.Zero)
+            {
+                return Icon.FromHandle(hIcon);
+            }
+            return null;
+        }
+
+        // 네이티브 메서드 선언
+        private static class NativeMethods
+        {
+            [System.Runtime.InteropServices.DllImport("shell32.dll", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+            public extern static IntPtr ExtractIcon(IntPtr hInst, string lpszExeFileName, int nIconIndex);
+        }
+
+
+
+
+
+        private Icon GetIconFromDll(string dllPath, int iconIndex)
+        {
+            IntPtr hIcon = IntPtr.Zero;
+            try
+            {
+                hIcon = NativeMethods.ExtractIcon(IntPtr.Zero, dllPath, iconIndex);
+                if (hIcon != IntPtr.Zero)
+                {
+                    return Icon.FromHandle(hIcon);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error extracting icon: {ex.Message}");
+            }
+            return null;
+        }
+
+        //===================================================
+
+
+
+
+
+
+
+
+
+
+
 
         private void LeftFileListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
@@ -333,6 +487,10 @@ namespace WpfApp9
                 {
                     MessageBox.Show($"삭제 중");
                 }
+                finally
+                {
+                    LoadFtpDirectory(_currentFtpPath);
+                }
             }
         }
         private async void TransferButton_Click(object sender, RoutedEventArgs e)
@@ -344,7 +502,9 @@ namespace WpfApp9
                 return;
             }
 
+            Transferpopup.Visibility = Visibility.Visible;
             TransferProgressBar.Visibility = Visibility.Visible;
+            
             TransferProgressBar.Value = 0;
             TransferProgressText.Text = "0%";
 
@@ -358,7 +518,11 @@ namespace WpfApp9
                     await TransferItemAsync(item, _currentFtpPath, totalSize, progress);
                 }
 
-                MessageBox.Show("전송이 완료되었습니다.", "알림", MessageBoxButton.OK, MessageBoxImage.Information);
+                if (check_finish == true)
+                {
+                    MessageBox.Show("전송이 완료되었습니다.", "알림", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                 
             }
             catch (Exception ex)
             {
@@ -366,6 +530,7 @@ namespace WpfApp9
             }
             finally
             {
+                Transferpopup.Visibility = Visibility.Collapsed;
                 TransferProgressBar.Visibility = Visibility.Collapsed;
                 TransferProgressText.Text = "";
                 LoadFtpDirectory(_currentFtpPath);
@@ -380,7 +545,7 @@ namespace WpfApp9
                 MessageBox.Show("전송할 항목을 선택해주세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
-
+            Transferpopup.Visibility = Visibility.Visible;
             TransferProgressBar.Visibility = Visibility.Visible;
             TransferProgressBar.Value = 0;
             TransferProgressText.Text = "0%";
@@ -395,7 +560,12 @@ namespace WpfApp9
                     await FtpToLocalTransferItemAsync(item, _currentLocalPath, totalSize, progress);
                 }
 
-                MessageBox.Show("전송이 완료되었습니다.", "알림", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                if (check_finish == true)
+                {
+                    MessageBox.Show("전송이 완료되었습니다.", "알림", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+
             }
             catch (Exception ex)
             {
@@ -403,6 +573,7 @@ namespace WpfApp9
             }
             finally
             {
+                Transferpopup.Visibility = Visibility.Collapsed;
                 TransferProgressBar.Visibility = Visibility.Collapsed;
                 TransferProgressText.Text = "";
                 LoadLocalDirectory(_currentLocalPath);
@@ -414,66 +585,232 @@ namespace WpfApp9
             CloseRequested?.Invoke(this, EventArgs.Empty);
         }
 
+
+        bool check_finish = false;
         private async Task TransferItemAsync(FileSystemItem item, string destPath, long totalSize, TransferProgress progress)
         {
-            if (item.Type == "File")
+            try
             {
-                var ftpPath = Path.Combine(destPath, item.Name).Replace("\\", "/");
-                var result = await Task.Run(() => _ftpClient.UploadFile(item.FullPath, ftpPath, FtpRemoteExists.Overwrite, true, FtpVerify.None, ftpProgress =>
-                {
-                    progress.TransferredSize = ftpProgress.TransferredBytes;
-                    UpdateProgress(progress.TransferredSize, totalSize);
-                }));
 
-                if (result != FtpStatus.Success)
+                if (item.Type == "File")
                 {
-                    throw new Exception($"파일 '{item.Name}' 전송 실패");
+                    //var ftpPath = Path.Combine(destPath, item.Name).Replace("\\", "/");
+                    //var result = await Task.Run(() => _ftpClient.UploadFile(item.FullPath, ftpPath, FtpRemoteExists.Overwrite, true, FtpVerify.None, ftpProgress =>
+                    //{
+                    //    progress.TransferredSize = ftpProgress.TransferredBytes;
+                    //    UpdateProgress(progress.TransferredSize, totalSize);
+
+                    //}));
+
+
+                    //if (result != FtpStatus.Success)
+                    //{
+                    //    throw new Exception($"파일 '{item.Name}' 전송 실패");
+                    //}
+
+
+
+                    try
+                    {
+                        var ftpPath = Path.Combine(destPath, item.Name).Replace("\\", "/");
+                        await Task.Run(() =>
+                        {
+                            try
+                            {
+                                _ftpClient.UploadFile(item.FullPath, ftpPath, FtpRemoteExists.Overwrite, true, FtpVerify.None, ftpProgress =>
+                                {
+                                    check_finish = true;
+                                    progress.TransferredSize = ftpProgress.TransferredBytes;
+                                    UpdateProgress(progress.TransferredSize, totalSize);
+                                });
+                            }
+                            catch (System.Net.Sockets.SocketException ex)
+                            {
+                                Console.WriteLine($"SocketException 발생: {ex.Message}");
+                                check_finish = false;
+                                throw; // 예외를 호출자에게 전달
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine($"업로드 중 오류 발생: {ex.Message}");
+                                //MessageBox.Show($"전송 중 오류 발생: {ex.Message}", "오류", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                               
+                                check_finish = false;
+                            }
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"작업 실행 중 오류 발생: {ex.Message}");
+                        check_finish = false;
+                    }
+
+
+
+
+
+
+
+
+
+
+
+
+                    //try
+                    //{
+                    //    await Task.Run(() =>
+                    //    {
+                    //        try
+                    //        {
+                    //            // FTP 업로드 작업 수행
+                    //            _ftpClient.UploadFile(item.FullPath, ftpPath, FtpRemoteExists.Overwrite, true, FtpVerify.None, ftpProgress =>
+                    //            {
+                    //                progress.TransferredSize = ftpProgress.TransferredBytes;
+                    //                UpdateProgress(progress.TransferredSize, totalSize);
+                    //            });
+
+
+
+                    //            //if (result != FtpStatus.Success)
+                    //            //{
+                    //            //    throw new Exception($"파일 '{item.Name}' 전송 실패");
+                    //            //}
+                    //        }
+                    //        catch (Exception ex)
+                    //        {
+                    //            // FTP 업로드 중 발생한 예외 처리
+                    //            Console.WriteLine($"FTP 업로드 중 오류 발생: {ex.Message}");
+                    //            // 예외를 다시 던져서 호출자에게 전달할 수 있습니다.
+                    //            //throw;
+                    //        }
+                    //    });
+                    //}
+                    //catch (Exception ex)
+                    //{
+                    //    // Task.Run 내에서 발생한 예외 처리
+                    //    Console.WriteLine($"작업 실행 중 오류 발생: {ex.Message}");
+                    //}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                }
+                else if (item.Type == "Folder")
+                {
+                    var ftpFolderPath = Path.Combine(destPath, item.Name).Replace("\\", "/");
+                    await Task.Run(() => _ftpClient.CreateDirectory(ftpFolderPath));
+
+                    foreach (var file in Directory.GetFiles(item.FullPath))
+                    {
+                        var fileItem = new FileSystemItem
+                        {
+                            Name = Path.GetFileName(file),
+                            Type = "File",
+                            FullPath = file
+                        };
+                        await TransferItemAsync(fileItem, ftpFolderPath, totalSize, progress);
+                    }
+
+                    foreach (var dir in Directory.GetDirectories(item.FullPath))
+                    {
+                        var dirItem = new FileSystemItem
+                        {
+                            Name = Path.GetFileName(dir),
+                            Type = "Folder",
+                            FullPath = dir
+                        };
+                        await TransferItemAsync(dirItem, ftpFolderPath, totalSize, progress);
+                    }
                 }
             }
-            else if (item.Type == "Folder")
+            catch(Exception e)
             {
-                var ftpFolderPath = Path.Combine(destPath, item.Name).Replace("\\", "/");
-                await Task.Run(() => _ftpClient.CreateDirectory(ftpFolderPath));
 
-                foreach (var file in Directory.GetFiles(item.FullPath))
-                {
-                    var fileItem = new FileSystemItem
-                    {
-                        Name = Path.GetFileName(file),
-                        Type = "File",
-                        FullPath = file
-                    };
-                    await TransferItemAsync(fileItem, ftpFolderPath, totalSize, progress);
-                }
-
-                foreach (var dir in Directory.GetDirectories(item.FullPath))
-                {
-                    var dirItem = new FileSystemItem
-                    {
-                        Name = Path.GetFileName(dir),
-                        Type = "Folder",
-                        FullPath = dir
-                    };
-                    await TransferItemAsync(dirItem, ftpFolderPath, totalSize, progress);
-                }
             }
         }
+
+
+
+
+
 
         private async Task FtpToLocalTransferItemAsync(FileSystemItem item, string destPath, long totalSize, TransferProgress progress)
         {
             if (item.Type == "File")
             {
-                var localPath = Path.Combine(destPath, item.Name);
-                var result = await Task.Run(() => _ftpClient.DownloadFile(localPath, item.FullPath, FtpLocalExists.Overwrite, FtpVerify.None, ftpProgress =>
-                {
-                    progress.TransferredSize += ftpProgress.TransferredBytes;
-                    UpdateProgress(progress.TransferredSize, totalSize);
-                }));
+               //  var localPath = Path.Combine(destPath, item.Name);
+                //var result = await Task.Run(() => _ftpClient.DownloadFile(localPath, item.FullPath, FtpLocalExists.Overwrite, FtpVerify.None, ftpProgress =>
+                //{
+                //    progress.TransferredSize += ftpProgress.TransferredBytes;
+                //    UpdateProgress(progress.TransferredSize, totalSize);
+                //}));
 
-                if (result != FtpStatus.Success)
+                //if (result != FtpStatus.Success)
+                //{
+                //    throw new Exception($"파일 '{item.Name}' 전송 실패");
+                //}
+
+
+
+
+
+
+                try
                 {
-                    throw new Exception($"파일 '{item.Name}' 전송 실패");
+                    var localPath = Path.Combine(destPath, item.Name);
+                    await Task.Run(() =>
+                    {
+                        try
+                        {
+                            _ftpClient.DownloadFile(localPath, item.FullPath, FtpLocalExists.Overwrite,  FtpVerify.None, ftpProgress =>
+                            {
+                                check_finish = true;
+                                progress.TransferredSize = ftpProgress.TransferredBytes;
+                                UpdateProgress(progress.TransferredSize, totalSize);
+                            });
+                        }
+                        catch (System.Net.Sockets.SocketException ex)
+                        {
+                            Console.WriteLine($"SocketException 발생: {ex.Message}");
+                            check_finish = false;
+                            throw; // 예외를 호출자에게 전달
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"업로드 중 오류 발생: {ex.Message}");
+                            //MessageBox.Show($"전송 중 오류 발생: {ex.Message}", "오류", MessageBoxButton.OK, MessageBoxImage.Error);
+
+
+                            check_finish = false;
+                        }
+                    });
                 }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"작업 실행 중 오류 발생: {ex.Message}");
+                    check_finish = false;
+                }
+
+
+
+
+
+
+
             }
             else if (item.Type == "Folder")
             {

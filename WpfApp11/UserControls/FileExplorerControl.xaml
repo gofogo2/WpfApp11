@@ -31,16 +31,22 @@
         </Style>
     </UserControl.Resources>
 
+
     <Grid>
+        <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="100"/>
         </Grid.RowDefinitions>
-
-        <Grid Grid.Row="0">
+            <Button Grid.Row="3" x:Name="CloseButton"  HorizontalAlignment="Center" VerticalAlignment="Center"  Width="150" Height="60" Margin="0,5,5,0" Click="CloseButton_Click" >
+                <TextBlock Text="닫기" FontSize="25"/>
+            </Button>
+            <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="100"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
@@ -49,7 +55,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="55"/>
                 </Grid.RowDefinitions>
 
                 <Border Grid.Row="0" Background="#FFE0E0E0" Padding="5">
@@ -91,29 +97,41 @@
                     <Button x:Name="LocalCreateFolderButton" Content="폴더 생성" Margin="5" Padding="5,2" Grid.Column="0" Click="LocalCreateFolder_Click"/>
                     <Button x:Name="LocalEditButton" Content="수정" Margin="5" Padding="5,2" Grid.Column="1" Click="LocalEdit_Click"/>
                     <Button x:Name="LocalDeleteButton" Content="삭제" Margin="5" Padding="5,2" Grid.Column="2" Click="LocalDelete_Click"/>
-                    <Button x:Name="TransferButton" Content="전송" Margin="5" Padding="5,2" Grid.Column="3" Click="TransferButton_Click"/>
+                    <!--<Button x:Name="TransferButton" Content="전송" Margin="5" Padding="5,2" Grid.Column="3" />-->
                 </Grid>
             </Grid>
 
             <!-- 경계선 -->
-            <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Center" VerticalAlignment="Stretch" Background="#FFC0C0C0"/>
+            <!--<GridSplitter Grid.Column="1" Width="80" HorizontalAlignment="Center" VerticalAlignment="Stretch" Background="#FFC0C0C0"/>-->
+            <Grid Grid.Column="1">
+                <StackPanel VerticalAlignment="Center" >
+                    <Button Width="70" Height=" 70" Click="TransferButton_Click">
+                        <Image Source="../Images/to_ftp.png"/>
+                    </Button>
+                    <Button Width="70" Height=" 70"  Margin="0,40,0,0" Click="FtpToLocalTransferButton_Click">
+                        <Image Source="../Images/to_local.png"/>
+                    </Button>
+                </StackPanel>
+                
+
+
+            </Grid>
 
             <!-- FTP 파일 시스템 패널 -->
             <Grid Grid.Column="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="55"/>
                 </Grid.RowDefinitions>
 
                 
 
                 <Border Grid.Row="0" Background="#FFE0E0E0" Padding="5">
-                    <TextBlock Text="LED PC #1" FontWeight="Bold"/>
+                    <TextBlock Text="LED PC #1" FontWeight="Bold" HorizontalAlignment="Center" x:Name="targetname"/>
                     
                 </Border>
-                <Button Grid.Row="0" x:Name="CloseButton" Content="X" HorizontalAlignment="Right" VerticalAlignment="Top" 
-                Width="30" Height="30" Margin="0,5,5,0" Click="CloseButton_Click"/>
+            
 
                 <ListView x:Name="RightFileListView" Grid.Row="1" BorderThickness="0"
                           ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -150,19 +168,18 @@
                     <Button x:Name="FtpCreateFolderButton" Content="폴더 생성" Margin="5" Padding="5,2" Grid.Column="0" Click="FtpCreateFolder_Click"/>
                     <Button x:Name="FtpEditButton" Content="수정" Margin="5" Padding="5,2" Grid.Column="1" Click="FtpEdit_Click"/>
                     <Button x:Name="FtpDeleteButton" Content="삭제" Margin="5" Padding="5,2" Grid.Column="2" Click="FtpDelete_Click"/>
-                    <Button x:Name="FtpToLocalTransferButton" Content="로컬로 전송" Margin="5" Padding="5,2" Grid.Column="3" Click="FtpToLocalTransferButton_Click"/>
+                    <!--<Button x:Name="FtpToLocalTransferButton" Content="로컬로 전송" Margin="5" Padding="5,2" Grid.Column="3" Click="FtpToLocalTransferButton_Click"/>-->
                 </Grid>
             </Grid>
         </Grid>
 
         <!-- 프로그레스 바 -->
-        <Grid Grid.Row="1" Background="#FFE0E0E0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <ProgressBar x:Name="TransferProgressBar" Height="20" Margin="5" Visibility="Collapsed"/>
-            <TextBlock x:Name="TransferProgressText" Grid.Column="1" VerticalAlignment="Center" Margin="5,0"/>
+        </Grid>
+        <Grid   x:Name="Transferpopup" Visibility="Collapsed" >
+            <Grid Background="Black" Opacity="0.8"/>
+            <ProgressBar x:Name="TransferProgressBar" Height="40" Width="400" Margin="5" Visibility="Visible" />
+            <TextBlock x:Name="TransferProgressText"  VerticalAlignment="Center" Margin="5,0"  HorizontalAlignment="Center"/>
         </Grid>
     </Grid>
+   
 </UserControl>
