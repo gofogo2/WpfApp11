@@ -619,8 +619,6 @@ namespace WpfApp9
        
         private async void TransferButton_Click(object sender, RoutedEventArgs e)
         {
-
-
             var selectedItems = LeftFileListView.SelectedItems.Cast<FileSystemItem>().ToList();
 
             if (!selectedItems.Any())
@@ -629,29 +627,18 @@ namespace WpfApp9
                 return;
             }
 
-
-
             List<string> filename = new List<string>();
             var listing = _ftpClient.GetListing(_currentFtpPath);
             var sortedListing = listing
                 .OrderByDescending(item => item.Type == FtpObjectType.Directory)
                 .ThenBy(item => item.Name);
 
-
-
             foreach (var item in sortedListing)
             {
                 filename.Add(item.Name);
             }
 
-
-
             bool file_exit = false;
-
-
-
-
-
 
             for (int i = 0; i < filename.Count; i++)
             {
@@ -665,8 +652,6 @@ namespace WpfApp9
             }
 
 
-
-
             if (file_exit)
             {
                 MessageBoxResult result = MessageBox.Show(
@@ -675,25 +660,17 @@ namespace WpfApp9
                MessageBoxButton.YesNo,      // 버튼 종류
                MessageBoxImage.Question     // 아이콘 종류
            );
-
+             
                 if (result == MessageBoxResult.Yes)
                 {
                     // 사용자가 'Yes'를 클릭했을 때의 처리
                     await file_send_to_ftp(selectedItems);
                 }
-                else
-                {
-                    
-                }
-
-
             }
             else
             {
                 await file_send_to_ftp(selectedItems);
             }
-
-           
         }
 
         private async Task file_send_to_ftp(List<FileSystemItem> selectedItems)
