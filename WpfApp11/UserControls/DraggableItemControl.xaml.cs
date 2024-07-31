@@ -150,7 +150,7 @@ namespace WpfApp9
             {
                 if (ispow == true)
                 {
-                    mainWindow.ShowFileExplorer(Configuration.FtpAddress, Configuration.Name);
+                    mainWindow.ShowFileExplorer(Configuration.IpAddress, Configuration.Name);
                 }
                 
             }

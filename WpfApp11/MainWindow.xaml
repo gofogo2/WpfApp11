@@ -162,6 +162,17 @@
         </Grid>
             <usercontrols:GlobalMessageControl x:Name="GlobalMessage" VerticalAlignment="Top" 
                           Height="0" Panel.ZIndex="9999"/>
+
+
+        <Grid Grid.Row="0" Grid.RowSpan="3" x:Name="add_device_ppanel" Visibility="Collapsed">
+
+
+            <usercontrols:AddDeviceControl x:Name="addDeviceWindow">
+                
+            </usercontrols:AddDeviceControl>
+        </Grid>
     </Grid>
+
+   
     
 </Window>

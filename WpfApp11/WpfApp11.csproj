@@ -65,6 +65,9 @@
     <Compile Include="Helpers\GlobalMessageService.cs" />
     <Compile Include="Helpers\PJLinkHelper.cs" />
     <Compile Include="Helpers\WakeOnlanHelper.cs" />
+    <Compile Include="UserControls\AddDeviceControl.xaml.cs">
+      <DependentUpon>AddDeviceControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\AutoPowerSettingsControl.xaml.cs">
       <DependentUpon>AutoPowerSettingsControl.xaml</DependentUpon>
     </Compile>
@@ -86,6 +89,10 @@
     <Compile Include="UserControls\RemoveDeviceWindow.xaml.cs">
       <DependentUpon>RemoveDeviceWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="UserControls\AddDeviceControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\AddDeviceWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

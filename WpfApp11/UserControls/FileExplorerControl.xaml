@@ -106,11 +106,12 @@
             <Grid Grid.Column="1">
                 <StackPanel VerticalAlignment="Center" >
                     <Button Width="70" Height=" 70" Click="TransferButton_Click">
-                        <Image Source="../Images/to_ftp.png"/>
-                    </Button>
+                        <!--<Image Source="../Images/to_ftp.png"/>-->
+                            <TextBlock Text="→" FontSize="50" Height="70"/>
+                        </Button>
                     <Button Width="70" Height=" 70"  Margin="0,40,0,0" Click="FtpToLocalTransferButton_Click">
-                        <Image Source="../Images/to_local.png"/>
-                    </Button>
+                            <TextBlock Text="←" FontSize="50" Height="70"/>
+                        </Button>
                 </StackPanel>
                 
 

@@ -333,6 +333,8 @@ namespace WpfApp9
 
             ItemCanvas.Children.Add(itemControl);
             dragItems.Add(itemControl);
+
+            SnapToGrid(itemControl);
         }
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
@@ -344,10 +346,10 @@ namespace WpfApp9
         }
         public void ShowFileExplorer(string ftpAddress, string name)
         {
-
+            OverlayGrid.Visibility = Visibility.Visible;
             FileExplorerControl.Initialize(ftpAddress);
             FileExplorerControl.targetname.Text = name;
-            OverlayGrid.Visibility = Visibility.Visible;
+           
         }
 
 
@@ -362,7 +364,7 @@ namespace WpfApp9
                 {
                     if (item.ispow)
                     {
-                        ShowFileExplorer(item.Configuration.FtpAddress, item.Configuration.Name); //더블클릭
+                        ShowFileExplorer(item.Configuration.IpAddress, item.Configuration.Name); //더블클릭
                     }
                     
                 }
@@ -558,13 +560,27 @@ namespace WpfApp9
 
         private void AddDevice_Click(object sender, RoutedEventArgs e)
         {
-            AddDeviceWindow addDeviceWindow = new AddDeviceWindow();
-            if (addDeviceWindow.ShowDialog() == true)
+            //AddDeviceControl addDeviceWindow = new AddDeviceControl();
+
+            add_device_ppanel.Visibility = Visibility.Visible;
             {
-                ItemConfiguration newConfig = addDeviceWindow.NewDeviceConfig;
-                CreateDraggableItem(newConfig);
-                SaveItemConfigurations();
+                //ItemConfiguration newConfig = addDeviceWindow.NewDeviceConfig;
+                //CreateDraggableItem(newConfig);
+                //SaveItemConfigurations();
             }
+        }
+
+
+        public void createitem(ItemConfiguration newconfig)
+        {
+
+            CreateDraggableItem(newconfig);
+
+           
+
+
+
+            SaveItemConfigurations();
         }
 
         private void RemoveDevice_Click(object sender, RoutedEventArgs e)
@@ -598,35 +614,52 @@ namespace WpfApp9
 
         private void item_delete(object sender, RoutedEventArgs e)
         {
-            //for (int i = 0; i < dragItems.Count; i++)
-            //{
-            //    if (dragItems[i].d_select.IsChecked == true)
-            //    {
-            //                ItemCanvas.Children.Remove(dragItems[i]);
-            //                dragItems.Remove(dragItems[i]);
 
-            //    }
-            //}
 
-            for (int i = dragItems.Count - 1; i >= 0; i--)
+
+            MessageBoxResult result = MessageBox.Show(
+               "현재 목록을 저장 하시겠습니까?",   // 메시지
+               "확인",                      // 제목
+               MessageBoxButton.YesNo,      // 버튼 종류
+               MessageBoxImage.Question     // 아이콘 종류
+           );
+
+            if (result == MessageBoxResult.Yes)
             {
-                if (dragItems[i].d_select.IsChecked == true)
+                // 사용자가 'Yes'를 클릭했을 때의 처리
+                for (int i = dragItems.Count - 1; i >= 0; i--)
                 {
-                    ItemCanvas.Children.Remove(dragItems[i]);
-                    dragItems.RemoveAt(i);
+                    if (dragItems[i].d_select.IsChecked == true)
+                    {
+                        ItemCanvas.Children.Remove(dragItems[i]);
+                        dragItems.RemoveAt(i);
+                    }
+                }
+
+                SaveItemConfigurations();
+
+
+
+                editpanel.Visibility = Visibility.Collapsed;
+                for (int i = 0; i < dragItems.Count; i++)
+                {
+                    dragItems[i].delete_select.Visibility = Visibility.Collapsed;
+                    dragItems[i].d_select.IsChecked = false;
                 }
             }
-
-            SaveItemConfigurations();
-
-
-
-            editpanel.Visibility = Visibility.Collapsed;
-            for (int i = 0; i < dragItems.Count; i++)
+            else
             {
-                dragItems[i].delete_select.Visibility = Visibility.Collapsed;
-                dragItems[i].d_select.IsChecked = false;
+              
             }
+
+
+
+
+
+
+
+
+          
         }
         private void editpanel_close(object sender, RoutedEventArgs e)
         {

@@ -13,6 +13,8 @@ using System.Diagnostics;
 using WpfApp11;
 using System.Drawing;
 using System.Windows.Interop;
+using System.Net;
+using System.Collections.Generic;
 
 namespace WpfApp9
 {
@@ -33,11 +35,19 @@ namespace WpfApp9
         private FtpClient _ftpClient;
         private string _currentLocalPath = @"C:\dw";
         private string _currentFtpPath = "/";
+        string ftp_port = "21";
         //private string _currentFtpPath = "ftp://192.168.0.5";
 
+
+        bool _isconnect = false;
+        MainWindow main;
         public FileExplorerControl()
         {
             InitializeComponent();
+
+            main = Application.Current.MainWindow as MainWindow;
+
+
             _leftItems = new ObservableCollection<FileSystemItem>();
             _rightItems = new ObservableCollection<FileSystemItem>();
             LeftFileListView.ItemsSource = _leftItems;
@@ -48,6 +58,8 @@ namespace WpfApp9
 
         public void Initialize(string ftpAddress)
         {
+
+
             InitializeFtpConnection(ftpAddress);
             LoadLocalDirectory(_currentLocalPath);
             LoadFtpDirectory(_currentFtpPath);
@@ -55,199 +67,309 @@ namespace WpfApp9
 
         private void InitializeFtpConnection(string ftpAddress)
         {
+
+            var target_ftp = "ftp://" + ftpAddress +":" + ftp_port;
             try
             {
-                Uri ftpUri = new Uri(ftpAddress);
+                //원래====================================================================
+                Uri ftpUri = new Uri(target_ftp);
                 string host = ftpUri.Host;
                 //string username = ftpUri.UserInfo.Split(':')[0];
                 //string password = ftpUri.UserInfo.Split(':')[1];
                 string username = "ftp1234";
                 string password = "1234";
 
+                //string username = "engium";
+                //string password = "1";
+                //====================================================================
+
+
+
+
+
+                //임시====================================================================
+                //Uri ftpUri = new Uri("ftp://121.131.142.148:12923");
+                //string host = ftpUri.Host;
+                //string username = "engium";
+                //string password = "1";
+
+                //====================================================================
+
+
+
+
+
                 _ftpClient = new FtpClient(host, username, password);
+                
+
                 _ftpClient.Connect();
+
+                _isconnect = true;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                //try
+                //{
+                //    FtpWebRequest request = (FtpWebRequest)WebRequest.Create(ftpUri);
+                //    request.Method = WebRequestMethods.Ftp.ListDirectory;
+
+                //    // 타임아웃 설정 (밀리초 단위)
+                //    request.Timeout = 5000; // 10초
+                //    request.ReadWriteTimeout = 5000; // 10초
+
+                //    request.Credentials = new NetworkCredential(username, password);
+
+                //    using (FtpWebResponse response = (FtpWebResponse)request.GetResponse())
+                //    {
+                //        Console.WriteLine($"Response status: {response.StatusDescription}");
+                //    }
+                //}
+                //catch (WebException ex)
+                //{
+                //    Console.WriteLine($"Error: {ex.Message}");
+                //}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             }
             catch (Exception ex)
             {
+                _isconnect = false;
                 MessageBox.Show("FTP 연결 오류: " + ex.Message);
+
+              
             }
         }
 
         private void LoadLocalDirectory(string path)
         {
-            try
+
+            if (_isconnect)
             {
-                _leftItems.Clear();
-                DirectoryInfo di = new DirectoryInfo(path);
-
-                if (di.Parent != null)
+                try
                 {
-                    _leftItems.Add(new FileSystemItem
-                    {
-                        Name = "..",
-                        Type = "Parent Directory",
-                        FullPath = di.Parent.FullName,
-                        IconSource = GetIconForFileType("folder")
-                    });
-                }
+                    _leftItems.Clear();
+                    DirectoryInfo di = new DirectoryInfo(path);
 
-                foreach (var directory in di.GetDirectories())
+                    if (di.Parent != null)
+                    {
+                        _leftItems.Add(new FileSystemItem
+                        {
+                            Name = "..",
+                            Type = "Parent Directory",
+                            FullPath = di.Parent.FullName,
+                            IconSource = GetIconForFileType("folder")
+                        });
+                    }
+
+                    foreach (var directory in di.GetDirectories())
+                    {
+                        _leftItems.Add(new FileSystemItem
+                        {
+                            Name = directory.Name,
+                            Type = "Folder",
+                            FullPath = directory.FullName,
+                            IconSource = GetIconForFileType("folder")
+                        });
+                    }
+
+                    foreach (var file in di.GetFiles())
+                    {
+                        _leftItems.Add(new FileSystemItem
+                        {
+                            Name = file.Name,
+                            Type = "File",
+                            FullPath = file.FullName,
+                            IconSource = GetIconForFileType(file.FullName)
+                        });
+
+
+
+                    }
+
+                    _currentLocalPath = path;
+                }
+                catch (Exception ex)
                 {
-                    _leftItems.Add(new FileSystemItem
-                    {
-                        Name = directory.Name,
-                        Type = "Folder",
-                        FullPath = directory.FullName,
-                        IconSource = GetIconForFileType("folder")
-                    });
+                    MessageBox.Show("Error loading local directory: " + ex.Message);
                 }
-
-                foreach (var file in di.GetFiles())
-                {
-                    _leftItems.Add(new FileSystemItem
-                    {
-                        Name = file.Name,
-                        Type = "File",
-                        FullPath = file.FullName,
-                        IconSource = GetIconForFileType(file.FullName)
-                    });
-
-
-              
-                }
-
-                _currentLocalPath = path;
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error loading local directory: " + ex.Message);
-            }
+           
         }
 
         private void LoadFtpDirectory(string path)
         {
-            try
+
+            if (_isconnect)
             {
-                _rightItems.Clear();
-                if (path != "/")
+                try
                 {
-                    _rightItems.Add(new FileSystemItem
+
+                    _rightItems.Clear();
+                    if (path != "/")
                     {
-                        Name = "..",
-                        Type = "Parent Directory",
-                        FullPath = Path.GetDirectoryName(path).Replace('\\', '/'),
-                        IconSource = GetIconForFileType("folder")
-                    });
+                        _rightItems.Add(new FileSystemItem
+                        {
+                            Name = "..",
+                            Type = "Parent Directory",
+                            FullPath = Path.GetDirectoryName(path).Replace('\\', '/'),
+                            IconSource = GetIconForFileType("folder")
+                        });
+                    }
+
+                    var listing = _ftpClient.GetListing(path);
+                    var sortedListing = listing
+                        .OrderByDescending(item => item.Type == FtpObjectType.Directory)
+                        .ThenBy(item => item.Name);
+
+                    foreach (var item in sortedListing)
+                    {
+
+                        FileSystemItem fs = new FileSystemItem();
+                        fs.Name = item.Name;
+                        fs.Type = item.Type == FtpObjectType.Directory ? "Folder" : "File";
+                        fs.FullPath = item.FullName;
+
+
+
+                        string extension = Path.GetExtension(fs.FullPath).ToLower();
+
+
+                        if (extension == "")
+                        {
+                            fs.IconSource = GetIconForFileType(item.Type == FtpObjectType.Directory ? "folder" : item.Name);
+                        }
+                        else if (extension == ".exe")
+                        {
+                            System.Drawing.Icon errorIcon = SystemIcons.Application;
+                            BitmapSource bitmapSource = Imaging.CreateBitmapSourceFromHIcon(
+                                errorIcon.Handle,
+                                Int32Rect.Empty,
+                                BitmapSizeOptions.FromEmptyOptions());
+                            fs.IconSource = bitmapSource;
+                        }
+                        else if (extension == ".txt")
+                        {
+
+
+                            BitmapSource bitmapSource = new BitmapImage(new Uri("../Images/icons/icon_txt.png", UriKind.Relative));
+                            fs.IconSource = bitmapSource;
+
+
+
+                            //================================================================================================================
+
+                            //Icon icon = GetIconFromDll(@"C:\Windows\System32\shell32.dll", 97); // 예시로 4번째 아이콘 가져오기
+
+                            //// Icon을 BitmapSource로 변환
+                            //BitmapSource bitmapSource = Imaging.CreateBitmapSourceFromHIcon(
+                            //    icon.Handle,
+                            //    Int32Rect.Empty,
+                            //    BitmapSizeOptions.FromEmptyOptions());
+
+                            //// 이미지를 표시하는 Image 컨트롤에 설정
+                            //fs.IconSource = bitmapSource;
+
+                            //// Icon 핸들 해제
+                            //icon.Dispose();
+
+
+                            //================================================================================================================
+
+
+                            //Icon shellIcon = GetShellIcon(5); // 예시로 Shell32.dll의 5번째 아이콘 가져오기
+
+                            //// Icon을 BitmapSource로 변환
+                            //BitmapSource bitmapSource = Imaging.CreateBitmapSourceFromHIcon(
+                            //    shellIcon.Handle,
+                            //    Int32Rect.Empty,
+                            //    BitmapSizeOptions.FromEmptyOptions());
+
+                            //// 이미지를 표시하는 Image 컨트롤에 설정
+                            //fs.IconSource = bitmapSource;
+
+                            //// Icon 핸들 해제
+                            //shellIcon.Dispose();
+
+                            //================================================================================================================
+
+
+                        }
+                        else if (extension == ".bat")
+                        {
+
+
+                            BitmapSource bitmapSource = new BitmapImage(new Uri("../Images/icons/icon_bat.png", UriKind.Relative));
+                            fs.IconSource = bitmapSource;
+
+                        }
+                        else
+                        {
+                            System.Drawing.Icon errorIcon = SystemIcons.Application;
+                            BitmapSource bitmapSource = Imaging.CreateBitmapSourceFromHIcon(
+                                errorIcon.Handle,
+                                Int32Rect.Empty,
+                                BitmapSizeOptions.FromEmptyOptions());
+                            fs.IconSource = bitmapSource;
+
+                            //BitmapSource bitmapSource = new BitmapImage(new Uri("../Images/time.png", UriKind.Relative));
+                        }
+
+
+
+                        _rightItems.Add(fs);
+                    }
+
+                    _currentFtpPath = path;
                 }
-
-                var listing = _ftpClient.GetListing(path);
-                var sortedListing = listing
-                    .OrderByDescending(item => item.Type == FtpObjectType.Directory)
-                    .ThenBy(item => item.Name);
-
-                foreach (var item in sortedListing)
+                catch (Exception ex)
                 {
-                   
-                    FileSystemItem fs = new FileSystemItem();
-                    fs.Name = item.Name;
-                    fs.Type = item.Type == FtpObjectType.Directory ? "Folder" : "File";
-                    fs.FullPath = item.FullName;
-
-
-
-                    string extension = Path.GetExtension(fs.FullPath).ToLower();
-
-
-                    if (extension == "")
-                    {
-                        fs.IconSource = GetIconForFileType(item.Type == FtpObjectType.Directory ? "folder" : item.Name);
-                    }
-                    else if (extension == ".exe")
-                    {
-                        System.Drawing.Icon errorIcon = SystemIcons.Application;
-                        BitmapSource bitmapSource = Imaging.CreateBitmapSourceFromHIcon(
-                            errorIcon.Handle,
-                            Int32Rect.Empty,
-                            BitmapSizeOptions.FromEmptyOptions());
-                        fs.IconSource = bitmapSource;
-                    }
-                    else if (extension == ".txt")
-                    {
-
-
-                        BitmapSource bitmapSource = new BitmapImage(new Uri("../Images/icons/icon_txt.png", UriKind.Relative));
-                        fs.IconSource = bitmapSource;
-
-
-
-                        //================================================================================================================
-
-                        //Icon icon = GetIconFromDll(@"C:\Windows\System32\shell32.dll", 97); // 예시로 4번째 아이콘 가져오기
-
-                        //// Icon을 BitmapSource로 변환
-                        //BitmapSource bitmapSource = Imaging.CreateBitmapSourceFromHIcon(
-                        //    icon.Handle,
-                        //    Int32Rect.Empty,
-                        //    BitmapSizeOptions.FromEmptyOptions());
-
-                        //// 이미지를 표시하는 Image 컨트롤에 설정
-                        //fs.IconSource = bitmapSource;
-
-                        //// Icon 핸들 해제
-                        //icon.Dispose();
-
-
-                        //================================================================================================================
-
-
-                        //Icon shellIcon = GetShellIcon(5); // 예시로 Shell32.dll의 5번째 아이콘 가져오기
-
-                        //// Icon을 BitmapSource로 변환
-                        //BitmapSource bitmapSource = Imaging.CreateBitmapSourceFromHIcon(
-                        //    shellIcon.Handle,
-                        //    Int32Rect.Empty,
-                        //    BitmapSizeOptions.FromEmptyOptions());
-
-                        //// 이미지를 표시하는 Image 컨트롤에 설정
-                        //fs.IconSource = bitmapSource;
-
-                        //// Icon 핸들 해제
-                        //shellIcon.Dispose();
-
-                        //================================================================================================================
-
-
-                    }
-                    else if (extension == ".bat")
-                    {
-
-
-                        BitmapSource bitmapSource = new BitmapImage(new Uri("../Images/icons/icon_bat.png", UriKind.Relative));
-                        fs.IconSource = bitmapSource;
-
-                    }
-                    else
-                    {
-                        System.Drawing.Icon errorIcon = SystemIcons.Application;
-                        BitmapSource bitmapSource = Imaging.CreateBitmapSourceFromHIcon(
-                            errorIcon.Handle,
-                            Int32Rect.Empty,
-                            BitmapSizeOptions.FromEmptyOptions());
-                        fs.IconSource = bitmapSource;
-
-                        //BitmapSource bitmapSource = new BitmapImage(new Uri("../Images/time.png", UriKind.Relative));
-                    }
-
-
-
-                    _rightItems.Add(fs);
+                    MessageBox.Show("Error loading FTP directory: " + ex.Message);
                 }
-
-                _currentFtpPath = path;
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show("Error loading FTP directory: " + ex.Message);
+                main.OverlayGrid.Visibility = Visibility.Collapsed;
             }
         }
 
@@ -493,18 +615,92 @@ namespace WpfApp9
                 }
             }
         }
+
+       
         private async void TransferButton_Click(object sender, RoutedEventArgs e)
         {
+
+
             var selectedItems = LeftFileListView.SelectedItems.Cast<FileSystemItem>().ToList();
+
             if (!selectedItems.Any())
             {
                 MessageBox.Show("전송할 항목을 선택해주세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
+
+
+            List<string> filename = new List<string>();
+            var listing = _ftpClient.GetListing(_currentFtpPath);
+            var sortedListing = listing
+                .OrderByDescending(item => item.Type == FtpObjectType.Directory)
+                .ThenBy(item => item.Name);
+
+
+
+            foreach (var item in sortedListing)
+            {
+                filename.Add(item.Name);
+            }
+
+
+
+            bool file_exit = false;
+
+
+
+
+
+
+            for (int i = 0; i < filename.Count; i++)
+            {
+                for (int j = 0; j < selectedItems.Count; j++)
+                {
+                    if (filename[i] == selectedItems[j].Name)
+                    {
+                        file_exit = true;
+                    }
+                }
+            }
+
+
+
+
+            if (file_exit)
+            {
+                MessageBoxResult result = MessageBox.Show(
+               "같은 이름의 파일이 있습니다. 덮어씌우시겠습니까?",   // 메시지
+               "확인",                      // 제목
+               MessageBoxButton.YesNo,      // 버튼 종류
+               MessageBoxImage.Question     // 아이콘 종류
+           );
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    // 사용자가 'Yes'를 클릭했을 때의 처리
+                    await file_send_to_ftp(selectedItems);
+                }
+                else
+                {
+                    
+                }
+
+
+            }
+            else
+            {
+                await file_send_to_ftp(selectedItems);
+            }
+
+           
+        }
+
+        private async Task file_send_to_ftp(List<FileSystemItem> selectedItems)
+        {
             Transferpopup.Visibility = Visibility.Visible;
             TransferProgressBar.Visibility = Visibility.Visible;
-            
+
             TransferProgressBar.Value = 0;
             TransferProgressText.Text = "0%";
 
@@ -522,7 +718,7 @@ namespace WpfApp9
                 {
                     MessageBox.Show("전송이 완료되었습니다.", "알림", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
-                 
+
             }
             catch (Exception ex)
             {
