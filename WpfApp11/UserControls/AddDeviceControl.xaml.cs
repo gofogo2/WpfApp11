@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -29,6 +31,11 @@ namespace WpfApp11.UserControls
             InitializeComponent();
         }
 
+        static bool IsValidIPv4(string ipAddress)
+        {
+            string pattern = @"^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
+            return Regex.IsMatch(ipAddress, pattern);
+        }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
@@ -42,6 +49,18 @@ namespace WpfApp11.UserControls
                 return;
             }
 
+            if (IsValidIPv4(IpAddressTextBox.Text))
+            {
+            }
+            else
+            {
+                MessageBox.Show("유효하지 않은 IP 주소입니다.", "오류", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+
+
+         
 
             NewDeviceConfig = new ItemConfiguration
             {
@@ -50,7 +69,7 @@ namespace WpfApp11.UserControls
                 
                 MacAddress = MacAddressTextBox.Text,
                 IpAddress = IpAddressTextBox.Text,
-                Description = DescriptionTextBox.Text,
+                port = DescriptionTextBox.Text,
                 IsOn = InitialStateCheckBox.IsChecked ?? false,
                 Row = 0,
                 Column = 0,

@@ -8,8 +8,8 @@
              d:DesignHeight="200" d:DesignWidth="180" Background="White">
     <UserControl.ContextMenu>
         <ContextMenu>
-            <MenuItem Header="수정" Click="EditMenuItem_Click"/>
-            <MenuItem Header="삭제" Click="DeleteMenuItem_Click"/>
+            <!--<MenuItem Header="수정" Click="EditMenuItem_Click"/>
+            <MenuItem Header="삭제" Click="DeleteMenuItem_Click"/>-->
             <MenuItem Header="정보" Click="InfoMenuItem_Click"/>
         </ContextMenu>
     </UserControl.ContextMenu>
@@ -29,17 +29,27 @@
             
             
             <Image  Grid.Row="1" x:Name="IconImage" Width="40" Height="40" Stretch="Uniform" 
-                   HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                   HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0"/>
             <Ellipse Grid.Row="1" x:Name="StatusIndicator" Width="25" Height="25"  Fill="White"
                      HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,5,6,80"
                      MouseLeftButtonDown="StatusIndicator_MouseLeftButtonDown">
                 
             </Ellipse>
-            <TextBlock Text="..."  Grid.Row="1" Width="15" Height="15" IsHitTestVisible="False" TextAlignment="Center"
-                     HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,4,11,91"/>
-            <ToggleButton Grid.Row="2" x:Name="PowerToggle" Width="70" Height="30" 
+
+                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center ">
+                    <Button Width="30" Height="30" Margin="0,0,0,0" Click="pow_on">
+                        <TextBlock Text="on"/>
+                    </Button>
+                    <Button Width="30" Height="30" Margin="20,0,0,0" Click="pow_off">
+                        <TextBlock Text="off"/>
+                    </Button>
+                    <Button Width="30" Height="30" Margin="20,0,0,0" Click="pow_re">
+                        <TextBlock Text="re"/>
+                    </Button>
+                </StackPanel>
+            <!--<ToggleButton Grid.Row="2" x:Name="PowerToggle" Width="70" Height="30" 
                           VerticalAlignment="Bottom" HorizontalAlignment="Center" 
-                          Margin="0,0,0,5" Style="{StaticResource PowerToggleStyle}"/>
+                          Margin="0,0,0,5" Style="{StaticResource PowerToggleStyle}"/>-->
 
             <!-- Overlay for dimming and buttons -->
             <Grid Grid.Row="1" x:Name="OverlayGrid" Visibility="Collapsed">
@@ -60,7 +70,25 @@
             </Grid>
 
             <ToggleButton Width="80" Height="80" x:Name="d_select" >
-                
+                <ToggleButton.Style>
+                    <Style TargetType="ToggleButton">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Content">
+                            <Setter.Value>
+                                <Image Source="../Images/etc.png"/>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter Property="Content">
+                                    <Setter.Value>
+                                        <Image Source="../Images/pc.png"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ToggleButton.Style>
             </ToggleButton>
         </Grid>
     </Grid>

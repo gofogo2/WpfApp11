@@ -23,7 +23,7 @@ namespace WpfApp9
             FtpAddressTextBox.Text = EditedDeviceConfig.FtpAddress;
             MacAddressTextBox.Text = EditedDeviceConfig.MacAddress;
             IpAddressTextBox.Text = EditedDeviceConfig.IpAddress;
-            DescriptionTextBox.Text = EditedDeviceConfig.Description;
+            DescriptionTextBox.Text = EditedDeviceConfig.port;
             InitialStateCheckBox.IsChecked = EditedDeviceConfig.IsOn;
         }
 

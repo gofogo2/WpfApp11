@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WpfApp11.UserControls"
              mc:Ignorable="d" 
-            Height="1080" Width="1920">
+             HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
     <Grid>
         <Border Background="Black" Opacity="0.8"></Border>
         <Grid Margin="10" Width="400" Height="650" VerticalAlignment="Center">

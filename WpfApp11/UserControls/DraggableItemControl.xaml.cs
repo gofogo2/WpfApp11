@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Net;
 using System.Net.NetworkInformation;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,6 +15,8 @@ namespace WpfApp9
 {
     public partial class DraggableItemControl : UserControl
     {
+        private UdpReceiver _udpReceiver;
+
         private const int PingInterval = 5000; // 5초마다 핑 체크
         private bool isPinging = false;
         private CancellationTokenSource pingCancellationTokenSource;
@@ -28,11 +31,9 @@ namespace WpfApp9
         {
             ispow = isOn;
             Configuration.IsOn = isOn;
-            PowerToggle.IsChecked = isOn;
-            //StatusIndicator.Fill = isOn ? Brushes.Green : Brushes.Red;
-
+            //PowerToggle.IsChecked = isOn;
             PowerState.Fill = isOn ? onColor : offColor;
-            Debug.WriteLine($"{Configuration.Name}의 전원이 {(isOn ? "켜졌습니다" : "꺼졌습니다")}.");
+            
         }
 
 
@@ -46,9 +47,15 @@ namespace WpfApp9
 
         public void StartPingCheck()
         {
-            StopPingCheck();
-            pingCancellationTokenSource = new CancellationTokenSource();
-            _ = PingCheckLoop(pingCancellationTokenSource.Token);
+            if (Configuration.DeviceType == "pc")
+            {
+                StopPingCheck();
+                pingCancellationTokenSource = new CancellationTokenSource();
+                _ = PingCheckLoop(pingCancellationTokenSource.Token);
+            }
+           
+
+
         }
 
         public void StopPingCheck()
@@ -97,26 +104,85 @@ namespace WpfApp9
             InitializeComponent();
             Configuration = config;
             UpdateUI();
-            PowerToggle.Checked += PowerToggle_Checked;
-            PowerToggle.Unchecked += PowerToggle_Unchecked;
-            StartPingCheck();
+            //PowerToggle.Checked += PowerToggle_Checked;
+            //PowerToggle.Unchecked += PowerToggle_Unchecked;
+
+
+            if (Configuration.DeviceType == "pc")
+            {
+                StartPingCheck();
+            }
+            else if (Configuration.DeviceType == "RELAY #1")
+            {
+                var allowedIp = IPAddress.Parse(config.IpAddress); // 허용할 IP 주소를 설정합니다.
+                _udpReceiver = new UdpReceiver(int.Parse(config.port), allowedIp);
+                Task.Run(() => _udpReceiver.StartReceivingAsync(OnMessageReceived, OnInvalidIpReceived));
+            }
+            else if (Configuration.DeviceType == "RELAY #2")
+            {
+                var allowedIp = IPAddress.Parse(config.IpAddress); // 허용할 IP 주소를 설정합니다.
+                _udpReceiver = new UdpReceiver(int.Parse(config.port), allowedIp);
+                Task.Run(() => _udpReceiver.StartReceivingAsync(OnMessageReceived, OnInvalidIpReceived));
+            }
+        }
+
+        int relay_onoff = 0;
+
+        private void OnMessageReceived(string message)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                // 유효한 IP에서 수신된 메시지를 표시합니다.
+                if (message == "00")
+                {
+                    if (relay_onoff < 5)
+                    {
+                        relay_onoff++;
+                    }
+                    else
+                    {
+                        UpdatePowerState(false);
+                    }
+                    
+                }
+                else
+                {
+                    UpdatePowerState(true);
+                    relay_onoff = 0;
+                }
+                
+            });
+        }
+
+        private void OnInvalidIpReceived(string message)
+        {
+            //Dispatcher.Invoke(() =>
+            //{
+            //    // 유효하지 않은 IP에서 수신된 메시지를 표시합니다.
+                
+            //});
+        }
+
+        public void StopReceiving()
+        {
+            _udpReceiver?.Stop();
         }
 
         private async void PowerToggle_Checked(object sender, RoutedEventArgs e)
         {
-            StopPingCheck();
-            UpdatePowerState(true);
+            //StopPingCheck();
+            //UpdatePowerState(true);
             
-            await Task.Delay(5000);
-            StartPingCheck();
+            //await Task.Delay(5000);
+            //StartPingCheck();
         }
 
         private async void PowerToggle_Unchecked(object sender, RoutedEventArgs e)
         {
-            StopPingCheck();
-            UpdatePowerState(false);
-            await Task.Delay(5000);
-            StartPingCheck();
+            //StopPingCheck();
+            //UpdatePowerState(false);
+            //await Task.Delay(5000);
+            //StartPingCheck();
         }
 
 
@@ -126,10 +192,33 @@ namespace WpfApp9
 
         private void UpdateUI()
         {
+
             TitleTextBlock.Text = Configuration.Name;
-            IconImage.Source = new BitmapImage(new Uri($"pack://application:,,,/Images/{Configuration.DeviceType}.png"));
+
+            if (Configuration.DeviceType == "프로젝터")
+            {
+                IconImage.Source = new BitmapImage(new Uri($"pack://application:,,,/Images/projector.png"));
+            }
+            else if (Configuration.DeviceType == "PDU")
+            {
+                IconImage.Source = new BitmapImage(new Uri($"pack://application:,,,/Images/projector.png"));
+            }
+            else if (Configuration.DeviceType == "RELAY #1")
+            {
+                IconImage.Source = new BitmapImage(new Uri($"pack://application:,,,/Images/projector.png"));
+            }
+            else if (Configuration.DeviceType == "RELAY #2")
+            {
+                IconImage.Source = new BitmapImage(new Uri($"pack://application:,,,/Images/projector.png"));
+            }
+            else
+            {
+                IconImage.Source = new BitmapImage(new Uri($"pack://application:,,,/Images/{Configuration.DeviceType}.png"));
+            }
+
+            
             //StatusIndicator.Fill = Configuration.IsOn ? Brushes.Green : Brushes.Red;
-            PowerToggle.IsChecked = Configuration.IsOn;
+            //PowerToggle.IsChecked = Configuration.IsOn;
         }
 
 
@@ -138,8 +227,16 @@ namespace WpfApp9
 
         private void StatusIndicator_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            OverlayGrid.Visibility = OverlayGrid.Visibility == Visibility.Visible ?
+
+            if (Configuration.DeviceType == "pc")
+            {
+                OverlayGrid.Visibility = OverlayGrid.Visibility == Visibility.Visible ?
                                      Visibility.Collapsed : Visibility.Visible;
+            }
+            
+
+
+
         }
 
         private void FTP_Button_Click(object sender, RoutedEventArgs e)
@@ -214,6 +311,22 @@ namespace WpfApp9
                           $"전원 상태: {(Configuration.IsOn ? "켜짐" : "꺼짐")}";
 
             MessageBox.Show(info, "기기 정보", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+
+        private void pow_on(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("on");
+        }
+
+        private void pow_off(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("off");
+        }
+
+        private void pow_re(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("re");
         }
     }
 }

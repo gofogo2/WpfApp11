@@ -64,6 +64,7 @@
     </ApplicationDefinition>
     <Compile Include="Helpers\GlobalMessageService.cs" />
     <Compile Include="Helpers\PJLinkHelper.cs" />
+    <Compile Include="Helpers\UdpReceiver.cs" />
     <Compile Include="Helpers\WakeOnlanHelper.cs" />
     <Compile Include="UserControls\AddDeviceControl.xaml.cs">
       <DependentUpon>AddDeviceControl.xaml</DependentUpon>

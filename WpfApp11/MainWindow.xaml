@@ -142,7 +142,7 @@
         <!-- Overlay for FileExplorer -->
         <Grid x:Name="OverlayGrid" Grid.RowSpan="3" Visibility="Collapsed">
             <Rectangle Fill="Black" Opacity="0.5"/>
-            <Border x:Name="FileExplorerBorder" Width="1280" Height="800" Background="White" CornerRadius="10">
+            <Border x:Name="FileExplorerBorder" Width="1280" Height="800" Background="Transparent" CornerRadius="10">
                 <local:FileExplorerControl x:Name="FileExplorerControl"/>
             </Border>
         </Grid>

@@ -72,15 +72,15 @@ namespace WpfApp9
             try
             {
                 //원래====================================================================
-                Uri ftpUri = new Uri(target_ftp);
-                string host = ftpUri.Host;
-                //string username = ftpUri.UserInfo.Split(':')[0];
-                //string password = ftpUri.UserInfo.Split(':')[1];
-                string username = "ftp1234";
-                string password = "1234";
+                //Uri ftpUri = new Uri(target_ftp);
+                //string host = ftpUri.Host;
+                //string username = "ftp1234";
+                //string password = "1234";
 
-                //string username = "engium";
-                //string password = "1";
+                ////string username = "engium";
+                ////string password = "1";
+                ///
+                //_ftpClient = new FtpClient(host, username, password);
                 //====================================================================
 
 
@@ -88,19 +88,19 @@ namespace WpfApp9
 
 
                 //임시====================================================================
-                //Uri ftpUri = new Uri("ftp://121.131.142.148:12923");
-                //string host = ftpUri.Host;
-                //string username = "engium";
-                //string password = "1";
-
+                Uri ftpUri = new Uri("ftp://121.131.142.148:12923");
+                string host = ftpUri.Host;
+                string username = "engium";
+                string password = "1";
+                _ftpClient = new FtpClient(host, username, password,12923);
                 //====================================================================
 
 
+                _ftpClient.Config.ConnectTimeout = 3000;
 
 
 
-                _ftpClient = new FtpClient(host, username, password);
-                
+
 
                 _ftpClient.Connect();
 

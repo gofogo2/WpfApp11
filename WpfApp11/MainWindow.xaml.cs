@@ -112,7 +112,7 @@ namespace WpfApp9
                     if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["월요일"].StartTime.ToString().Substring(0, 5))
                     {
                         //켜지게
-                        MessageBox.Show("on");
+                        on_wol();
                     }
                     else if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["월요일"].EndTime.ToString().Substring(0, 5))
                     {
@@ -121,8 +121,7 @@ namespace WpfApp9
                     }
                     else
                     {
-                        Console.WriteLine(now.ToString("HH:mm"));
-                        Console.WriteLine(AutoPowerSettingsControl.pow_schedule["월요일"].StartTime.ToString().Substring(0, 5));
+                     
                     }
                 }
             }
@@ -133,7 +132,7 @@ namespace WpfApp9
                     if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["화요일"].StartTime.ToString().Substring(0, 5))
                     {
                         //켜지게
-                        MessageBox.Show("on");
+                        on_wol();
                     }
                     else if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["화요일"].EndTime.ToString().Substring(0, 5))
                     {
@@ -153,7 +152,7 @@ namespace WpfApp9
                     if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["수요일"].StartTime.ToString().Substring(0, 5))
                     {
                         //켜지게
-                        MessageBox.Show("on");
+                        on_wol();
                     }
                     else if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["수요일"].EndTime.ToString().Substring(0, 5))
                     {
@@ -173,7 +172,7 @@ namespace WpfApp9
                     if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["목요일"].StartTime.ToString().Substring(0, 5))
                     {
                         //켜지게
-                        MessageBox.Show("on");
+                        on_wol();
                     }
                     else if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["목요일"].EndTime.ToString().Substring(0, 5))
                     {
@@ -193,7 +192,7 @@ namespace WpfApp9
                     if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["금요일"].StartTime.ToString().Substring(0, 5))
                     {
                         //켜지게
-                        MessageBox.Show("on");
+                        on_wol();
                     }
                     else if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["금요일"].EndTime.ToString().Substring(0, 5))
                     {
@@ -213,7 +212,7 @@ namespace WpfApp9
                     if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["토요일"].StartTime.ToString().Substring(0, 5))
                     {
                         //켜지게
-                        MessageBox.Show("on");
+                        on_wol();
                     }
                     else if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["토요일"].EndTime.ToString().Substring(0, 5))
                     {
@@ -222,8 +221,7 @@ namespace WpfApp9
                     }
                     else
                     {
-                        Console.WriteLine(now.ToString("HH:mm"));
-                        Console.WriteLine(AutoPowerSettingsControl.pow_schedule["토요일"].StartTime.ToString().Substring(0, 5));
+                      
                     }
                 }
             }
@@ -234,7 +232,7 @@ namespace WpfApp9
                     if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["일요일"].StartTime.ToString().Substring(0, 5))
                     {
                         //켜지게
-                        MessageBox.Show("on");
+                        on_wol();
                     }
                     else if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["일요일"].EndTime.ToString().Substring(0, 5))
                     {
@@ -248,7 +246,18 @@ namespace WpfApp9
                 }
             }
         }
-      
+
+
+
+        void on_wol()
+        {
+            for (int i = 0; i < dragItems.Count; i++)
+            {
+                if (dragItems[i].Configuration.DeviceType == "pc")
+                {
+                }
+            }
+        }
 
         private void OnGlobalMessageReceived(object sender, string message)
         {
@@ -322,6 +331,17 @@ namespace WpfApp9
             itemControl.MouseLeftButtonUp += Item_MouseLeftButtonUp;
             itemControl.MouseMove += Item_MouseMove;
 
+
+            if (itemControl.Configuration.DeviceType == "pc")
+            {
+                itemControl.StatusIndicator.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                itemControl.StatusIndicator.Visibility = Visibility.Collapsed;
+            }
+            
+
             double left = (config.Column * GridCellWidth) + ItemMargin;
             double top = (config.Row * GridCellHeight) + ItemMargin;
 
@@ -362,9 +382,12 @@ namespace WpfApp9
                 var item = sender as DraggableItemControl;
                 if (item != null)
                 {
-                    if (item.ispow)
+                    if (item.Configuration.DeviceType == "pc")
                     {
-                        ShowFileExplorer(item.Configuration.IpAddress, item.Configuration.Name); //더블클릭
+                        if (item.ispow)
+                        {
+                            ShowFileExplorer(item.Configuration.IpAddress, item.Configuration.Name); //더블클릭
+                        }
                     }
                     
                 }
@@ -590,24 +613,6 @@ namespace WpfApp9
             {
                 dragItems[i].delete_select.Visibility = Visibility.Visible;
             }
-            //if (dragItems.Count == 0)
-            //{
-            //    MessageBox.Show("삭제할 기기가 없습니다.", "알림", MessageBoxButton.OK, MessageBoxImage.Information);
-            //    return;
-            //}
-
-            //RemoveDeviceWindow removeDeviceWindow = new RemoveDeviceWindow(dragItems.Select(i => i.Configuration).ToList());
-            //if (removeDeviceWindow.ShowDialog() == true)
-            //{
-            //    var configToRemove = removeDeviceWindow.SelectedConfig;
-            //    var itemToRemove = dragItems.FirstOrDefault(i => i.Configuration == configToRemove);
-            //    if (itemToRemove != null)
-            //    {
-            //        ItemCanvas.Children.Remove(itemToRemove);
-            //        dragItems.Remove(itemToRemove);
-            //        SaveItemConfigurations();
-            //    }
-            //}
         }
 
 
@@ -631,6 +636,7 @@ namespace WpfApp9
                 {
                     if (dragItems[i].d_select.IsChecked == true)
                     {
+                        dragItems[i].StopReceiving();
                         ItemCanvas.Children.Remove(dragItems[i]);
                         dragItems.RemoveAt(i);
                     }
@@ -740,10 +746,13 @@ namespace WpfApp9
         public string FtpAddress { get; set; }
         public string MacAddress { get; set; }
         public string IpAddress { get; set; }
+        public string port { get; set; }
+
         public string Description { get; set; }
         public int Row { get; set; }
         public int Column { get; set; }
         public int ZIndex { get; set; }
         public string VncPw { get; set; }
+
     }
 }
