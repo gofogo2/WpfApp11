@@ -112,6 +112,14 @@ namespace WpfApp9
             {
                 StartPingCheck();
             }
+            else if (Configuration.DeviceType == "프로젝터")
+            {
+                StartPingCheck();
+            }
+            else if (Configuration.DeviceType == "PDU")
+            {
+                
+            }
             else if (Configuration.DeviceType == "RELAY #1")
             {
                 var allowedIp = IPAddress.Parse(config.IpAddress); // 허용할 IP 주소를 설정합니다.
@@ -316,11 +324,50 @@ namespace WpfApp9
 
         private void pow_on(object sender, RoutedEventArgs e)
         {
+
+            if (Configuration.DeviceType == "pc")
+            {
+            }
+            else if (Configuration.DeviceType == "프로젝터")
+            {
+            }
+            else if (Configuration.DeviceType == "PDU")
+            {
+
+            }
+            else if (Configuration.DeviceType == "RELAY #1")
+            {
+               
+            }
+            else if (Configuration.DeviceType == "RELAY #2")
+            {
+            
+            }
+
+
             MessageBox.Show("on");
         }
 
         private void pow_off(object sender, RoutedEventArgs e)
         {
+            if (Configuration.DeviceType == "pc")
+            {
+            }
+            else if (Configuration.DeviceType == "프로젝터")
+            {
+            }
+            else if (Configuration.DeviceType == "PDU")
+            {
+
+            }
+            else if (Configuration.DeviceType == "RELAY #1")
+            {
+
+            }
+            else if (Configuration.DeviceType == "RELAY #2")
+            {
+
+            }
             MessageBox.Show("off");
         }
 
