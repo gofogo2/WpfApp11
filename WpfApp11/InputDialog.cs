@@ -17,6 +17,7 @@ namespace WpfApp11
             Width = 300;
             Height = 150;
             Title = question;
+           
 
             Grid grid = new Grid();
             grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });

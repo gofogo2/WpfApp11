@@ -30,21 +30,21 @@
             
             <Image  Grid.Row="1" x:Name="IconImage" Width="40" Height="40" Stretch="Uniform" 
                    HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0"/>
-            <Ellipse Grid.Row="1" x:Name="StatusIndicator" Width="25" Height="25"  Fill="White"
-                     HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,5,6,80"
-                     MouseLeftButtonDown="StatusIndicator_MouseLeftButtonDown">
+
+                    <Image Source = "../Images/StatusIndicator.png"   x:Name="StatusIndicator" Grid.Row="1"  Width="25" Height="25" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,5,6,80"  MouseLeftButtonDown="StatusIndicator_MouseLeftButtonDown"/>
+                    
                 
-            </Ellipse>
 
                 <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center ">
-                    <Button Width="30" Height="30" Margin="0,0,0,0" Click="pow_on">
-                        <TextBlock Text="on"/>
+                    <Button Width="30" Height="30" Margin="0,0,0,0" Click="pow_on" Background="Transparent" BorderThickness="0">
+                        <!--<TextBlock Text="on"/>-->
+                        <Image Source="../Images/on.png"/>
                     </Button>
-                    <Button Width="30" Height="30" Margin="20,0,0,0" Click="pow_off">
-                        <TextBlock Text="off"/>
+                    <Button Width="30" Height="30" Margin="20,0,0,0" Click="pow_off" Background="Transparent" BorderThickness="0">
+                        <Image Source="../Images/off.png"/>
                     </Button>
-                    <Button Width="30" Height="30" Margin="20,0,0,0" Click="pow_re">
-                        <TextBlock Text="re"/>
+                    <Button Width="30" Height="30" Margin="20,0,0,0" Click="pow_re" Background="Transparent" BorderThickness="0">
+                        <Image Source="../Images/re.png"/>
                     </Button>
                 </StackPanel>
             <!--<ToggleButton Grid.Row="2" x:Name="PowerToggle" Width="70" Height="30" 
@@ -69,20 +69,21 @@
             <Grid Background="Transparent">
             </Grid>
 
-            <ToggleButton Width="80" Height="80" x:Name="d_select" >
+            <ToggleButton Width="120" Height="120" x:Name="d_select" >
                 <ToggleButton.Style>
                     <Style TargetType="ToggleButton">
                         <Setter Property="Background" Value="Transparent"/>
                         <Setter Property="Content">
                             <Setter.Value>
-                                <Image Source="../Images/etc.png"/>
+                                <Image Source="../Images/blank.png"/>
                             </Setter.Value>
                         </Setter>
                         <Style.Triggers>
                             <Trigger Property="IsChecked" Value="True">
-                                <Setter Property="Content">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Content" >
                                     <Setter.Value>
-                                        <Image Source="../Images/pc.png"/>
+                                        <Image Source="../Images/x.png"/>
                                     </Setter.Value>
                                 </Setter>
                             </Trigger>

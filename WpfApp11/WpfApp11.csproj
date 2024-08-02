@@ -217,5 +217,24 @@
     <Resource Include="Images\icons\icon_video.png" />
     <Resource Include="Images\icons\icon_xls.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\StatusIndicator.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\on.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\off.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\re.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\icons\icon_zip.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\blank.png" />
+    <Resource Include="Images\x.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

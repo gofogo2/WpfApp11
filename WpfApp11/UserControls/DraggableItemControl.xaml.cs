@@ -33,6 +33,23 @@ namespace WpfApp9
             Configuration.IsOn = isOn;
             //PowerToggle.IsChecked = isOn;
             PowerState.Fill = isOn ? onColor : offColor;
+
+
+            if (isOn)
+            {
+                if (Configuration.DeviceType == "pc")
+                {
+                    StatusIndicator.Visibility = Visibility.Visible;
+                }
+            }
+            else
+            {
+                if (Configuration.DeviceType == "pc")
+                {
+                    StatusIndicator.Visibility = Visibility.Collapsed;
+                }
+            }
+            
             
         }
 
