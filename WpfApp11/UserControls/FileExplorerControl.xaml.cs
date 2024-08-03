@@ -464,6 +464,9 @@ namespace WpfApp9
                     string newName = inputDialog.Answer;
                     if (!string.IsNullOrEmpty(newName))
                     {
+
+
+
                         string newPath = Path.Combine(Path.GetDirectoryName(selectedItem.FullPath), newName);
                         if (selectedItem.Type == "Folder")
                         {
@@ -502,6 +505,10 @@ namespace WpfApp9
                             }
                         }
                         LoadLocalDirectory(_currentLocalPath);
+                    }
+                    else
+                    {
+                            MessageBox.Show("이름을 넣어주세요");
                     }
                 }
             }
@@ -673,6 +680,10 @@ namespace WpfApp9
                         }
 
                     }
+                    else
+                    {
+                        MessageBox.Show("이름을 넣어주세요");
+                    }
                 }
             }
         }
@@ -812,75 +823,12 @@ namespace WpfApp9
         {
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             var selectedItems = RightFileListView.SelectedItems.Cast<FileSystemItem>().ToList();
             if (!selectedItems.Any())
             {
                 MessageBox.Show("전송할 항목을 선택해주세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
-
-
-
-
-
-
 
 
 
@@ -902,9 +850,6 @@ namespace WpfApp9
             }
 
             bool file_exit = false;
-
-
-
 
 
 
@@ -1035,70 +980,6 @@ namespace WpfApp9
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            //Transferpopup.Visibility = Visibility.Visible;
-            //TransferProgressBar.Visibility = Visibility.Visible;
-            //TransferProgressBar.Value = 0;
-            //TransferProgressText.Text = "0%";
-
-            //long totalSize = await Task.Run(() => selectedItems.Sum(item => _ftpClient.GetFileSize(item.FullPath)));
-            //var progress = new TransferProgress();
-
-            //try
-            //{
-            //    foreach (var item in selectedItems)
-            //    {
-            //        await FtpToLocalTransferItemAsync(item, _currentLocalPath, totalSize, progress);
-            //    }
-
-
-            //    if (check_finish == true)
-            //    {
-            //        MessageBox.Show("전송이 완료되었습니다.", "알림", MessageBoxButton.OK, MessageBoxImage.Information);
-            //    }
-
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show($"전송 중 오류 발생: {ex.Message}", "오류", MessageBoxButton.OK, MessageBoxImage.Error);
-            //}
-            //finally
-            //{
-            //    Transferpopup.Visibility = Visibility.Collapsed;
-            //    TransferProgressBar.Visibility = Visibility.Collapsed;
-            //    TransferProgressText.Text = "";
-            //    LoadLocalDirectory(_currentLocalPath);
-            //}
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
@@ -1115,22 +996,7 @@ namespace WpfApp9
 
                 if (item.Type == "File")
                 {
-                    //var ftpPath = Path.Combine(destPath, item.Name).Replace("\\", "/");
-                    //var result = await Task.Run(() => _ftpClient.UploadFile(item.FullPath, ftpPath, FtpRemoteExists.Overwrite, true, FtpVerify.None, ftpProgress =>
-                    //{
-                    //    progress.TransferredSize = ftpProgress.TransferredBytes;
-                    //    UpdateProgress(progress.TransferredSize, totalSize);
-
-                    //}));
-
-
-                    //if (result != FtpStatus.Success)
-                    //{
-                    //    throw new Exception($"파일 '{item.Name}' 전송 실패");
-                    //}
-
-
-
+                    
                     try
                     {
                         var ftpPath = Path.Combine(destPath, item.Name).Replace("\\", "/");
@@ -1166,66 +1032,6 @@ namespace WpfApp9
                         Console.WriteLine($"작업 실행 중 오류 발생: {ex.Message}");
                         check_finish = false;
                     }
-
-
-
-
-
-
-
-
-
-
-
-
-                    //try
-                    //{
-                    //    await Task.Run(() =>
-                    //    {
-                    //        try
-                    //        {
-                    //            // FTP 업로드 작업 수행
-                    //            _ftpClient.UploadFile(item.FullPath, ftpPath, FtpRemoteExists.Overwrite, true, FtpVerify.None, ftpProgress =>
-                    //            {
-                    //                progress.TransferredSize = ftpProgress.TransferredBytes;
-                    //                UpdateProgress(progress.TransferredSize, totalSize);
-                    //            });
-
-
-
-                    //            //if (result != FtpStatus.Success)
-                    //            //{
-                    //            //    throw new Exception($"파일 '{item.Name}' 전송 실패");
-                    //            //}
-                    //        }
-                    //        catch (Exception ex)
-                    //        {
-                    //            // FTP 업로드 중 발생한 예외 처리
-                    //            Console.WriteLine($"FTP 업로드 중 오류 발생: {ex.Message}");
-                    //            // 예외를 다시 던져서 호출자에게 전달할 수 있습니다.
-                    //            //throw;
-                    //        }
-                    //    });
-                    //}
-                    //catch (Exception ex)
-                    //{
-                    //    // Task.Run 내에서 발생한 예외 처리
-                    //    Console.WriteLine($"작업 실행 중 오류 발생: {ex.Message}");
-                    //}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1273,22 +1079,7 @@ namespace WpfApp9
         {
             if (item.Type == "File")
             {
-               //  var localPath = Path.Combine(destPath, item.Name);
-                //var result = await Task.Run(() => _ftpClient.DownloadFile(localPath, item.FullPath, FtpLocalExists.Overwrite, FtpVerify.None, ftpProgress =>
-                //{
-                //    progress.TransferredSize += ftpProgress.TransferredBytes;
-                //    UpdateProgress(progress.TransferredSize, totalSize);
-                //}));
-
-                //if (result != FtpStatus.Success)
-                //{
-                //    throw new Exception($"파일 '{item.Name}' 전송 실패");
-                //}
-
-
-
-
-
+             
 
                 try
                 {
