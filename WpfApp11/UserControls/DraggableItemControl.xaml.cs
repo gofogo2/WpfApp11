@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using WpfApp11.Helpers;
+using WpfApp11.Helpers.Launcher_SE.Helpers;
 
 namespace WpfApp9
 {
@@ -344,6 +345,7 @@ namespace WpfApp9
 
             if (Configuration.DeviceType == "pc")
             {
+                WakeOnLanHelper.Instance.TurnOnPC(Configuration.IpAddress, Configuration.MacAddress);
             }
             else if (Configuration.DeviceType == "프로젝터")
             {
@@ -354,11 +356,11 @@ namespace WpfApp9
             }
             else if (Configuration.DeviceType == "RELAY #1")
             {
-               
+
             }
             else if (Configuration.DeviceType == "RELAY #2")
             {
-            
+
             }
 
 

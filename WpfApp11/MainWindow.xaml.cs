@@ -15,6 +15,7 @@ using WpfApp11.Helpers;
 using System.Windows.Media.Animation;
 using System.Threading.Tasks;
 using WpfApp11.UserControls;
+using WpfApp11.Helpers.Launcher_SE.Helpers;
 
 namespace WpfApp9
 {
@@ -255,6 +256,7 @@ namespace WpfApp9
             {
                 if (dragItems[i].Configuration.DeviceType == "pc")
                 {
+                    WakeOnLanHelper.Instance.TurnOnPC(dragItems[i].Configuration.IpAddress, dragItems[i].Configuration.MacAddress);
                 }
             }
         }
