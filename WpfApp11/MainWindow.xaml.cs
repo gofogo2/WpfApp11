@@ -518,23 +518,32 @@ namespace WpfApp9
             }
         }
 
-        private void TotalPowerBtn_Click(object sender, RoutedEventArgs e)
+        private void TotalPowerBtnOn_Click(object sender, RoutedEventArgs e)
         {
-            bool newState = TotalPowerBtn.Content.ToString() == "전체 전원 ON";
+            PowerOverlay.Visibility = Visibility.Visible;
+            powerProgress = 0;
+            PowerProgressBar.Value = 0;
+            on_wol();
+            powerTimer = new DispatcherTimer();
+            powerTimer.Interval = TimeSpan.FromMilliseconds(30); // 3초 동안 100번 업데이트
+            powerTimer.Tick += PowerTimerON_Tick;
+            powerTimer.Start();
+        }
 
-            PowerProgressBar.Foreground = newState ? Brushes.Green : Brushes.Red;
-            PowerStatusText.Text = newState ? "전원 ON" : "전원 OFF";
+        private void TotalPowerBtnOff_Click(object sender, RoutedEventArgs e)
+        {
             PowerOverlay.Visibility = Visibility.Visible;
             powerProgress = 0;
             PowerProgressBar.Value = 0;
 
             powerTimer = new DispatcherTimer();
             powerTimer.Interval = TimeSpan.FromMilliseconds(30); // 3초 동안 100번 업데이트
-            powerTimer.Tick += PowerTimer_Tick;
+            powerTimer.Tick += PowerTimerOFF_Tick;
             powerTimer.Start();
         }
 
-        private void PowerTimer_Tick(object sender, EventArgs e)
+
+        private void PowerTimerON_Tick(object sender, EventArgs e)
         {
             powerProgress += 1;
             PowerProgressBar.Value = powerProgress;
@@ -544,13 +553,32 @@ namespace WpfApp9
                 powerTimer.Stop();
                 PowerOverlay.Visibility = Visibility.Collapsed;
 
-                bool newState = PowerStatusText.Text == "전원 ON";
+                bool newState = PowerStatusText.Text == "전원 ON";3
                 foreach (var item in dragItems)
                 {
                     item.Configuration.IsOn = newState;
                     UpdateItemPowerState(item, newState);
                 }
-                TotalPowerBtn.Content = newState ? "전체 전원 OFF" : "전체 전원 ON";
+                SaveItemConfigurations();
+            }
+        }
+
+        private void PowerTimerOFF_Tick(object sender, EventArgs e)
+        {
+            powerProgress += 1;
+            PowerProgressBar.Value = powerProgress;
+
+            if (powerProgress >= 100)
+            {
+                powerTimer.Stop();
+                PowerOverlay.Visibility = Visibility.Collapsed;
+
+                bool newState = PowerStatusText.Text == "전원 OFF";
+                foreach (var item in dragItems)
+                {
+                    item.Configuration.IsOn = newState;
+                    UpdateItemPowerState(item, newState);
+                }
                 SaveItemConfigurations();
             }
         }
@@ -658,16 +686,7 @@ namespace WpfApp9
             else
             {
               
-            }
-
-
-
-
-
-
-
-
-          
+            }          
         }
         private void editpanel_close(object sender, RoutedEventArgs e)
         {

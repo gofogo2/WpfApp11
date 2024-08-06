@@ -77,8 +77,8 @@
             </StackPanel>
             <TextBlock Grid.Column="1" Text="PROJECT TITLE" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold"/>
             <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Content="전체 전원 ON" x:Name="TotalPowerBtn" Width="100" Height="30" Background="Green" Foreground="Black" Margin="0,0,10,0" Click="TotalPowerBtn_Click"/>
-                <Button Content="전체 전원 OFF" Width="100" Height="30" Background="white" Foreground="black" Click="TotalPowerBtn_Click" />
+                <Button Content="전체 전원 ON" x:Name="TotalPowerONBtn" Width="100" Height="30" Background="Green" Foreground="Black" Margin="0,0,10,0" Click="TotalPowerBtnOn_Click"/>
+                <Button Content="전체 전원 OFF" x:Name="TotalPowerOFFBtn" Width="100" Height="30" Background="Red" Foreground="black" Click="TotalPowerBtnOff_Click" />
             </StackPanel>
         </Grid>
         <Grid Grid.Row="1" Margin="50,10,50,0" >
