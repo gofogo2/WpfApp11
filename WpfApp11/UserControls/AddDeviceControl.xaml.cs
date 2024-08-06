@@ -58,9 +58,34 @@ namespace WpfApp11.UserControls
                 return;
             }
 
+            string portText = DescriptionTextBox.Text;
+
+            // 포트 번호 유효성 검사
+            if (int.TryParse(portText, out int portNumber))
+            {
+                if (portNumber >= 1 && portNumber <= 65535)
+                {
+                  
+                }
+                else
+                {
+                    MessageBox.Show("유효하지 않은 포트입니다.", "오류", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+            }
+            else
+            {
+                MessageBox.Show("유효하지 않은 포트입니다.", "오류", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+        
 
 
-         
+
+
+        
+
+
 
             NewDeviceConfig = new ItemConfiguration
             {

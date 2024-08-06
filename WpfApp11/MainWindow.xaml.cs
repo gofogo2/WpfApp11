@@ -553,7 +553,7 @@ namespace WpfApp9
                 powerTimer.Stop();
                 PowerOverlay.Visibility = Visibility.Collapsed;
 
-                bool newState = PowerStatusText.Text == "전원 ON";3
+                bool newState = PowerStatusText.Text == "전원 ON";
                 foreach (var item in dragItems)
                 {
                     item.Configuration.IsOn = newState;
