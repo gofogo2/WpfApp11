@@ -54,15 +54,26 @@
             <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="50"/>
-                    <RowDefinition Height="*"/>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="*"/>
                     <RowDefinition Height="55"/>
                 </Grid.RowDefinitions>
 
                 <Border Grid.Row="0" Background="#FFE0E0E0" Padding="5">
                     <TextBlock Text="CMS PC" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20"/>
                 </Border>
+                    <Border Grid.Row="1" Background="#FFE0E0E0" Padding="5">
+                        <StackPanel Orientation="Horizontal" x:Name="drivelist_panel">
+                            <!--<Button Width="150" Click="goto_c">
+                                <TextBlock  Text="C:" FontSize="25" />
+                            </Button>
+                            <Button Width="150" Margin="10,0,0,0" Click="goto_desktop">
+                                <TextBlock  Text="바탕화면" FontSize="25"/>
+                            </Button>-->
+                        </StackPanel>
+                    </Border>
 
-                <ListView x:Name="LeftFileListView" Grid.Row="1" BorderThickness="0"
+                    <ListView x:Name="LeftFileListView" Grid.Row="2" BorderThickness="0"
                           ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                           ScrollViewer.VerticalScrollBarVisibility="Auto"
                           ItemContainerStyle="{StaticResource FileItemStyle}">
@@ -87,7 +98,7 @@
                     </ListView.ItemTemplate>
                 </ListView>
 
-                <Grid Grid.Row="2" Background="#FFE0E0E0">
+                <Grid Grid.Row="3" Background="#FFE0E0E0">
                     <!--<Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>

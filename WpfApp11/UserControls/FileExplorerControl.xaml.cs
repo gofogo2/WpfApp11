@@ -44,6 +44,73 @@ namespace WpfApp9
         public FileExplorerControl()
         {
             InitializeComponent();
+            _currentLocalPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+
+            string[] drives = Directory.GetLogicalDrives();
+            string drivesList = string.Join(Environment.NewLine, drives);
+
+
+
+
+
+
+
+            drivelist_panel.Children.Clear();
+
+            // 드라이브 목록을 가져오기
+
+            // 각 드라이브를 StackPanel에 버튼으로 추가
+            foreach (string drive in drives)
+            {
+                // 드라이브를 나타내는 버튼 생성
+                Button driveButton = new Button
+                {
+                    Width = 80,
+                    Content = drive,
+                    Margin = new Thickness(10,0,0,0),
+                    FontSize = 25
+                };
+
+                // 버튼 클릭 시 드라이브 경로를 표시하는 이벤트 핸들러 추가
+                driveButton.Click += (s, args) =>
+                {
+                    //MessageBox.Show($"드라이브 선택됨: {drive}");
+                    LoadLocalDirectory(drive);
+                };
+
+                // StackPanel에 버튼 추가
+                drivelist_panel.Children.Add(driveButton);
+            }
+
+            Button driveButton2 = new Button
+            {
+                Width = 120,
+                Content = "바탕화면",
+                Margin = new Thickness(10, 0, 0, 0),
+                FontSize = 25
+            };
+
+            // 버튼 클릭 시 드라이브 경로를 표시하는 이벤트 핸들러 추가
+            driveButton2.Click += (s, args) =>
+            {
+                //MessageBox.Show($"드라이브 선택됨: {drive}");
+                LoadLocalDirectory(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
+            };
+
+            // StackPanel에 버튼 추가
+            drivelist_panel.Children.Add(driveButton2);
+
+
+
+
+
+
+
+
+
+
+            //_currentLocalPath = @"C:\";
+            //_currentLocalPath = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.System));
 
             main = Application.Current.MainWindow as MainWindow;
 
@@ -161,7 +228,9 @@ namespace WpfApp9
 
                     }
 
-                    _currentLocalPath = path;
+                    //_currentLocalPath = path;
+                    //_currentLocalPath = @"C:\";
+                    _currentLocalPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
                 }
                 catch (Exception ex)
                 {
@@ -379,7 +448,22 @@ namespace WpfApp9
         {
             public long TransferredSize { get; set; }
         }
-      
+
+        private void goto_c(object sender, RoutedEventArgs e)
+        {
+
+         
+            LoadLocalDirectory(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.System)));
+        }
+
+        private void goto_desktop(object sender, RoutedEventArgs e)
+        {
+
+
+            LoadLocalDirectory(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
+        }
+
+
 
         private void LocalCreateFolder_Click(object sender, RoutedEventArgs e)
         {
