@@ -16,6 +16,7 @@ using System.Windows.Media.Animation;
 using System.Threading.Tasks;
 using WpfApp11.UserControls;
 using WpfApp11.Helpers.Launcher_SE.Helpers;
+using TcpHelperNamespace;
 
 namespace WpfApp9
 {
@@ -37,9 +38,13 @@ namespace WpfApp9
         private DispatcherTimer powerTimer;
         private double powerProgress = 0;
 
+        private double Progress_duration = 3;
 
-        DispatcherTimer pow_timer;
 
+        DispatcherTimer pow_timer = new DispatcherTimer();
+
+        public string local_pc_name = "pc";
+        bool first_init = false;
 
         public MainWindow()
         {
@@ -53,48 +58,96 @@ namespace WpfApp9
             GlobalMessageService.MessageReceived += OnGlobalMessageReceived;
             FileExplorerControl.CloseRequested += FileExplorerControl_CloseRequested;
 
+            
             pow_timer.Tick += Pow_timer_Tick;
             pow_timer.Interval = TimeSpan.FromMinutes(1);
+
+            first_init = true;
+            //TcpHelper.Instance.Send("wer", 234, "wer"); ;
         }
 
        
 
         private void LoadSettings()
         {
+            //if (File.Exists(SettingsFile))
+            //{
+            //    string json = File.ReadAllText(SettingsFile);
+            //    var settings = JsonConvert.DeserializeObject<Dictionary<string, bool>>(json);
+            //    if (settings.TryGetValue("AutoPowerEnabled", out bool isEnabled))
+            //    {
+            //        AutoPowerToggle.IsChecked = isEnabled;
+            //    }
+            //}
+
+
             if (File.Exists(SettingsFile))
             {
                 string json = File.ReadAllText(SettingsFile);
-                var settings = JsonConvert.DeserializeObject<Dictionary<string, bool>>(json);
-                if (settings.TryGetValue("AutoPowerEnabled", out bool isEnabled))
+                var settings = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
+
+                if (settings.TryGetValue("AutoPowerEnabled", out var autoPowerValue) && autoPowerValue is bool isEnabled)
                 {
                     AutoPowerToggle.IsChecked = isEnabled;
                 }
+
+                if (settings.TryGetValue("cms_pc_Name", out var nameValue) && nameValue is string name)
+                {
+                    local_pc_name = name;
+                }
+                if (settings.TryGetValue("Progress_duration", out var progressDurationValue) && progressDurationValue is double progressDuration)
+                {
+                    Progress_duration = progressDuration;
+                }
             }
+
         }
 
         private void SaveSettings()
         {
-            var settings = new Dictionary<string, bool>
-        {
-            { "AutoPowerEnabled", AutoPowerToggle.IsChecked ?? false }
-        };
+            //    var settings = new Dictionary<string, bool>
+            //{
+            //    { "AutoPowerEnabled", AutoPowerToggle.IsChecked ?? false }
+            //};
+            //    string json = JsonConvert.SerializeObject(settings, Formatting.Indented);
+            //    File.WriteAllText(SettingsFile, json);
+
+            var settings = new Dictionary<string, object>
+            {
+                { "cms_pc_Name", local_pc_name },
+                { "AutoPowerEnabled", AutoPowerToggle.IsChecked ?? false },
+                 { "Progress_duration", Progress_duration }
+            };
+
+            // JSON 문자열로 직렬화
             string json = JsonConvert.SerializeObject(settings, Formatting.Indented);
+
+            // JSON 파일에 기록
             File.WriteAllText(SettingsFile, json);
+
+
         }
 
         private void AutoPowerToggle_Checked(object sender, RoutedEventArgs e)
         {
-            SaveSettings();
+            if (first_init)
+            {
+                SaveSettings();
+            }
+            
 
             // 자동 전원 기능 활성화 로직 추가
 
-            pow_timer = new DispatcherTimer();
+            //pow_timer = new DispatcherTimer();
             pow_timer.Start();
         }
 
         private void AutoPowerToggle_Unchecked(object sender, RoutedEventArgs e)
         {
-            SaveSettings();
+            if (first_init)
+            {
+                SaveSettings();
+            }
 
             // 자동 전원 기능 비활성화 로직 추가
 
@@ -525,7 +578,7 @@ namespace WpfApp9
             PowerProgressBar.Value = 0;
             on_wol();
             powerTimer = new DispatcherTimer();
-            powerTimer.Interval = TimeSpan.FromMilliseconds(30); // 3초 동안 100번 업데이트
+            powerTimer.Interval = TimeSpan.FromMilliseconds(10);
             powerTimer.Tick += PowerTimerON_Tick;
             powerTimer.Start();
         }
@@ -536,19 +589,78 @@ namespace WpfApp9
             powerProgress = 0;
             PowerProgressBar.Value = 0;
 
+
             powerTimer = new DispatcherTimer();
-            powerTimer.Interval = TimeSpan.FromMilliseconds(30); // 3초 동안 100번 업데이트
+            powerTimer.Interval = TimeSpan.FromMilliseconds(10);
+
+            //powerTimer.Interval = TimeSpan.FromSeconds(1);   //방법 1
             powerTimer.Tick += PowerTimerOFF_Tick;
             powerTimer.Start();
+        }
+
+        private void PowerTimerOFF_Tick(object sender, EventArgs e)
+        {
+
+
+            //=================================  방법 1=====================================
+            //PowerProgressBar.Maximum = Progress_duration;
+
+            //powerProgress += 1;
+            //PowerProgressBar.Value = powerProgress;
+
+
+            //if (powerProgress >= Progress_duration)
+            //{
+            //    powerTimer.Stop();
+            //    PowerOverlay.Visibility = Visibility.Collapsed;
+
+            //    bool newState = PowerStatusText.Text == "전원 OFF";
+            //    foreach (var item in dragItems)
+            //    {
+            //        item.Configuration.IsOn = newState;
+            //        UpdateItemPowerState(item, newState);
+            //    }
+            //    SaveItemConfigurations();
+            //}
+            //=================================  방법 1=====================================
+
+
+
+
+
+            PowerProgressBar.Maximum = (Progress_duration * 0.7) * 100;
+
+            powerProgress += 1;
+            PowerProgressBar.Value = powerProgress;
+
+
+            if (powerProgress >= (Progress_duration * 0.7) * 100)
+            {
+                powerTimer.Stop();
+                PowerOverlay.Visibility = Visibility.Collapsed;
+
+                bool newState = PowerStatusText.Text == "전원 OFF";
+                foreach (var item in dragItems)
+                {
+                    item.Configuration.IsOn = newState;
+                    UpdateItemPowerState(item, newState);
+                }
+                SaveItemConfigurations();
+            }
         }
 
 
         private void PowerTimerON_Tick(object sender, EventArgs e)
         {
+            //powerProgress += 1;
+            //PowerProgressBar.Value = powerProgress;
+            PowerProgressBar.Maximum = (Progress_duration * 0.7) * 100;
+
             powerProgress += 1;
             PowerProgressBar.Value = powerProgress;
 
-            if (powerProgress >= 100)
+            //if (powerProgress >= 100)
+            if (powerProgress >= (Progress_duration * 0.7) * 100)
             {
                 powerTimer.Stop();
                 PowerOverlay.Visibility = Visibility.Collapsed;
@@ -563,25 +675,7 @@ namespace WpfApp9
             }
         }
 
-        private void PowerTimerOFF_Tick(object sender, EventArgs e)
-        {
-            powerProgress += 1;
-            PowerProgressBar.Value = powerProgress;
-
-            if (powerProgress >= 100)
-            {
-                powerTimer.Stop();
-                PowerOverlay.Visibility = Visibility.Collapsed;
-
-                bool newState = PowerStatusText.Text == "전원 OFF";
-                foreach (var item in dragItems)
-                {
-                    item.Configuration.IsOn = newState;
-                    UpdateItemPowerState(item, newState);
-                }
-                SaveItemConfigurations();
-            }
-        }
+       
 
         private void UpdateItemPowerState(DraggableItemControl item, bool isOn)
         {

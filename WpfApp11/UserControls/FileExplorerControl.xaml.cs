@@ -33,7 +33,7 @@ namespace WpfApp9
         private ObservableCollection<FileSystemItem> _leftItems;
         private ObservableCollection<FileSystemItem> _rightItems;
         private FtpClient _ftpClient;
-        private string _currentLocalPath = @"C:\dw";
+        private string _currentLocalPath = @"C:\GL-MEDIA";
         private string _currentFtpPath = "/";
         string ftp_port = "21";
         //private string _currentFtpPath = "ftp://192.168.0.5";
@@ -44,10 +44,6 @@ namespace WpfApp9
         public FileExplorerControl()
         {
             InitializeComponent();
-            _currentLocalPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-
-            string[] drives = Directory.GetLogicalDrives();
-            string drivesList = string.Join(Environment.NewLine, drives);
 
 
 
@@ -55,50 +51,13 @@ namespace WpfApp9
 
 
 
-            drivelist_panel.Children.Clear();
 
-            // 드라이브 목록을 가져오기
-
-            // 각 드라이브를 StackPanel에 버튼으로 추가
-            foreach (string drive in drives)
+            if (!Directory.Exists(_currentLocalPath))
             {
-                // 드라이브를 나타내는 버튼 생성
-                Button driveButton = new Button
-                {
-                    Width = 80,
-                    Content = drive,
-                    Margin = new Thickness(10,0,0,0),
-                    FontSize = 25
-                };
-
-                // 버튼 클릭 시 드라이브 경로를 표시하는 이벤트 핸들러 추가
-                driveButton.Click += (s, args) =>
-                {
-                    //MessageBox.Show($"드라이브 선택됨: {drive}");
-                    LoadLocalDirectory(drive);
-                };
-
-                // StackPanel에 버튼 추가
-                drivelist_panel.Children.Add(driveButton);
+                // 폴더가 존재하지 않으면 생성
+                Directory.CreateDirectory(_currentLocalPath);
             }
-
-            Button driveButton2 = new Button
-            {
-                Width = 120,
-                Content = "바탕화면",
-                Margin = new Thickness(10, 0, 0, 0),
-                FontSize = 25
-            };
-
-            // 버튼 클릭 시 드라이브 경로를 표시하는 이벤트 핸들러 추가
-            driveButton2.Click += (s, args) =>
-            {
-                //MessageBox.Show($"드라이브 선택됨: {drive}");
-                LoadLocalDirectory(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
-            };
-
-            // StackPanel에 버튼 추가
-            drivelist_panel.Children.Add(driveButton2);
+            
 
 
 
@@ -109,8 +68,81 @@ namespace WpfApp9
 
 
 
-            //_currentLocalPath = @"C:\";
-            //_currentLocalPath = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.System));
+
+
+
+
+
+
+
+
+
+            //_currentLocalPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+
+            //string[] drives = Directory.GetLogicalDrives();
+            //string drivesList = string.Join(Environment.NewLine, drives);
+
+
+
+
+
+
+
+            //drivelist_panel.Children.Clear();
+
+            //// 드라이브 목록을 가져오기
+
+            //// 각 드라이브를 StackPanel에 버튼으로 추가
+            //foreach (string drive in drives)
+            //{
+            //    // 드라이브를 나타내는 버튼 생성
+            //    Button driveButton = new Button
+            //    {
+            //        Width = 80,
+            //        Content = drive,
+            //        Margin = new Thickness(10,0,0,0),
+            //        FontSize = 25
+            //    };
+
+            //    // 버튼 클릭 시 드라이브 경로를 표시하는 이벤트 핸들러 추가
+            //    driveButton.Click += (s, args) =>
+            //    {
+            //        //MessageBox.Show($"드라이브 선택됨: {drive}");
+            //        LoadLocalDirectory(drive);
+            //    };
+
+            //    // StackPanel에 버튼 추가
+            //    drivelist_panel.Children.Add(driveButton);
+            //}
+
+            //Button driveButton2 = new Button
+            //{
+            //    Width = 120,
+            //    Content = "바탕화면",
+            //    Margin = new Thickness(10, 0, 0, 0),
+            //    FontSize = 25
+            //};
+
+            //// 버튼 클릭 시 드라이브 경로를 표시하는 이벤트 핸들러 추가
+            //driveButton2.Click += (s, args) =>
+            //{
+            //    //MessageBox.Show($"드라이브 선택됨: {drive}");
+            //    LoadLocalDirectory(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
+            //};
+
+            //// StackPanel에 버튼 추가
+            //drivelist_panel.Children.Add(driveButton2);
+
+
+
+
+
+
+
+
+
+
+
 
             main = Application.Current.MainWindow as MainWindow;
 
@@ -121,6 +153,7 @@ namespace WpfApp9
             RightFileListView.ItemsSource = _rightItems;
             LeftFileListView.MouseDoubleClick += LeftFileListView_MouseDoubleClick;
             RightFileListView.MouseDoubleClick += RightFileListView_MouseDoubleClick;
+
         }
 
         public void Initialize(string ftpAddress)
@@ -130,6 +163,9 @@ namespace WpfApp9
             InitializeFtpConnection(ftpAddress);
             LoadLocalDirectory(_currentLocalPath);
             LoadFtpDirectory(_currentFtpPath);
+
+            cms_pc_name.Text = main.local_pc_name;
+
         }
 
         private void InitializeFtpConnection(string ftpAddress)
@@ -194,13 +230,13 @@ namespace WpfApp9
 
                     if (di.Parent != null)
                     {
-                        _leftItems.Add(new FileSystemItem
-                        {
-                            Name = "..",
-                            Type = "Parent Directory",
-                            FullPath = di.Parent.FullName,
-                            IconSource = GetIconForFileType("folder")
-                        });
+                        //_leftItems.Add(new FileSystemItem
+                        //{
+                        //    Name = "..",
+                        //    Type = "Parent Directory",
+                        //    FullPath = di.Parent.FullName,
+                        //    IconSource = GetIconForFileType("folder")
+                        //});
                     }
 
                     foreach (var directory in di.GetDirectories())
@@ -230,7 +266,7 @@ namespace WpfApp9
 
                     //_currentLocalPath = path;
                     //_currentLocalPath = @"C:\";
-                    _currentLocalPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                    _currentLocalPath = @"C:\GL-MEDIA";
                 }
                 catch (Exception ex)
                 {

@@ -99,7 +99,7 @@ namespace WpfApp11.UserControls
                 Row = 0,
                 Column = 0,
                 ZIndex = 1,
-                VncPw = "1015"
+                VncPw = "1111"
             };
 
 
