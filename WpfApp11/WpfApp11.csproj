@@ -65,8 +65,10 @@
     <Compile Include="Helpers\GlobalMessageService.cs" />
     <Compile Include="Helpers\PJLinkHelper.cs" />
     <Compile Include="Helpers\TcpHelper.cs" />
+    <Compile Include="Helpers\UdpHelper.cs" />
     <Compile Include="Helpers\UdpReceiver.cs" />
     <Compile Include="Helpers\WakeOnlanHelper.cs" />
+    <Compile Include="Helpers\WebApiHelper.cs" />
     <Compile Include="UserControls\AddDeviceControl.xaml.cs">
       <DependentUpon>AddDeviceControl.xaml</DependentUpon>
     </Compile>
@@ -236,6 +238,9 @@
   <ItemGroup>
     <Resource Include="Images\blank.png" />
     <Resource Include="Images\x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="README.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

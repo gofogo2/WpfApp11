@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using WpfApp11.UserControls;
 using WpfApp11.Helpers.Launcher_SE.Helpers;
 using TcpHelperNamespace;
+using System.Diagnostics;
 
 namespace WpfApp9
 {
@@ -156,7 +157,7 @@ namespace WpfApp9
 
         private void Pow_timer_Tick(object sender, EventArgs e)
         {
-            Console.WriteLine(AutoPowerSettingsControl.pow_schedule.Values);
+            Debug.WriteLine(AutoPowerSettingsControl.pow_schedule.Values);
 
             DateTime now = DateTime.Now;
             if (now.DayOfWeek == DayOfWeek.Monday)

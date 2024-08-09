@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Launcher_SE.Helpers;
+using System;
 using System.Diagnostics;
 using System.Net;
 using System.Net.NetworkInformation;
@@ -340,15 +341,20 @@ namespace WpfApp9
         }
 
 
-        private void pow_on(object sender, RoutedEventArgs e)
+        private async void pow_on(object sender, RoutedEventArgs e)
         {
-
+            Debug.WriteLine(Configuration);
             if (Configuration.DeviceType == "pc")
             {
                 WakeOnLanHelper.Instance.TurnOnPC(Configuration.IpAddress, Configuration.MacAddress);
             }
             else if (Configuration.DeviceType == "프로젝터")
             {
+                PJLinkHelper.Instance.PowerOn(Configuration.IpAddress);
+            }
+            else if (Configuration.DeviceType == "DLP프로젝터")
+            {
+                await UdpHelper.Instance.SendPowerOnCommandToDLPProjector(Configuration.IpAddress);
             }
             else if (Configuration.DeviceType == "PDU")
             {
@@ -367,13 +373,20 @@ namespace WpfApp9
             MessageBox.Show("on");
         }
 
-        private void pow_off(object sender, RoutedEventArgs e)
+        private async void pow_off(object sender, RoutedEventArgs e)
         {
+            Debug.WriteLine(Configuration);
             if (Configuration.DeviceType == "pc")
             {
+                await UdpHelper.Instance.SendWithIpAsync("power-off", Configuration.IpAddress, 11116);
             }
             else if (Configuration.DeviceType == "프로젝터")
             {
+                PJLinkHelper.Instance.PowerOff(Configuration.IpAddress);
+            }
+            else if (Configuration.DeviceType == "DLP프로젝터")
+            {
+                await UdpHelper.Instance.SendPowerOffCommandToDLPProjector(Configuration.IpAddress);
             }
             else if (Configuration.DeviceType == "PDU")
             {
@@ -392,7 +405,27 @@ namespace WpfApp9
 
         private void pow_re(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("re");
+            Debug.WriteLine(Configuration);
+            if (Configuration.DeviceType == "pc")
+            {
+                UdpHelper.Instance.SendWithIpAsync("power-reboot", Configuration.IpAddress, 11116);
+            }
+            else if (Configuration.DeviceType == "프로젝터")
+            {
+            }
+            else if (Configuration.DeviceType == "PDU")
+            {
+
+            }
+            else if (Configuration.DeviceType == "RELAY #1")
+            {
+
+            }
+            else if (Configuration.DeviceType == "RELAY #2")
+            {
+
+            }
+            MessageBox.Show("off");
         }
     }
 }
