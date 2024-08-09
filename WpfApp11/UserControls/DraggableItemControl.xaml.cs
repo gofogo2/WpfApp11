@@ -141,15 +141,15 @@ namespace WpfApp9
             }
             else if (Configuration.DeviceType == "RELAY #1")
             {
-                var allowedIp = IPAddress.Parse(config.IpAddress); // 허용할 IP 주소를 설정합니다.
-                _udpReceiver = new UdpReceiver(int.Parse(config.port), allowedIp);
-                Task.Run(() => _udpReceiver.StartReceivingAsync(OnMessageReceived, OnInvalidIpReceived));
+                //var allowedIp = IPAddress.Parse(config.IpAddress); // 허용할 IP 주소를 설정합니다.
+                //_udpReceiver = new UdpReceiver(int.Parse(config.port), allowedIp);
+                //Task.Run(() => _udpReceiver.StartReceivingAsync(OnMessageReceived, OnInvalidIpReceived));
             }
             else if (Configuration.DeviceType == "RELAY #2")
             {
-                var allowedIp = IPAddress.Parse(config.IpAddress); // 허용할 IP 주소를 설정합니다.
-                _udpReceiver = new UdpReceiver(int.Parse(config.port), allowedIp);
-                Task.Run(() => _udpReceiver.StartReceivingAsync(OnMessageReceived, OnInvalidIpReceived));
+                //var allowedIp = IPAddress.Parse(config.IpAddress); // 허용할 IP 주소를 설정합니다.
+                //_udpReceiver = new UdpReceiver(int.Parse(config.port), allowedIp);
+                //Task.Run(() => _udpReceiver.StartReceivingAsync(OnMessageReceived, OnInvalidIpReceived));
             }
         }
 
@@ -242,10 +242,6 @@ namespace WpfApp9
             {
                 IconImage.Source = new BitmapImage(new Uri($"pack://application:,,,/Images/{Configuration.DeviceType}.png"));
             }
-
-            
-            //StatusIndicator.Fill = Configuration.IsOn ? Brushes.Green : Brushes.Red;
-            //PowerToggle.IsChecked = Configuration.IsOn;
         }
 
 
@@ -308,14 +304,19 @@ namespace WpfApp9
 
         private void EditMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            EditDeviceWindow editWindow = new EditDeviceWindow(Configuration);
-            editWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            if (editWindow.ShowDialog() == true)
-            {
-                
-                Configuration = editWindow.EditedDeviceConfig;
-                UpdateUI();
-            }
+            var mainWindow = Window.GetWindow(this) as MainWindow;
+            mainWindow.add_device_ppanel.Visibility = Visibility.Visible;
+
+            mainWindow.addDeviceWindow.set_edit_value(Configuration);
+            //ㅈㄷㄱㅈㄷㄱㄷㅈㄱ
+            //EditDeviceWindow editWindow = new EditDeviceWindow(Configuration);
+            //editWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            //if (editWindow.ShowDialog() == true)
+            //{ 
+
+            //    Configuration = editWindow.EditedDeviceConfig;
+            //    UpdateUI();
+            //}
         }
 
         private void DeleteMenuItem_Click(object sender, RoutedEventArgs e)

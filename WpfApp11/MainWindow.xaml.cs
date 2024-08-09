@@ -45,6 +45,7 @@ namespace WpfApp9
         DispatcherTimer pow_timer = new DispatcherTimer();
 
         public string local_pc_name = "pc";
+        public string local_path = @"C:\GL-MEDIA";
         bool first_init = false;
 
         public MainWindow()
@@ -95,7 +96,14 @@ namespace WpfApp9
                 if (settings.TryGetValue("cms_pc_Name", out var nameValue) && nameValue is string name)
                 {
                     local_pc_name = name;
+                    p_title.Text = local_pc_name;
                 }
+
+                if (settings.TryGetValue("local_path", out var local_pathValue) && local_pathValue is string local_path_value)
+                {
+                    local_path = local_path_value;
+                }
+
                 if (settings.TryGetValue("Progress_duration", out var progressDurationValue) && progressDurationValue is double progressDuration)
                 {
                     Progress_duration = progressDuration;
@@ -116,6 +124,7 @@ namespace WpfApp9
             var settings = new Dictionary<string, object>
             {
                 { "cms_pc_Name", local_pc_name },
+                { "local_path", local_path },
                 { "AutoPowerEnabled", AutoPowerToggle.IsChecked ?? false },
                  { "Progress_duration", Progress_duration }
             };
@@ -549,10 +558,72 @@ namespace WpfApp9
             File.WriteAllText(ConfigFile, jsonString);
         }
 
-        private void LoadItemConfigurations()
+
+
+        public void EditItemConfiguration(ItemConfiguration updatedConfiguration)
         {
+            // 현재 구성을 파일에서 읽어옵니다.
+            List<ItemConfiguration> currentConfigurations = new List<ItemConfiguration>();
+
             if (File.Exists(ConfigFile))
             {
+                string jsonString = File.ReadAllText(ConfigFile);
+                currentConfigurations = JsonConvert.DeserializeObject<List<ItemConfiguration>>(jsonString) ?? new List<ItemConfiguration>();
+            }
+
+            // 기존 구성에서 업데이트할 아이템을 찾아 업데이트합니다.
+            var existingConfig = currentConfigurations.FirstOrDefault(c => c.Name == updatedConfiguration.Name);
+            if (existingConfig != null)
+            {
+                // 기존 아이템의 정보를 업데이트합니다.
+                existingConfig.port = updatedConfiguration.port;
+                existingConfig.DeviceType = updatedConfiguration.DeviceType;
+                //existingConfig.Property2 = updatedConfiguration.Property2;
+                // ... 필요한 다른 속성들 업데이트
+            }
+            else
+            {
+                // 해당 아이템이 없으면 새로 추가합니다.
+                //currentConfigurations.Add(updatedConfiguration);
+            }
+
+            // 업데이트된 구성을 JSON으로 직렬화하고 파일에 저장합니다.
+            string updatedJsonString = JsonConvert.SerializeObject(currentConfigurations, Formatting.Indented);
+            File.WriteAllText(ConfigFile, updatedJsonString);
+
+
+            add_device_ppanel.Visibility = Visibility.Collapsed;
+
+
+            LoadItemConfigurations();
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+        private void LoadItemConfigurations()
+        {
+
+
+
+            if (File.Exists(ConfigFile))
+            {
+
+
+                ItemCanvas.Children.Clear();
+                dragItems.Clear();
+
+
+
                 string jsonString = File.ReadAllText(ConfigFile);
                 List<ItemConfiguration> configurations = JsonConvert.DeserializeObject<List<ItemConfiguration>>(jsonString);
 
@@ -711,6 +782,9 @@ namespace WpfApp9
             //AddDeviceControl addDeviceWindow = new AddDeviceControl();
 
             add_device_ppanel.Visibility = Visibility.Visible;
+            addDeviceWindow.addbtn.Visibility = Visibility.Visible;
+            addDeviceWindow.editbtn.Visibility = Visibility.Collapsed;
+            addDeviceWindow.title.Content = "기기 등록";
             {
                 //ItemConfiguration newConfig = addDeviceWindow.NewDeviceConfig;
                 //CreateDraggableItem(newConfig);

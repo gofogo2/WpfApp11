@@ -115,6 +115,50 @@ namespace WpfApp11.UserControls
             //DialogResult = true;
         }
 
+        ItemConfiguration tempconfig;
+        public void set_edit_value(ItemConfiguration config)
+        {
+            tempconfig = config;
+            title.Content = "기기 수정";
+            addbtn.Visibility = Visibility.Collapsed;
+            editbtn.Visibility = Visibility.Visible;
+
+
+            NameTextBox.Text = config.Name;
+
+
+            if (config.DeviceType == "pc")
+            {
+                DeviceTypeComboBox.SelectedIndex = 0;
+            }
+            else if (config.DeviceType == "프로젝터")
+            {
+                DeviceTypeComboBox.SelectedIndex = 1;
+            }
+            else if (config.DeviceType == "RELAY #1")
+            {
+                DeviceTypeComboBox.SelectedIndex = 2;
+            }
+            else if (config.DeviceType == "RELAY #2")
+            {
+                DeviceTypeComboBox.SelectedIndex = 3;
+            }
+            else if (config.DeviceType == "PDU")
+            {
+                DeviceTypeComboBox.SelectedIndex = 4;
+            }
+
+            //DeviceType = ((ComboBoxItem)DeviceTypeComboBox.SelectedItem).Content.ToString(),
+
+            MacAddressTextBox.Text = config.MacAddress;
+            IpAddressTextBox.Text = config.IpAddress; ;
+            DescriptionTextBox.Text = config.port;
+
+            
+
+
+        }
+
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
 
@@ -129,6 +173,41 @@ namespace WpfApp11.UserControls
 
             //DialogResult = false;
         }
+
+        private void EditButton_Click(object sender, RoutedEventArgs e)
+        {
+
+            var main = Application.Current.MainWindow as MainWindow;
+
+
+
+            tempconfig.Name = NameTextBox.Text;
+            tempconfig.DeviceType = ((ComboBoxItem)DeviceTypeComboBox.SelectedItem).Content.ToString();
+
+            tempconfig.MacAddress = MacAddressTextBox.Text;
+            tempconfig.IpAddress = IpAddressTextBox.Text;
+            tempconfig.port = DescriptionTextBox.Text;
+            tempconfig.IsOn = InitialStateCheckBox.IsChecked ?? false;
+
+
+            main.EditItemConfiguration(tempconfig);
+
+            //var main = Application.Current.MainWindow as MainWindow;
+            //main.add_device_ppanel.Visibility = Visibility.Collapsed;
+
+
+            //data_clear();
+
+
+
+        }
+
+
+
+
+
+
+        
 
         void data_clear()
         {

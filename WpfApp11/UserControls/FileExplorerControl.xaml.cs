@@ -52,12 +52,7 @@ namespace WpfApp9
 
 
 
-            if (!Directory.Exists(_currentLocalPath))
-            {
-                // 폴더가 존재하지 않으면 생성
-                Directory.CreateDirectory(_currentLocalPath);
-            }
-            
+         
 
 
 
@@ -159,12 +154,20 @@ namespace WpfApp9
         public void Initialize(string ftpAddress)
         {
 
+            _currentLocalPath = main.local_path;
+
+            if (!Directory.Exists(_currentLocalPath))
+            {
+                // 폴더가 존재하지 않으면 생성
+                Directory.CreateDirectory(_currentLocalPath);
+            }
+
 
             InitializeFtpConnection(ftpAddress);
             LoadLocalDirectory(_currentLocalPath);
             LoadFtpDirectory(_currentFtpPath);
 
-            cms_pc_name.Text = main.local_pc_name;
+            //cms_pc_name.Text = main.local_pc_name;
 
         }
 
@@ -227,16 +230,21 @@ namespace WpfApp9
                 {
                     _leftItems.Clear();
                     DirectoryInfo di = new DirectoryInfo(path);
-
-                    if (di.Parent != null)
+                    if (path == _currentLocalPath)
                     {
-                        //_leftItems.Add(new FileSystemItem
-                        //{
-                        //    Name = "..",
-                        //    Type = "Parent Directory",
-                        //    FullPath = di.Parent.FullName,
-                        //    IconSource = GetIconForFileType("folder")
-                        //});
+                    }
+                    else
+                    {
+                        if (di.Parent != null)
+                        {
+                            _leftItems.Add(new FileSystemItem
+                            {
+                                Name = "..",
+                                Type = "Parent Directory",
+                                FullPath = di.Parent.FullName,
+                                IconSource = GetIconForFileType("folder")
+                            });
+                        }
                     }
 
                     foreach (var directory in di.GetDirectories())
@@ -266,7 +274,7 @@ namespace WpfApp9
 
                     //_currentLocalPath = path;
                     //_currentLocalPath = @"C:\";
-                    _currentLocalPath = @"C:\GL-MEDIA";
+                    _currentLocalPath = main.local_path;
                 }
                 catch (Exception ex)
                 {
@@ -1265,6 +1273,7 @@ namespace WpfApp9
 
         private void UpdateProgress(long transferredSize, long totalSize)
         {
+            
             double percentage = (double)transferredSize / totalSize * 100;
             int roundedPercentage = (int)Math.Round(percentage);
 
@@ -1274,6 +1283,74 @@ namespace WpfApp9
                 TransferProgressText.Text = $"{roundedPercentage}%";
             });
         }
+
+
+
+
+
+
+
+
+
+        //void fake_updateprogress()
+        //{
+
+
+        //    double percentage = (double)transferredSize / totalSize * 100;
+        //    int roundedPercentage = (int)Math.Round(percentage);
+
+        //    Dispatcher.Invoke(() =>
+        //    {
+        //        TransferProgressBar.Value = roundedPercentage;
+        //        TransferProgressText.Text = $"{roundedPercentage}%";
+        //    });
+
+
+
+
+
+
+        //    PowerProgressBar.Maximum = (Progress_duration * 0.7) * 100;
+
+        //    powerProgress += 1;
+        //    PowerProgressBar.Value = powerProgress;
+
+
+        //    if (powerProgress >= (Progress_duration * 0.7) * 100)
+        //    {
+        //        powerTimer.Stop();
+        //        PowerOverlay.Visibility = Visibility.Collapsed;
+
+        //        bool newState = PowerStatusText.Text == "전원 OFF";
+        //        foreach (var item in dragItems)
+        //        {
+        //            item.Configuration.IsOn = newState;
+        //            UpdateItemPowerState(item, newState);
+        //        }
+        //    }
+
+
+        //}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         //private void CloseButton_Click(object sender, RoutedEventArgs e)
         //{
