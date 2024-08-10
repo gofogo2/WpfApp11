@@ -572,14 +572,14 @@ namespace WpfApp9
             }
 
             // 기존 구성에서 업데이트할 아이템을 찾아 업데이트합니다.
-            var existingConfig = currentConfigurations.FirstOrDefault(c => c.Name == updatedConfiguration.Name);
+            var existingConfig = currentConfigurations.FirstOrDefault(c => c.id == updatedConfiguration.id);
             if (existingConfig != null)
             {
-                // 기존 아이템의 정보를 업데이트합니다.
+                existingConfig.Name = updatedConfiguration.Name;
                 existingConfig.port = updatedConfiguration.port;
+                existingConfig.IpAddress = updatedConfiguration.IpAddress;
                 existingConfig.DeviceType = updatedConfiguration.DeviceType;
-                //existingConfig.Property2 = updatedConfiguration.Property2;
-                // ... 필요한 다른 속성들 업데이트
+                existingConfig.MacAddress= updatedConfiguration.MacAddress;
             }
             else
             {
@@ -930,6 +930,7 @@ namespace WpfApp9
 
     public class ItemConfiguration
     {
+        public string id { get; set; }
         public string Name { get; set; }
         public string DeviceType { get; set; }
         public bool IsOn { get; set; }

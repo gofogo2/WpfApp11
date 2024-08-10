@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -37,8 +39,13 @@ namespace WpfApp11.UserControls
             return Regex.IsMatch(ipAddress, pattern);
         }
 
+
+        string ConfigFile = "itemConfig.json";
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
+
+
+
             if (string.IsNullOrWhiteSpace(NameTextBox.Text) ||
                 DeviceTypeComboBox.SelectedItem == null ||
                 
@@ -78,17 +85,21 @@ namespace WpfApp11.UserControls
                 MessageBox.Show("유효하지 않은 포트입니다.", "오류", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-        
 
 
 
 
-        
+
+            Guid uniqueId = Guid.NewGuid();
+
+            // 문자열로 변환
+            string uniqueIdString = uniqueId.ToString();
 
 
 
             NewDeviceConfig = new ItemConfiguration
             {
+                id = uniqueIdString,
                 Name = NameTextBox.Text,
                 DeviceType = ((ComboBoxItem)DeviceTypeComboBox.SelectedItem).Content.ToString(),
                 
