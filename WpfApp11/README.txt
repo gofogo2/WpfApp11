@@ -42,8 +42,8 @@ ON/OFF/REBOOT 버튼 이미지 공통
 [V] DLP Projector
 [V] PJLINK
 [V] PC
-[V] (Relay)Basso
-[V] (Relay)ETC
+[ ] (Relay)Basso
+[ ] (Relay)ETC
 [V] PDU
 
 
