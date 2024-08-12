@@ -159,6 +159,8 @@ namespace WpfApp11.UserControls
                 DeviceTypeComboBox.SelectedIndex = 4;
             }
 
+            DeviceTypeComboBox.IsEnabled = false;
+
             //DeviceType = ((ComboBoxItem)DeviceTypeComboBox.SelectedItem).Content.ToString(),
 
             MacAddressTextBox.Text = config.MacAddress;
@@ -194,6 +196,8 @@ namespace WpfApp11.UserControls
 
             tempconfig.Name = NameTextBox.Text;
             tempconfig.DeviceType = ((ComboBoxItem)DeviceTypeComboBox.SelectedItem).Content.ToString();
+
+           
 
             tempconfig.MacAddress = MacAddressTextBox.Text;
             tempconfig.IpAddress = IpAddressTextBox.Text;

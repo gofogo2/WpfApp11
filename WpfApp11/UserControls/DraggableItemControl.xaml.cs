@@ -279,19 +279,27 @@ namespace WpfApp9
 
         private void VNC_Button_Click(object sender, RoutedEventArgs e)
         {
-            if (ispow)
-            {
-                try
-                {
-                    Process.Start(vncViewerPath, $"{Configuration.IpAddress} -password={Configuration.VncPw}");
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"연결 오류: {ex.Message}", "오류", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
 
-                Debug.WriteLine(Configuration.IpAddress);
+            var main = Application.Current.MainWindow as MainWindow;
+
+            if (main.isvnc)
+            {
+                if (ispow)
+                {
+                    try
+                    {
+                        Process.Start(vncViewerPath, $"{Configuration.IpAddress} -password={Configuration.VncPw}");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"연결 오류: {ex.Message}", "오류", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+
+                    Debug.WriteLine(Configuration.IpAddress);
+                }
             }
+
+            
             
             OverlayGrid.Visibility = Visibility.Collapsed;
         }

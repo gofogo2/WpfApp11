@@ -40,6 +40,8 @@ namespace WpfApp9
         private double powerProgress = 0;
 
         private double Progress_duration = 3;
+        public bool isvnc = true;
+        public bool isftp = true;
 
 
         DispatcherTimer pow_timer = new DispatcherTimer();
@@ -108,6 +110,16 @@ namespace WpfApp9
                 {
                     Progress_duration = progressDuration;
                 }
+
+                if (settings.TryGetValue("vnc", out var vnc_value) && vnc_value is bool vncvalue)
+                {
+                    isvnc = vncvalue;
+                }
+
+                if (settings.TryGetValue("ftp", out var ftp_value) && ftp_value is bool ftpvalue)
+                {
+                    isftp = ftpvalue;
+                }
             }
 
         }
@@ -126,7 +138,10 @@ namespace WpfApp9
                 { "cms_pc_Name", local_pc_name },
                 { "local_path", local_path },
                 { "AutoPowerEnabled", AutoPowerToggle.IsChecked ?? false },
-                 { "Progress_duration", Progress_duration }
+                { "Progress_duration", Progress_duration },
+                { "vnc", isvnc },
+                { "ftp", isftp}
+
             };
 
             // JSON 문자열로 직렬화
@@ -431,9 +446,14 @@ namespace WpfApp9
         }
         public void ShowFileExplorer(string ftpAddress, string name)
         {
-            OverlayGrid.Visibility = Visibility.Visible;
-            FileExplorerControl.Initialize(ftpAddress);
-            FileExplorerControl.targetname.Text = name;
+            if (isftp)
+            {
+                OverlayGrid.Visibility = Visibility.Visible;
+                FileExplorerControl.Initialize(ftpAddress);
+                FileExplorerControl.targetname.Text = name;
+            }
+
+            
            
         }
 
@@ -785,11 +805,7 @@ namespace WpfApp9
             addDeviceWindow.addbtn.Visibility = Visibility.Visible;
             addDeviceWindow.editbtn.Visibility = Visibility.Collapsed;
             addDeviceWindow.title.Content = "기기 등록";
-            {
-                //ItemConfiguration newConfig = addDeviceWindow.NewDeviceConfig;
-                //CreateDraggableItem(newConfig);
-                //SaveItemConfigurations();
-            }
+            addDeviceWindow.DeviceTypeComboBox.IsEnabled = true;
         }
 
 

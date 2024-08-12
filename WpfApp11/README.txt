@@ -22,14 +22,14 @@ ON/OFF/REBOOT 버튼 이미지 공통
 ##cms
 #config
 [V] CMS TITLE
-[  ] VNC ON / OFF
-[ ] 파일관리 ON / OFF
+[V] VNC ON / OFF
+[V] 파일관리 ON / OFF
 [V] 파일 기본 경로
 [V] 프로그래스 시간 조절
 
 #program
 [V] 기기 관리 등록 / 삭제 
-[ ] 기기 관리 수정(유형은 수정 안되게 처리)
+[V] 기기 관리 수정(유형은 수정 안되게 처리)
 [V] 전체 기기 전원 ON / OFF / REBOOT / 상태체크(우선은 PC만)
 [V] 스케쥴링 요일 별 전원 ON / OFF 시간 설정(우선은 PC만)
 [V] 정해진 폴더에 파일 업데이트(버튼 방식)
@@ -61,3 +61,5 @@ ON/OFF/REBOOT 버튼 이미지 공통
 [] 스크립트생성
 [] 계정생성
 [] 가이드 작성
+
+#sample 추가

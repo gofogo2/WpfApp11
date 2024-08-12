@@ -176,6 +176,8 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="sample\itemConfig.json" />
+    <None Include="sample\settings.json" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -242,5 +244,6 @@
   <ItemGroup>
     <Resource Include="README.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

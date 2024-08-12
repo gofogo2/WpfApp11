@@ -1,0 +1,47 @@
+[
+  {
+    "id": "04770970-0a2a-4b5e-93e8-4b3e670f7abd",
+    "Name": "담담",
+    "DeviceType": "pc",
+    "IsOn": true,
+    "FtpAddress": "121.131.142.148:12923",
+    "MacAddress": "wer",
+    "IpAddress": "121.131.142.148",
+    "port": "34534",
+    "Description": "wer",
+    "Row": 0,
+    "Column": 3,
+    "ZIndex": 198,
+    "VncPw": "1015"
+  },
+  {
+    "id": "7c2e5dea-8470-45e7-aaed-3e819ee0053b",
+    "Name": "123",
+    "DeviceType": "pc",
+    "IsOn": false,
+    "FtpAddress": null,
+    "MacAddress": "wer",
+    "IpAddress": "192.168.0.5",
+    "port": "23453",
+    "Description": null,
+    "Row": 0,
+    "Column": 0,
+    "ZIndex": 1,
+    "VncPw": "1111"
+  },
+  {
+    "id": "0d8566a3-9685-4f71-8d52-6f6c9a2530b9",
+    "Name": "sds",
+    "DeviceType": "pc",
+    "IsOn": false,
+    "FtpAddress": null,
+    "MacAddress": "wer",
+    "IpAddress": "192.168.0.7",
+    "port": "12342",
+    "Description": null,
+    "Row": 0,
+    "Column": 5,
+    "ZIndex": 189,
+    "VncPw": "1111"
+  }
+]
