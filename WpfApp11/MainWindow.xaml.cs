@@ -47,7 +47,7 @@ namespace WpfApp9
         DispatcherTimer pow_timer = new DispatcherTimer();
 
         public string local_pc_name = "pc";
-        public string local_path = @"C:\GL-MEDIA";
+        public string local_path = @"C:\test";
         bool first_init = false;
 
         public MainWindow()
@@ -62,7 +62,7 @@ namespace WpfApp9
             GlobalMessageService.MessageReceived += OnGlobalMessageReceived;
             FileExplorerControl.CloseRequested += FileExplorerControl_CloseRequested;
 
-            
+
             pow_timer.Tick += Pow_timer_Tick;
             pow_timer.Interval = TimeSpan.FromMinutes(1);
 

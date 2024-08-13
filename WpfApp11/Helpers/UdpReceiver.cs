@@ -29,11 +29,12 @@ namespace WpfApp11.Helpers
                 var message = Encoding.UTF8.GetString(result.Buffer);
 
                 // 수신된 패킷의 IP 주소가 허용된 IP와 일치하는지 확인합니다.
-                if (result.RemoteEndPoint.Address.Equals(_allowedIp))
-                {
-                    onMessageReceived?.Invoke(message);
-                }
+                //if (result.RemoteEndPoint.Address.Equals(""))
+                //{
+                    
+                //}
 
+                onMessageReceived?.Invoke(message);
 
                 await Task.Delay(2000);
 
