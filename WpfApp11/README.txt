@@ -51,8 +51,8 @@ ON/OFF/REBOOT 버튼 이미지 공통
 
 #launcher
 [V] PORT
-[ ] 전원 관리 ON / OFF
-[ ] 통신 기능 ON / OFF
+[V] 전원 관리 ON / OFF
+[V] 통신 기능 ON / OFF
 [ ] 통신프로세스(와치아웃,resolume)
 
 ## issue
