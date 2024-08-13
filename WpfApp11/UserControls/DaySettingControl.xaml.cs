@@ -37,7 +37,7 @@ namespace WpfApp9
             if (e.AddedItems.Count != 0)
             {
                 endtime_hour = e.AddedItems[0].ToString();
-                checkTimeSet_enable("endhour");
+                //checkTimeSet_enable("endhour");
             }
             
         }
@@ -52,7 +52,7 @@ namespace WpfApp9
             if (e.AddedItems.Count != 0)
             {
                 starttime_hour = e.AddedItems[0].ToString();
-                checkTimeSet_enable("starthour");
+                //checkTimeSet_enable("starthour");
             }  
         }
 

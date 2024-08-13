@@ -20,8 +20,50 @@ namespace WpfApp9
         public AutoPowerSettingsControl()
         {
             InitializeComponent();
+            PopulateComboBoxes();
             PopulateDaySettings();
             LoadSchedule();
+        }
+
+
+
+        private void PopulateComboBoxes()
+        {
+            for (int i = 1; i < 25; i++)
+            {
+                all_StartHourComboBox.Items.Add(i.ToString("D2"));
+                all_EndHourComboBox.Items.Add(i.ToString("D2"));
+            }
+
+            for (int i = 0; i < 60; i += 30)
+            {
+                all_StartMinuteComboBox.Items.Add(i.ToString("D2"));
+                all_EndMinuteComboBox.Items.Add(i.ToString("D2"));
+            }
+        }
+
+        private void allapply_click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            if (all_StartHourComboBox.SelectedIndex != -1 && all_StartMinuteComboBox.SelectedIndex != -1 && all_EndHourComboBox.SelectedIndex != -1 && all_EndMinuteComboBox.SelectedIndex != -1)
+            {
+                for (int i = 0; i < daySettings.Count; i++)
+                {
+                    daySettings[i].StartHourComboBox.SelectedIndex = all_StartHourComboBox.SelectedIndex;
+                    daySettings[i].StartMinuteComboBox.SelectedIndex = all_StartMinuteComboBox.SelectedIndex;
+                    daySettings[i].EndHourComboBox.SelectedIndex = all_EndHourComboBox.SelectedIndex;
+                    daySettings[i].EndMinuteComboBox.SelectedIndex = all_EndMinuteComboBox.SelectedIndex;
+
+                    daySettings[i].DayCheckBox.IsChecked = true;
+                }
+            }
+            else
+            {
+                MessageBox.Show("모든 시간을 입력하세요.", "오류", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+
+            
+
         }
 
         private void PopulateDaySettings()
