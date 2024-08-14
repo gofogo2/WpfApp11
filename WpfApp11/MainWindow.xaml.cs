@@ -37,20 +37,19 @@ namespace WpfApp9
         private int highestZIndex = 1;
         private DateTime lastClickTime = DateTime.MinValue;
         private const double DoubleClickTime = 300; // 밀리초
-        private DispatcherTimer powerTimer;
         private double powerProgress = 0;
 
         private double Progress_duration = 3;
         public bool isvnc = true;
         public bool isftp = true;
         private static readonly Dictionary<string, int> deviceTypeSortOrder = new Dictionary<string, int>
-{
-    {"projector", 1},
-    {"pc", 2},
-    {"RELAY #1", 3},
-    {"RELAY #2", 4},
-    {"pdu", 5}
-};
+        {
+            {"projector", 1},
+            {"pc", 2},
+            {"RELAY #1", 3},
+            {"RELAY #2", 4},
+            {"pdu", 5}
+        };
 
         DispatcherTimer pow_timer = new DispatcherTimer();
 
@@ -60,7 +59,6 @@ namespace WpfApp9
 
         public MainWindow()
         {
-            
             InitializeComponent();
             occupiedCells = new bool[GridRows, GridColumns];
             CreateGrid();
@@ -70,29 +68,14 @@ namespace WpfApp9
             GlobalMessageService.MessageReceived += OnGlobalMessageReceived;
             FileExplorerControl.CloseRequested += FileExplorerControl_CloseRequested;
 
-
             pow_timer.Tick += Pow_timer_Tick;
             pow_timer.Interval = TimeSpan.FromMinutes(1);
 
             first_init = true;
-            //TcpHelper.Instance.Send("wer", 234, "wer"); ;
         }
-
-       
 
         private void LoadSettings()
         {
-            //if (File.Exists(SettingsFile))
-            //{
-            //    string json = File.ReadAllText(SettingsFile);
-            //    var settings = JsonConvert.DeserializeObject<Dictionary<string, bool>>(json);
-            //    if (settings.TryGetValue("AutoPowerEnabled", out bool isEnabled))
-            //    {
-            //        AutoPowerToggle.IsChecked = isEnabled;
-            //    }
-            //}
-
-
             if (File.Exists(SettingsFile))
             {
                 string json = File.ReadAllText(SettingsFile);
@@ -129,18 +112,10 @@ namespace WpfApp9
                     isftp = ftpvalue;
                 }
             }
-
         }
 
         private void SaveSettings()
         {
-            //    var settings = new Dictionary<string, bool>
-            //{
-            //    { "AutoPowerEnabled", AutoPowerToggle.IsChecked ?? false }
-            //};
-            //    string json = JsonConvert.SerializeObject(settings, Formatting.Indented);
-            //    File.WriteAllText(SettingsFile, json);
-
             var settings = new Dictionary<string, object>
             {
                 { "cms_pc_Name", local_pc_name },
@@ -149,16 +124,10 @@ namespace WpfApp9
                 { "Progress_duration", Progress_duration },
                 { "vnc", isvnc },
                 { "ftp", isftp}
-
             };
 
-            // JSON 문자열로 직렬화
             string json = JsonConvert.SerializeObject(settings, Formatting.Indented);
-
-            // JSON 파일에 기록
             File.WriteAllText(SettingsFile, json);
-
-
         }
 
         private void AutoPowerToggle_Checked(object sender, RoutedEventArgs e)
@@ -167,11 +136,6 @@ namespace WpfApp9
             {
                 SaveSettings();
             }
-            
-
-            // 자동 전원 기능 활성화 로직 추가
-
-            //pow_timer = new DispatcherTimer();
             pow_timer.Start();
         }
 
@@ -181,209 +145,74 @@ namespace WpfApp9
             {
                 SaveSettings();
             }
-
-            // 자동 전원 기능 비활성화 로직 추가
-
             pow_timer.Stop();
         }
 
-        private void Pow_timer_Tick(object sender, EventArgs e)
+        private async void Pow_timer_Tick(object sender, EventArgs e)
         {
-            Debug.WriteLine(AutoPowerSettingsControl.pow_schedule.Values);
-
             DateTime now = DateTime.Now;
-            if (now.DayOfWeek == DayOfWeek.Monday)
-            {
-                if (AutoPowerSettingsControl.pow_schedule["월요일"].IsEnabled)
-                {
-                    if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["월요일"].StartTime.ToString().Substring(0, 5))
-                    {
-                        //켜지게
-                        OnDevice();
-                    }
-                    else if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["월요일"].EndTime.ToString().Substring(0, 5))
-                    {
-                        //꺼지게
-                        OffDevice();
-                    }
-                    else
-                    {
-                     
-                    }
-                }
-            }
-            else if (now.DayOfWeek == DayOfWeek.Tuesday)
-            {
-                if (AutoPowerSettingsControl.pow_schedule["화요일"].IsEnabled)
-                {
-                    if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["화요일"].StartTime.ToString().Substring(0, 5))
-                    {
-                        //켜지게
-                        OnDevice();
-                    }
-                    else if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["화요일"].EndTime.ToString().Substring(0, 5))
-                    {
-                        //꺼지게
-                        OffDevice();
-                    }
-                    else
-                    {
-                       
-                    }
-                }
-            }
-            else if (now.DayOfWeek == DayOfWeek.Wednesday)
-            {
-                if (AutoPowerSettingsControl.pow_schedule["수요일"].IsEnabled)
-                {
-                    if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["수요일"].StartTime.ToString().Substring(0, 5))
-                    {
-                        //켜지게
-                        OnDevice();
-                    }
-                    else if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["수요일"].EndTime.ToString().Substring(0, 5))
-                    {
-                        //꺼지게
-                        OffDevice();
-                    }
-                    else
-                    {
+            string[] days = { "월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일" };
+            string currentDay = days[(int)now.DayOfWeek - 1];
 
-                    }
-                }
-            }
-            else if (now.DayOfWeek == DayOfWeek.Thursday)
+            if (AutoPowerSettingsControl.pow_schedule[currentDay].IsEnabled)
             {
-                if (AutoPowerSettingsControl.pow_schedule["목요일"].IsEnabled)
+                string currentTime = now.ToString("HH:mm");
+                if (currentTime == AutoPowerSettingsControl.pow_schedule[currentDay].StartTime.ToString().Substring(0, 5))
                 {
-                    if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["목요일"].StartTime.ToString().Substring(0, 5))
-                    {
-                        //켜지게
-                        OnDevice();
-                    }
-                    else if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["목요일"].EndTime.ToString().Substring(0, 5))
-                    {
-                        //꺼지게
-                        OffDevice();
-                    }
-                    else
-                    {
-
-                    }
+                    await OnDevice();
                 }
-            }
-            else if (now.DayOfWeek == DayOfWeek.Friday)
-            {
-                if (AutoPowerSettingsControl.pow_schedule["금요일"].IsEnabled)
+                else if (currentTime == AutoPowerSettingsControl.pow_schedule[currentDay].EndTime.ToString().Substring(0, 5))
                 {
-                    if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["금요일"].StartTime.ToString().Substring(0, 5))
-                    {
-                        //켜지게
-                        OnDevice();
-                    }
-                    else if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["금요일"].EndTime.ToString().Substring(0, 5))
-                    {
-                        //꺼지게
-                        OffDevice();
-                    }
-                    else
-                    {
-
-                    }
-                }
-            }
-            else if (now.DayOfWeek == DayOfWeek.Saturday)
-            {
-                if (AutoPowerSettingsControl.pow_schedule["토요일"].IsEnabled)
-                {
-                    if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["토요일"].StartTime.ToString().Substring(0, 5))
-                    {
-                        //켜지게
-                        OnDevice();
-                    }
-                    else if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["토요일"].EndTime.ToString().Substring(0, 5))
-                    {
-                        //꺼지게
-                        OffDevice();
-                    }
-                    else
-                    {
-                      
-                    }
-                }
-            }
-            else if (now.DayOfWeek == DayOfWeek.Sunday)
-            {
-                if (AutoPowerSettingsControl.pow_schedule["일요일"].IsEnabled)
-                {
-                    if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["일요일"].StartTime.ToString().Substring(0, 5))
-                    {
-                        //켜지게
-                        OnDevice();
-                    }
-                    else if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["일요일"].EndTime.ToString().Substring(0, 5))
-                    {
-                        //꺼지게
-                        OffDevice();
-                    }
-                    else
-                    {
-
-                    }
+                    await OffDevice();
                 }
             }
         }
 
-
-
-
-
-        public void OnDevice()
+        public async Task OnDevice()
         {
-
+            PowerOverlay.Visibility = Visibility.Visible;
+            PowerProgressBar.Value = 0;
             var items = dragItems.Select(a => a.Configuration).ToList();
-
-            _ = SortAndProcessDragItems(items, true);
+            await SortAndProcessDragItems(items, true, 0, 25); // 장치 처리
+            await AddDelay(25, 100); //10초 딜레이
+            await FinalizeDeviceOperation(true);
         }
 
-        public void OffDevice()
+        public async Task OffDevice()
         {
+            PowerOverlay.Visibility = Visibility.Visible;
+            PowerProgressBar.Value = 0;
             var items = dragItems.Select(a => a.Configuration).ToList();
-
-            _ = SortAndProcessDragItems(items, false);
+            await SortAndProcessDragItems(items, false, 0, 25); //장치 처리
+            await AddDelay(25, 100); // 10초 딜레이
+            await FinalizeDeviceOperation(false);
         }
-
-        public async Task SortAndProcessDragItems(List<ItemConfiguration> drags, bool onOff)
+        public async Task SortAndProcessDragItems(List<ItemConfiguration> drags, bool onOff, double startProgress, double endProgress)
         {
-            //var sortedDragItems = drags.OrderBy(item => deviceTypeSortOrder.TryGetValue(item.DeviceType, out int order) ? order : int.MaxValue).ToList();
-            var sortedDragItems = drags.FindAll(a => a.DeviceType.ToLower() == "프로젝터");
-            var listb = drags.FindAll(a => a.DeviceType.ToLower() == "pc");
-            var listc = drags.FindAll(a => a.DeviceType.ToLower() == "relay #1");
-            var listd = drags.FindAll(a => a.DeviceType.ToLower() == "relay #2");
-            var liste = drags.FindAll(a => a.DeviceType.ToLower() == "pdu");
+            var sortedDragItems = drags
+                .OrderBy(a => a.DeviceType.ToLower() == "프로젝터" ? 1 :
+                              a.DeviceType.ToLower() == "pc" ? 2 :
+                              a.DeviceType.ToLower() == "relay #1" ? 3 :
+                              a.DeviceType.ToLower() == "relay #2" ? 4 :
+                              a.DeviceType.ToLower() == "pdu" ? 5 : 6)
+                .ToList();
 
-           sortedDragItems.AddRange(listb);
-           sortedDragItems.AddRange(listc);
-           sortedDragItems.AddRange(listd);
-            sortedDragItems.AddRange(liste);
-
-            foreach(var i in dragItems)
+            foreach (var i in dragItems)
             {
                 i.StopPingCheck();
             }
 
-            
-
-
-
-            foreach (var item in sortedDragItems)
+            int totalItems = sortedDragItems.Count;
+            for (int i = 0; i < totalItems; i++)
             {
+                var item = sortedDragItems[i];
                 Debug.WriteLine($"{item.DeviceType}: {item.IpAddress}: onOff:{onOff}");
+
                 switch (item.DeviceType.ToLower())
-                { 
+                {
                     case "프로젝터":
-                        ProcessProjector(item, onOff);
-                        await Task.Delay(1000); //딜레이
+                        await ProcessProjector(item, onOff);
+                        await Task.Delay(1000);
                         break;
                     case "pc":
                         ProcessPC(item, onOff);
@@ -397,35 +226,80 @@ namespace WpfApp9
                     case "pdu":
                         ProcessPDU(item, onOff);
                         break;
-                    default:
-                        break;
                 }
-            }
 
+                double progress = startProgress + (endProgress - startProgress) * ((i + 1) / (double)totalItems);
+                Dispatcher.Invoke(() => PowerProgressBar.Value = progress);
+
+                await Task.Delay(50);
+            }
 
             foreach (var i in dragItems)
             {
                 i.StartPingCheck();
             }
-
         }
 
-        // 프로젝터 전원
-        private void ProcessProjector(ItemConfiguration item, bool onOff)
+        private async Task AddDelay(double startProgress, double endProgress)
         {
-            if (onOff)
+            var watch = System.Diagnostics.Stopwatch.StartNew();
+            double delayDuration = 10000; // 10초
+
+            while (watch.ElapsedMilliseconds < delayDuration)
             {
-                PJLinkHelper.Instance.PowerOn(item.IpAddress);
-                
+                double progress = startProgress + (endProgress - startProgress) * (watch.ElapsedMilliseconds / delayDuration);
+                Dispatcher.Invoke(() => PowerProgressBar.Value = progress);
+                await Task.Delay(100);
             }
-            else
+
+            watch.Stop();
+        }
+
+        private Task FinalizeDeviceOperation(bool isOn)
+        {
+            PowerOverlay.Visibility = Visibility.Collapsed;
+
+            foreach (var item in dragItems)
             {
-                PJLinkHelper.Instance.PowerOff(item.IpAddress);
+                item.Configuration.IsOn = isOn;
+                UpdateItemPowerState(item, isOn);
+            }
+            SaveItemConfigurations();
+            return Task.CompletedTask;
+        }
+
+
+
+        private async void TotalPowerBtnOn_Click(object sender, RoutedEventArgs e)
+        {
+            await OnDevice();
+        }
+
+        private async void TotalPowerBtnOff_Click(object sender, RoutedEventArgs e)
+        {
+            await OffDevice();
+        }
+
+        private async Task ProcessProjector(ItemConfiguration item, bool onOff)
+        {
+            try
+            {
+                bool result = onOff
+                    ? await PJLinkHelper.Instance.PowerOnAsync(item.IpAddress)
+                    : await PJLinkHelper.Instance.PowerOffAsync(item.IpAddress);
+
+                if (!result)
+                {
+                    Debug.WriteLine($"Failed to {(onOff ? "power on" : "power off")} projector at {item.IpAddress}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error processing projector: {ex.Message}");
             }
         }
 
-        // PC 전원
-        private void ProcessPC(ItemConfiguration item,bool onOff)
+        private void ProcessPC(ItemConfiguration item, bool onOff)
         {
             if (onOff)
             {
@@ -435,35 +309,19 @@ namespace WpfApp9
             {
                 UdpHelper.Instance.SendWithIpAsync("off", item.IpAddress, 11116);
             }
-            
         }
 
-        // RELAY #1 전원
         private void ProcessRelay1(ItemConfiguration item, bool onOff)
         {
-            if (onOff)
-            {
-            }
-            else
-            {
-            }
-
+            // Implement Relay1 logic here
         }
 
-        // RELAY #2 전원
         private void ProcessRelay2(ItemConfiguration item, bool onOff)
         {
-            if (onOff)
-            {
-            }
-            else
-            {
-            }
-                
+            // Implement Relay2 logic here
         }
 
-        // PDU 전원
-        private void ProcessPDU(ItemConfiguration item,bool onOff)
+        private void ProcessPDU(ItemConfiguration item, bool onOff)
         {
             if (onOff)
             {
@@ -520,11 +378,8 @@ namespace WpfApp9
                     Canvas.SetTop(cell, i * GridCellHeight);
 
                     var gs = new grid_background();
-
                     var vb = new VisualBrush();
-                    
                     vb.Visual = gs;
-                    
                     cell.Fill = vb;
 
                     GridCanvas.Children.Add(cell);
@@ -532,11 +387,10 @@ namespace WpfApp9
             }
         }
 
-        private const int ItemMargin = 10; // 그리드 셀과 아이템 사이의 여백
+        private const int ItemMargin = 10;
 
-        private async void CreateDraggableItem(ItemConfiguration config)
+        private void CreateDraggableItem(ItemConfiguration config)
         {
-
             var itemControl = new DraggableItemControl(config)
             {
                 Width = GridCellWidth - (ItemMargin * 2),
@@ -547,16 +401,7 @@ namespace WpfApp9
             itemControl.MouseLeftButtonUp += Item_MouseLeftButtonUp;
             itemControl.MouseMove += Item_MouseMove;
 
-
-            if (itemControl.Configuration.DeviceType == "pc")
-            {
-                itemControl.StatusIndicator.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                itemControl.StatusIndicator.Visibility = Visibility.Collapsed;
-            }
-            
+            itemControl.StatusIndicator.Visibility = config.DeviceType == "pc" ? Visibility.Visible : Visibility.Collapsed;
 
             double left = (config.Column * GridCellWidth) + ItemMargin;
             double top = (config.Row * GridCellHeight) + ItemMargin;
@@ -572,6 +417,7 @@ namespace WpfApp9
 
             SnapToGrid(itemControl);
         }
+
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
             base.OnClosing(e);
@@ -580,6 +426,7 @@ namespace WpfApp9
                 item.StopPingCheck();
             }
         }
+
         public void ShowFileExplorer(string ftpAddress, string name)
         {
             if (isftp)
@@ -588,35 +435,22 @@ namespace WpfApp9
                 FileExplorerControl.Initialize(ftpAddress);
                 FileExplorerControl.targetname.Text = name;
             }
-
-            
-           
         }
-
 
         private void Item_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             var now = DateTime.Now;
             if ((now - lastClickTime).TotalMilliseconds <= DoubleClickTime)
             {
-                // 더블 클릭 처리
                 var item = sender as DraggableItemControl;
-                if (item != null)
+                if (item != null && item.Configuration.DeviceType == "pc" && item.ispow)
                 {
-                    if (item.Configuration.DeviceType == "pc")
-                    {
-                        if (item.ispow)
-                        {
-                            ShowFileExplorer(item.Configuration.IpAddress, item.Configuration.Name); //더블클릭
-                        }
-                    }
-                    
+                    ShowFileExplorer(item.Configuration.IpAddress, item.Configuration.Name);
                 }
                 e.Handled = true;
             }
             else
             {
-                // 단일 클릭 처리 (드래그 시작)
                 draggedItem = sender as DraggableItemControl;
                 offset = e.GetPosition(draggedItem);
                 draggedItem.CaptureMouse();
@@ -644,6 +478,7 @@ namespace WpfApp9
                 SaveItemConfigurations();
             }
         }
+
         private void Item_MouseMove(object sender, MouseEventArgs e)
         {
             if (draggedItem != null)
@@ -671,7 +506,6 @@ namespace WpfApp9
 
             occupiedCells[rowIndex, columnIndex] = true;
 
-            // Update the configuration
             element.Configuration.Row = rowIndex;
             element.Configuration.Column = columnIndex;
             element.Configuration.ZIndex = Canvas.GetZIndex(element);
@@ -714,11 +548,8 @@ namespace WpfApp9
             File.WriteAllText(ConfigFile, jsonString);
         }
 
-
-
         public void EditItemConfiguration(ItemConfiguration updatedConfiguration)
         {
-            // 현재 구성을 파일에서 읽어옵니다.
             List<ItemConfiguration> currentConfigurations = new List<ItemConfiguration>();
 
             if (File.Exists(ConfigFile))
@@ -727,7 +558,6 @@ namespace WpfApp9
                 currentConfigurations = JsonConvert.DeserializeObject<List<ItemConfiguration>>(jsonString) ?? new List<ItemConfiguration>();
             }
 
-            // 기존 구성에서 업데이트할 아이템을 찾아 업데이트합니다.
             var existingConfig = currentConfigurations.FirstOrDefault(c => c.id == updatedConfiguration.id);
             if (existingConfig != null)
             {
@@ -735,51 +565,23 @@ namespace WpfApp9
                 existingConfig.port = updatedConfiguration.port;
                 existingConfig.IpAddress = updatedConfiguration.IpAddress;
                 existingConfig.DeviceType = updatedConfiguration.DeviceType;
-                existingConfig.MacAddress= updatedConfiguration.MacAddress;
-            }
-            else
-            {
-                // 해당 아이템이 없으면 새로 추가합니다.
-                //currentConfigurations.Add(updatedConfiguration);
+                existingConfig.MacAddress = updatedConfiguration.MacAddress;
             }
 
-            // 업데이트된 구성을 JSON으로 직렬화하고 파일에 저장합니다.
             string updatedJsonString = JsonConvert.SerializeObject(currentConfigurations, Formatting.Indented);
             File.WriteAllText(ConfigFile, updatedJsonString);
 
-
             add_device_ppanel.Visibility = Visibility.Collapsed;
 
-
             LoadItemConfigurations();
-
-
         }
-
-
-
-
-
-
-
-
-
-
 
         private void LoadItemConfigurations()
         {
-
-
-
             if (File.Exists(ConfigFile))
             {
-
-
                 ItemCanvas.Children.Clear();
                 dragItems.Clear();
-
-
-
                 string jsonString = File.ReadAllText(ConfigFile);
                 List<ItemConfiguration> configurations = JsonConvert.DeserializeObject<List<ItemConfiguration>>(jsonString);
 
@@ -799,117 +601,38 @@ namespace WpfApp9
             }
         }
 
-        private void TotalPowerBtnOn_Click(object sender, RoutedEventArgs e)
+     
+
+        private async Task AnimateProgressBar(bool isOn)
         {
-            PowerOverlay.Visibility = Visibility.Visible;
-            powerProgress = 0;
-            PowerProgressBar.Value = 0;
-            //OnDevice();
-            powerTimer = new DispatcherTimer();
-            powerTimer.Interval = TimeSpan.FromMilliseconds(10);
-            powerTimer.Tick += PowerTimerON_Tick;
-            powerTimer.Start();
-        }
+            double animationDuration = Progress_duration * 0.7;
+            var watch = System.Diagnostics.Stopwatch.StartNew();
 
-        private void TotalPowerBtnOff_Click(object sender, RoutedEventArgs e)
-        {
-            PowerOverlay.Visibility = Visibility.Visible;
-            powerProgress = 0;
-            PowerProgressBar.Value = 0;
-
-            //OffDevice();
-            powerTimer = new DispatcherTimer();
-            powerTimer.Interval = TimeSpan.FromMilliseconds(10);
-
-            //powerTimer.Interval = TimeSpan.FromSeconds(1);   //방법 1
-            powerTimer.Tick += PowerTimerOFF_Tick;
-            powerTimer.Start();
-        }
-
-        private void PowerTimerOFF_Tick(object sender, EventArgs e)
-        {
-
-
-            //=================================  방법 1=====================================
-            //PowerProgressBar.Maximum = Progress_duration;
-
-            //powerProgress += 1;
-            //PowerProgressBar.Value = powerProgress;
-
-
-            //if (powerProgress >= Progress_duration)
-            //{
-            //    powerTimer.Stop();
-            //    PowerOverlay.Visibility = Visibility.Collapsed;
-
-            //    bool newState = PowerStatusText.Text == "전원 OFF";
-            //    foreach (var item in dragItems)
-            //    {
-            //        item.Configuration.IsOn = newState;
-            //        UpdateItemPowerState(item, newState);
-            //    }
-            //    SaveItemConfigurations();
-            //}
-            //=================================  방법 1=====================================
-
-
-
-
-
-            PowerProgressBar.Maximum = (Progress_duration * 0.7) * 100;
-
-            powerProgress += 1;
-            PowerProgressBar.Value = powerProgress;
-
-
-            if (powerProgress >= (Progress_duration * 0.7) * 100)
+            while (watch.Elapsed.TotalSeconds < animationDuration)
             {
-                powerTimer.Stop();
-                PowerOverlay.Visibility = Visibility.Collapsed;
-
-                bool newState = PowerStatusText.Text == "전원 OFF";
-                foreach (var item in dragItems)
-                {
-                    item.Configuration.IsOn = newState;
-                    UpdateItemPowerState(item, newState);
-                }
-                SaveItemConfigurations();
+                await Task.Delay(16); // 약 60fps
+                double progress = Math.Min(watch.Elapsed.TotalSeconds / animationDuration, 1);
+                PowerProgressBar.Value = progress * 100;
             }
-        }
 
+            watch.Stop();
+            PowerProgressBar.Value = 100;
 
-        private void PowerTimerON_Tick(object sender, EventArgs e)
-        {
-            //powerProgress += 1;
-            //PowerProgressBar.Value = powerProgress;
-            PowerProgressBar.Maximum = (Progress_duration * 0.7) * 100;
+            PowerOverlay.Visibility = Visibility.Collapsed;
 
-            powerProgress += 1;
-            PowerProgressBar.Value = powerProgress;
-
-            //if (powerProgress >= 100)
-            if (powerProgress >= (Progress_duration * 0.7) * 100)
+            bool newState = isOn;
+            foreach (var item in dragItems)
             {
-                powerTimer.Stop();
-                PowerOverlay.Visibility = Visibility.Collapsed;
-
-                bool newState = PowerStatusText.Text == "전원 ON";
-                foreach (var item in dragItems)
-                {
-                    item.Configuration.IsOn = newState;
-                    UpdateItemPowerState(item, newState);
-                }
-                SaveItemConfigurations();
+                item.Configuration.IsOn = newState;
+                UpdateItemPowerState(item, newState);
             }
+            SaveItemConfigurations();
         }
-
-       
 
         private void UpdateItemPowerState(DraggableItemControl item, bool isOn)
         {
             item.UpdatePowerState(isOn);
         }
-
 
         private T FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
         {
@@ -935,8 +658,6 @@ namespace WpfApp9
 
         private void AddDevice_Click(object sender, RoutedEventArgs e)
         {
-            //AddDeviceControl addDeviceWindow = new AddDeviceControl();
-
             add_device_ppanel.Visibility = Visibility.Visible;
             addDeviceWindow.addbtn.Visibility = Visibility.Visible;
             addDeviceWindow.editbtn.Visibility = Visibility.Collapsed;
@@ -944,16 +665,9 @@ namespace WpfApp9
             addDeviceWindow.DeviceTypeComboBox.IsEnabled = true;
         }
 
-
         public void createitem(ItemConfiguration newconfig)
         {
-
             CreateDraggableItem(newconfig);
-
-           
-
-
-
             SaveItemConfigurations();
         }
 
@@ -966,23 +680,17 @@ namespace WpfApp9
             }
         }
 
-
-
         private void item_delete(object sender, RoutedEventArgs e)
         {
-
-
-
             MessageBoxResult result = MessageBox.Show(
-               "현재 목록을 저장 하시겠습니까?",   // 메시지
-               "확인",                      // 제목
-               MessageBoxButton.YesNo,      // 버튼 종류
-               MessageBoxImage.Question     // 아이콘 종류
+               "현재 목록을 저장 하시겠습니까?",
+               "확인",
+               MessageBoxButton.YesNo,
+               MessageBoxImage.Question
            );
 
             if (result == MessageBoxResult.Yes)
             {
-                // 사용자가 'Yes'를 클릭했을 때의 처리
                 for (int i = dragItems.Count - 1; i >= 0; i--)
                 {
                     if (dragItems[i].d_select.IsChecked == true)
@@ -995,8 +703,6 @@ namespace WpfApp9
 
                 SaveItemConfigurations();
 
-
-
                 editpanel.Visibility = Visibility.Collapsed;
                 for (int i = 0; i < dragItems.Count; i++)
                 {
@@ -1004,11 +710,8 @@ namespace WpfApp9
                     dragItems[i].d_select.IsChecked = false;
                 }
             }
-            else
-            {
-              
-            }          
         }
+
         private void editpanel_close(object sender, RoutedEventArgs e)
         {
             editpanel.Visibility = Visibility.Collapsed;
@@ -1017,6 +720,7 @@ namespace WpfApp9
                 dragItems[i].delete_select.Visibility = Visibility.Collapsed;
             }
         }
+
         private void AutoPowerSettings_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ClickCount == 2)
@@ -1024,6 +728,7 @@ namespace WpfApp9
                 ShowAutoPowerSettingsOverlay();
             }
         }
+
         private void ShowAutoPowerSettingsOverlay()
         {
             AutoPowerSettingsControl.Visibility = Visibility.Visible;
@@ -1031,7 +736,6 @@ namespace WpfApp9
 
         private void InitializeAutoPowerSettings()
         {
-            //sp_auto.MouseLeftButtonDown += AutoPowerSettings_MouseLeftButtonDown;
             AutoPowerSettingsControl.CloseRequested += (sender, e) =>
             {
                 AutoPowerSettingsControl.Visibility = Visibility.Collapsed;
@@ -1062,6 +766,7 @@ namespace WpfApp9
 
             return panel;
         }
+
         public void RemoveDevice(DraggableItemControl deviceControl)
         {
             ItemCanvas.Children.Remove(deviceControl);
@@ -1069,10 +774,6 @@ namespace WpfApp9
             SaveItemConfigurations();
         }
     }
-
-
-
-
 
     public class DraggableItem
     {
@@ -1090,12 +791,10 @@ namespace WpfApp9
         public string MacAddress { get; set; }
         public string IpAddress { get; set; }
         public string port { get; set; }
-
         public string Description { get; set; }
         public int Row { get; set; }
         public int Column { get; set; }
         public int ZIndex { get; set; }
         public string VncPw { get; set; }
-
     }
 }
