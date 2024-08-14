@@ -804,7 +804,7 @@ namespace WpfApp9
             PowerOverlay.Visibility = Visibility.Visible;
             powerProgress = 0;
             PowerProgressBar.Value = 0;
-            OnDevice();
+            //OnDevice();
             powerTimer = new DispatcherTimer();
             powerTimer.Interval = TimeSpan.FromMilliseconds(10);
             powerTimer.Tick += PowerTimerON_Tick;
@@ -817,7 +817,7 @@ namespace WpfApp9
             powerProgress = 0;
             PowerProgressBar.Value = 0;
 
-            OffDevice();
+            //OffDevice();
             powerTimer = new DispatcherTimer();
             powerTimer.Interval = TimeSpan.FromMilliseconds(10);
 
