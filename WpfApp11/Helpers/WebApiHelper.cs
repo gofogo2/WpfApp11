@@ -43,7 +43,7 @@ public class WebApiHelper
         _password = password;
     }
 
-    public async Task<string> PostAsync(string endpoint, Dictionary<string, string> additionalParams)
+    private async Task<string> PostAsync(string endpoint, Dictionary<string, string> additionalParams)
     {
         var parameters = new Dictionary<string, string>
         {
@@ -63,31 +63,29 @@ public class WebApiHelper
         return await response.Content.ReadAsStringAsync();
     }
 
-    public async Task<string> ToggleOutlet(int index, bool turnOn)
-    {
-        var method = turnOn ? "on" : "off";
-        return await PostAsync("/api/outlet/relay", new Dictionary<string, string>
-        {
-            {"index", index.ToString()},
-            {"method", method}
-        });
-    }
+   
 
-    public async Task<string> ToggleBank(int index, bool turnOn)
-    {
-        var method = turnOn ? "on" : "off";
-        return await PostAsync("/api/bank/relay", new Dictionary<string, string>
-        {
-            {"index", index.ToString()},
-            {"method", method}
-        });
-    }
-
-    public async Task<string> RebootAllOutlets()
+    public async Task<string> RebootAll()
     {
         return await PostAsync("/api/device/relay", new Dictionary<string, string>
         {
             {"method", "reboot"}
+        });
+    }
+
+    public async Task<string> OnAll()
+    {
+        return await PostAsync("/api/device/relay", new Dictionary<string, string>
+        {
+            {"method", "on"}
+        });
+    }
+
+    public async Task<string> OffAll()
+    {
+        return await PostAsync("/api/device/relay", new Dictionary<string, string>
+        {
+            {"method", "off"}
         });
     }
 }
