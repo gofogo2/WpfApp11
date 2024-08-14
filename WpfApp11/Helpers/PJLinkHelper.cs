@@ -36,8 +36,8 @@ public class PJLinkHelper
         try
         {
             client = new TcpClient();
-            client.ReceiveTimeout = 5000;
-            client.SendTimeout = 5000;
+            client.ReceiveTimeout = 1000;
+            client.SendTimeout = 1000;
             client.Connect(ipAddress, port);
 
             stream = client.GetStream();

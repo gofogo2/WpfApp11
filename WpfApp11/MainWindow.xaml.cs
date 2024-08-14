@@ -43,7 +43,14 @@ namespace WpfApp9
         private double Progress_duration = 3;
         public bool isvnc = true;
         public bool isftp = true;
-
+        private static readonly Dictionary<string, int> deviceTypeSortOrder = new Dictionary<string, int>
+{
+    {"projector", 1},
+    {"pc", 2},
+    {"RELAY #1", 3},
+    {"RELAY #2", 4},
+    {"pdu", 5}
+};
 
         DispatcherTimer pow_timer = new DispatcherTimer();
 
@@ -192,12 +199,12 @@ namespace WpfApp9
                     if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["월요일"].StartTime.ToString().Substring(0, 5))
                     {
                         //켜지게
-                        on_device();
+                        OnDevice();
                     }
                     else if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["월요일"].EndTime.ToString().Substring(0, 5))
                     {
                         //꺼지게
-                        MessageBox.Show("off");
+                        OffDevice();
                     }
                     else
                     {
@@ -212,12 +219,12 @@ namespace WpfApp9
                     if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["화요일"].StartTime.ToString().Substring(0, 5))
                     {
                         //켜지게
-                        on_device();
+                        OnDevice();
                     }
                     else if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["화요일"].EndTime.ToString().Substring(0, 5))
                     {
                         //꺼지게
-                        MessageBox.Show("off");
+                        OffDevice();
                     }
                     else
                     {
@@ -232,12 +239,12 @@ namespace WpfApp9
                     if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["수요일"].StartTime.ToString().Substring(0, 5))
                     {
                         //켜지게
-                        on_device();
+                        OnDevice();
                     }
                     else if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["수요일"].EndTime.ToString().Substring(0, 5))
                     {
                         //꺼지게
-                        MessageBox.Show("off");
+                        OffDevice();
                     }
                     else
                     {
@@ -252,12 +259,12 @@ namespace WpfApp9
                     if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["목요일"].StartTime.ToString().Substring(0, 5))
                     {
                         //켜지게
-                        on_device();
+                        OnDevice();
                     }
                     else if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["목요일"].EndTime.ToString().Substring(0, 5))
                     {
                         //꺼지게
-                        MessageBox.Show("off");
+                        OffDevice();
                     }
                     else
                     {
@@ -272,12 +279,12 @@ namespace WpfApp9
                     if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["금요일"].StartTime.ToString().Substring(0, 5))
                     {
                         //켜지게
-                        on_device();
+                        OnDevice();
                     }
                     else if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["금요일"].EndTime.ToString().Substring(0, 5))
                     {
                         //꺼지게
-                        MessageBox.Show("off");
+                        OffDevice();
                     }
                     else
                     {
@@ -292,12 +299,12 @@ namespace WpfApp9
                     if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["토요일"].StartTime.ToString().Substring(0, 5))
                     {
                         //켜지게
-                        on_device();
+                        OnDevice();
                     }
                     else if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["토요일"].EndTime.ToString().Substring(0, 5))
                     {
                         //꺼지게
-                        MessageBox.Show("off");
+                        OffDevice();
                     }
                     else
                     {
@@ -312,12 +319,12 @@ namespace WpfApp9
                     if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["일요일"].StartTime.ToString().Substring(0, 5))
                     {
                         //켜지게
-                        on_device();
+                        OnDevice();
                     }
                     else if (now.ToString("HH:mm") == AutoPowerSettingsControl.pow_schedule["일요일"].EndTime.ToString().Substring(0, 5))
                     {
                         //꺼지게
-                        MessageBox.Show("off");
+                        OffDevice();
                     }
                     else
                     {
@@ -329,39 +336,54 @@ namespace WpfApp9
 
 
 
-        private static readonly Dictionary<string, int> deviceTypeSortOrder = new Dictionary<string, int>
-{
-    {"projector", 1},
-    {"pc", 2},
-    {"RELAY #1", 3},
-    {"RELAY #2", 4},
-    {"pdu", 5}
-};
 
-        public void on_device()
+
+        public void OnDevice()
+        {
+
+            var items = dragItems.Select(a => a.Configuration).ToList();
+
+            _ = SortAndProcessDragItems(items, true);
+        }
+
+        public void OffDevice()
         {
             var items = dragItems.Select(a => a.Configuration).ToList();
 
-            SortAndProcessDragItems(items,true);
+            _ = SortAndProcessDragItems(items, false);
         }
 
-        public void off_device()
+        public async Task SortAndProcessDragItems(List<ItemConfiguration> drags, bool onOff)
         {
-            var items = dragItems.Select(a => a.Configuration).ToList();
+            //var sortedDragItems = drags.OrderBy(item => deviceTypeSortOrder.TryGetValue(item.DeviceType, out int order) ? order : int.MaxValue).ToList();
+            var sortedDragItems = drags.FindAll(a => a.DeviceType.ToLower() == "프로젝터");
+            var listb = drags.FindAll(a => a.DeviceType.ToLower() == "pc");
+            var listc = drags.FindAll(a => a.DeviceType.ToLower() == "relay #1");
+            var listd = drags.FindAll(a => a.DeviceType.ToLower() == "relay #2");
+            var liste = drags.FindAll(a => a.DeviceType.ToLower() == "pdu");
 
-            SortAndProcessDragItems(items, false);
-        }
+           sortedDragItems.AddRange(listb);
+           sortedDragItems.AddRange(listc);
+           sortedDragItems.AddRange(listd);
+            sortedDragItems.AddRange(liste);
 
-        public void SortAndProcessDragItems(List<ItemConfiguration> drags,bool onOff)
-        {
-            var sortedDragItems = drags.OrderBy(item => deviceTypeSortOrder.TryGetValue(item.DeviceType, out int order) ? order : int.MaxValue).ToList();
+            foreach(var i in dragItems)
+            {
+                i.StopPingCheck();
+            }
+
+            
+
+
 
             foreach (var item in sortedDragItems)
             {
+                Debug.WriteLine($"{item.DeviceType}: {item.IpAddress}: onOff:{onOff}");
                 switch (item.DeviceType.ToLower())
-                {
-                    case "projector":
+                { 
+                    case "프로젝터":
                         ProcessProjector(item, onOff);
+                        await Task.Delay(1000); //딜레이
                         break;
                     case "pc":
                         ProcessPC(item, onOff);
@@ -379,6 +401,13 @@ namespace WpfApp9
                         break;
                 }
             }
+
+
+            foreach (var i in dragItems)
+            {
+                i.StartPingCheck();
+            }
+
         }
 
         // 프로젝터 전원
@@ -387,6 +416,7 @@ namespace WpfApp9
             if (onOff)
             {
                 PJLinkHelper.Instance.PowerOn(item.IpAddress);
+                
             }
             else
             {
@@ -413,11 +443,9 @@ namespace WpfApp9
         {
             if (onOff)
             {
-                Debug.WriteLine($"PowerON RELAY1: {item.IpAddress}");
             }
             else
             {
-                Debug.WriteLine($"PowerOFF RELAY1: {item.IpAddress}");
             }
 
         }
@@ -427,11 +455,9 @@ namespace WpfApp9
         {
             if (onOff)
             {
-                Debug.WriteLine($"PowerON RELAY2: {item.IpAddress}");
             }
             else
             {
-                Debug.WriteLine($"PowerOFF RELAY2: {item.IpAddress}");
             }
                 
         }
@@ -441,12 +467,10 @@ namespace WpfApp9
         {
             if (onOff)
             {
-                Debug.WriteLine($"PowerON PDU: {item.IpAddress}");
                 _ = WebApiHelper.Instance.OnAll();
             }
             else
             {
-                Debug.WriteLine($"PowerOFF PDU: {item.IpAddress}");
                 _ = WebApiHelper.Instance.OffAll();
             }
         }
@@ -780,7 +804,7 @@ namespace WpfApp9
             PowerOverlay.Visibility = Visibility.Visible;
             powerProgress = 0;
             PowerProgressBar.Value = 0;
-            on_device();
+            OnDevice();
             powerTimer = new DispatcherTimer();
             powerTimer.Interval = TimeSpan.FromMilliseconds(10);
             powerTimer.Tick += PowerTimerON_Tick;
@@ -793,7 +817,7 @@ namespace WpfApp9
             powerProgress = 0;
             PowerProgressBar.Value = 0;
 
-
+            OffDevice();
             powerTimer = new DispatcherTimer();
             powerTimer.Interval = TimeSpan.FromMilliseconds(10);
 

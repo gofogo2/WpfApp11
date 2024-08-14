@@ -2,7 +2,7 @@
   "cms_pc_Name": "pc",
   "local_path": "C:\\GL-MEDIA",
   "AutoPowerEnabled": false,
-  "Progress_duration": 3.0,
+  "Progress_duration": 50.0,
   "vnc": false,
   "ftp": false
 }
