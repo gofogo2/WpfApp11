@@ -60,8 +60,27 @@ ON/OFF/REBOOT 버튼 이미지 공통
 
 
 #ftp
-[] 스크립트생성
-[] 계정생성
+[V] 스크립트생성
+[V] 계정생성
 [] 가이드 작성
 
-#sample 추가
+
+#ftp 설치
+
+[복사]
+c:\exe 에 Setup-IIS-FTP.ps1
+
+[실행]
+시작 -> PowerShell ISE 관리자 권한으로 실행
+
+[붙여넣기]
+Set-ExecutionPolicy Unrestricted 
+
+[IIS 설치 FTP 설치 ftpuser // 1 생성]
+cd c:\exe
+.\ Setup-IIS-FTP.ps1
+
+시작 -> 실행 -> inetmgr -> 사이트 우클릭 [FTP 사이트 추가] -> 사이트 이름 : contentServer -> 경로 서버로 둘 경로 -> 다음 ->SSL 사용 안함 -> 다음 -> 기본인증 -> 엑세스허용 모든 사용자 -> 읽기,쓰기 -> 마침
+
+
+
