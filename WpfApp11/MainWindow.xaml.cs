@@ -39,9 +39,9 @@ namespace WpfApp9
         private const double DoubleClickTime = 300; // 밀리초
         private double powerProgress = 0;
 
-        private double Progress_duration = 3;
-        public bool isvnc = true;
-        public bool isftp = true;
+        private double Progress_duration = 50;
+        public bool isvnc = false;
+        public bool isftp = false;
         private static readonly Dictionary<string, int> deviceTypeSortOrder = new Dictionary<string, int>
         {
             {"projector", 1},
@@ -54,7 +54,7 @@ namespace WpfApp9
         DispatcherTimer pow_timer = new DispatcherTimer();
 
         public string local_pc_name = "pc";
-        public string local_path = @"C:\test";
+        public string local_path = @"C:\GL-MEDIA";
         bool first_init = false;
 
         public MainWindow()
@@ -62,8 +62,15 @@ namespace WpfApp9
             InitializeComponent();
             occupiedCells = new bool[GridRows, GridColumns];
             CreateGrid();
+            if (!File.Exists(SettingsFile))
+            {
+                SaveSettings();
+            }
+
             LoadSettings();
-            LoadItemConfigurations();
+
+           
+                LoadItemConfigurations();
             InitializeAutoPowerSettings();
             GlobalMessageService.MessageReceived += OnGlobalMessageReceived;
             FileExplorerControl.CloseRequested += FileExplorerControl_CloseRequested;
@@ -86,13 +93,13 @@ namespace WpfApp9
                     AutoPowerToggle.IsChecked = isEnabled;
                 }
 
-                if (settings.TryGetValue("cms_pc_Name", out var nameValue) && nameValue is string name)
+                if (settings.TryGetValue("CMSTitle", out var nameValue) && nameValue is string name)
                 {
                     local_pc_name = name;
                     p_title.Text = local_pc_name;
                 }
 
-                if (settings.TryGetValue("local_path", out var local_pathValue) && local_pathValue is string local_path_value)
+                if (settings.TryGetValue("ContentsPath", out var local_pathValue) && local_pathValue is string local_path_value)
                 {
                     local_path = local_path_value;
                 }
@@ -102,12 +109,12 @@ namespace WpfApp9
                     Progress_duration = progressDuration;
                 }
 
-                if (settings.TryGetValue("vnc", out var vnc_value) && vnc_value is bool vncvalue)
+                if (settings.TryGetValue("useVNC", out var vnc_value) && vnc_value is bool vncvalue)
                 {
                     isvnc = vncvalue;
                 }
 
-                if (settings.TryGetValue("ftp", out var ftp_value) && ftp_value is bool ftpvalue)
+                if (settings.TryGetValue("useFTP", out var ftp_value) && ftp_value is bool ftpvalue)
                 {
                     isftp = ftpvalue;
                 }
@@ -118,12 +125,12 @@ namespace WpfApp9
         {
             var settings = new Dictionary<string, object>
             {
-                { "cms_pc_Name", local_pc_name },
-                { "local_path", local_path },
+                { "CMSTitle", local_pc_name },
+                { "ContentsPath", local_path },
                 { "AutoPowerEnabled", AutoPowerToggle.IsChecked ?? false },
                 { "Progress_duration", Progress_duration },
-                { "vnc", isvnc },
-                { "ftp", isftp}
+                { "useVNC", isvnc },
+                { "useFTP", isftp}
             };
 
             string json = JsonConvert.SerializeObject(settings, Formatting.Indented);
