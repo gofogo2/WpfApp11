@@ -65,24 +65,27 @@ public class WebApiHelper
 
    
 
-    public async Task<string> RebootAll()
+    public async Task<string> RebootAll(string url)
     {
+        _baseUrl = $"http://{url}/";
         return await PostAsync("/api/device/relay", new Dictionary<string, string>
         {
             {"method", "reboot"}
         });
     }
 
-    public async Task<string> OnAll()
+    public async Task<string> OnAll(string url)
     {
+        _baseUrl =  $"http://{url}/";
         return await PostAsync("/api/device/relay", new Dictionary<string, string>
         {
             {"method", "on"}
         });
     }
 
-    public async Task<string> OffAll()
+    public async Task<string> OffAll(string url)
     {
+        _baseUrl = $"http://{url}/";
         return await PostAsync("/api/device/relay", new Dictionary<string, string>
         {
             {"method", "off"}

@@ -307,7 +307,7 @@ namespace WpfApp9
             }
             else
             {
-                UdpHelper.Instance.SendWithIpAsync("off", item.IpAddress, 11116);
+                UdpHelper.Instance.SendWithIpAsync("off", item.IpAddress, 8889);
             }
         }
 
@@ -325,11 +325,11 @@ namespace WpfApp9
         {
             if (onOff)
             {
-                _ = WebApiHelper.Instance.OnAll();
+                _ = WebApiHelper.Instance.OnAll(item.IpAddress);
             }
             else
             {
-                _ = WebApiHelper.Instance.OffAll();
+                _ = WebApiHelper.Instance.OffAll(item.IpAddress);
             }
         }
 

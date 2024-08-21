@@ -256,10 +256,6 @@ namespace WpfApp9
                 OverlayGrid.Visibility = OverlayGrid.Visibility == Visibility.Visible ?
                                      Visibility.Collapsed : Visibility.Visible;
             }
-            
-
-
-
         }
 
         private void FTP_Button_Click(object sender, RoutedEventArgs e)
@@ -367,17 +363,12 @@ namespace WpfApp9
             }
             else if (Configuration.DeviceType == "PDU")
             {
-
+                await WebApiHelper.Instance.OnAll(Configuration.IpAddress);
             }
             else if (Configuration.DeviceType == "RELAY #1")
             {
-
+                await UdpRelayHelper.Instance.SendPowerOn(Configuration.IpAddress, Configuration.port,"0");
             }
-            else if (Configuration.DeviceType == "RELAY #2")
-            {
-
-            }
-
 
             MessageBox.Show("on");
         }
@@ -387,7 +378,7 @@ namespace WpfApp9
             Debug.WriteLine(Configuration);
             if (Configuration.DeviceType == "pc")
             {
-                await UdpHelper.Instance.SendWithIpAsync("power-off", Configuration.IpAddress, 11116);
+                await UdpHelper.Instance.SendWithIpAsync("power-off", Configuration.IpAddress, 8889);
             }
             else if (Configuration.DeviceType == "프로젝터")
             {
@@ -399,38 +390,35 @@ namespace WpfApp9
             }
             else if (Configuration.DeviceType == "PDU")
             {
-
+                await WebApiHelper.Instance.OffAll(Configuration.IpAddress);
             }
             else if (Configuration.DeviceType == "RELAY #1")
             {
-
-            }
-            else if (Configuration.DeviceType == "RELAY #2")
-            {
-
+                await UdpRelayHelper.Instance.SendPowerOff(Configuration.IpAddress, Configuration.port, "0");
             }
             MessageBox.Show("off");
         }
 
-        private void pow_re(object sender, RoutedEventArgs e)
+        private async void pow_re(object sender, RoutedEventArgs e)
         {
             Debug.WriteLine(Configuration);
             if (Configuration.DeviceType == "pc")
             {
-                UdpHelper.Instance.SendWithIpAsync("power-reboot", Configuration.IpAddress, 11116);
+                await UdpHelper.Instance.SendWithIpAsync("power-reboot", Configuration.IpAddress, 8889);
             }
             else if (Configuration.DeviceType == "프로젝터")
             {
+                
+            }
+            else if (Configuration.DeviceType == "DLP프로젝터")
+            {
+                
             }
             else if (Configuration.DeviceType == "PDU")
             {
-
+                await WebApiHelper.Instance.RebootAll(Configuration.IpAddress);
             }
             else if (Configuration.DeviceType == "RELAY #1")
-            {
-
-            }
-            else if (Configuration.DeviceType == "RELAY #2")
             {
 
             }

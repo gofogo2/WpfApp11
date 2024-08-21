@@ -88,7 +88,7 @@ namespace Launcher_SE.Helpers
         private const string ServerHost = "127.0.0.1";
         private const string ServerBroadcast = "255.255.255.255";
         private const int ReceiverPort = 8888;
-        private const int SenderPort = 11116;
+        private const int SenderPort = 8889;
 
         private static UdpHelper _instance;
         public static UdpHelper Instance

@@ -1,7 +1,6 @@
-﻿## 체크 사항
--하드웨어
--UI
--PDU 에서 뱅크 아울렛 뭔지 체크
+﻿## 전원 켜는 순서
+ON - relay(pdu) -> pdu -> projector -> pc
+OFF - pc -> projector -> pdu -> relay(pdu)
 
 ##디바이스 타입
 PC
@@ -11,15 +10,15 @@ RELAY01 - UDP
 RELAY02 - UDP
 PDU - WEBAPI
 
-
 ##리소스
 ON/OFF/REBOOT 버튼 이미지 공통
 폴더 및 파일 리소스
 디바이스 타입에 따른 이미지(relay, pdu, project 2가지, PC)
 
-
-
 ##cms
+[]전원 켜는 순서 반영
+[]전원 제어 전체
+
 #config
 [V] CMS TITLE
 [V] VNC ON / OFF
@@ -44,16 +43,9 @@ ON/OFF/REBOOT 버튼 이미지 공통
 [V] DLP Projector
 [V] PJLINK
 [V] PC
-[ ] (Relay)Basso
-[ ] (Relay)ETC
+[V] Relay
 [V] PDU
 
-
-#launcher
-[V] PORT
-[V] 전원 관리 ON / OFF
-[V] 통신 기능 ON / OFF
-[ ] 통신프로세스(와치아웃,resolume)
 
 ## issue
 [이슈] - 뭐가 안됨
@@ -63,6 +55,10 @@ ON/OFF/REBOOT 버튼 이미지 공통
 [V] 스크립트생성
 [V] 계정생성
 [] 가이드 작성
+
+
+#2024-08-21
+[] 기본 전원제어 포트 변경 8889
 
 
 #ftp 설치
