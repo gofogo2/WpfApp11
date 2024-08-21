@@ -87,9 +87,6 @@ namespace WpfApp11.UserControls
             }
 
 
-
-
-
             Guid uniqueId = Guid.NewGuid();
 
             // 문자열로 변환
@@ -106,6 +103,7 @@ namespace WpfApp11.UserControls
                 MacAddress = MacAddressTextBox.Text,
                 IpAddress = IpAddressTextBox.Text,
                 port = DescriptionTextBox.Text,
+                Channel = ChannelTextBox.Text,
                 IsOn = InitialStateCheckBox.IsChecked ?? false,
                 Row = 0,
                 Column = 0,
@@ -146,7 +144,7 @@ namespace WpfApp11.UserControls
             {
                 DeviceTypeComboBox.SelectedIndex = 1;
             }
-            else if (config.DeviceType == "RELAY #1")
+            else if (config.DeviceType == "RELAY")
             {
                 DeviceTypeComboBox.SelectedIndex = 2;
             }
@@ -160,29 +158,17 @@ namespace WpfApp11.UserControls
             }
 
             DeviceTypeComboBox.IsEnabled = false;
-
-            //DeviceType = ((ComboBoxItem)DeviceTypeComboBox.SelectedItem).Content.ToString(),
-
             MacAddressTextBox.Text = config.MacAddress;
-            IpAddressTextBox.Text = config.IpAddress; ;
+            IpAddressTextBox.Text = config.IpAddress;
             DescriptionTextBox.Text = config.port;
-
-            
-
-
+            ChannelTextBox.Text = config.Channel;
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-
-
-
             var main = Application.Current.MainWindow as MainWindow;
             main.add_device_ppanel.Visibility = Visibility.Collapsed;
-
-
             data_clear();
-
 
             //DialogResult = false;
         }
@@ -202,6 +188,7 @@ namespace WpfApp11.UserControls
             tempconfig.MacAddress = MacAddressTextBox.Text;
             tempconfig.IpAddress = IpAddressTextBox.Text;
             tempconfig.port = DescriptionTextBox.Text;
+            tempconfig.Channel = ChannelTextBox.Text;
             tempconfig.IsOn = InitialStateCheckBox.IsChecked ?? false;
 
 
@@ -233,6 +220,7 @@ namespace WpfApp11.UserControls
             MacAddressTextBox.Text = "";
             IpAddressTextBox.Text = "";
             DescriptionTextBox.Text = "";
+            ChannelTextBox.Text = string.Empty;
         }
     }
 }

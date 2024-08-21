@@ -339,7 +339,7 @@ namespace WpfApp9
                           $"FTP 주소: {Configuration.FtpAddress}\n" +
                           $"MAC 주소: {Configuration.MacAddress}\n" +
                           $"IP 주소: {Configuration.IpAddress}\n" +
-                          $"설명: {Configuration.Description}\n" +
+                          $"채널: {Configuration.Channel}\n" +
                           $"전원 상태: {(Configuration.IsOn ? "켜짐" : "꺼짐")}";
 
             MessageBox.Show(info, "기기 정보", MessageBoxButton.OK, MessageBoxImage.Information);

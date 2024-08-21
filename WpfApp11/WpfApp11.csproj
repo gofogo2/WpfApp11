@@ -178,6 +178,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <None Include="sample\itemConfig.json" />
+    <None Include="sample\setting_updated.json" />
     <None Include="sample\settings.json" />
     <Content Include="Settings\Setup-IIS-FTP.ps1">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

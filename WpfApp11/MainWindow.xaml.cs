@@ -189,18 +189,30 @@ namespace WpfApp9
         }
         public async Task SortAndProcessDragItems(List<ItemConfiguration> drags, bool onOff, double startProgress, double endProgress)
         {
-            var sortedDragItems = drags
-                .OrderBy(a => a.DeviceType.ToLower() == "프로젝터" ? 1 :
-                              a.DeviceType.ToLower() == "pc" ? 2 :
-                              a.DeviceType.ToLower() == "relay #1" ? 3 :
-                              a.DeviceType.ToLower() == "relay #2" ? 4 :
-                              a.DeviceType.ToLower() == "pdu" ? 5 : 6)
-                .ToList();
+            var sortedDragItems = onOff
+           ? drags.OrderBy(a => a.DeviceType.ToLower() == "relay #1" ? 1 :
+                                a.DeviceType.ToLower() == "pdu" ? 2 :
+                                a.DeviceType.ToLower() == "프로젝터" ? 3 :
+                                a.DeviceType.ToLower() == "pc" ? 4 :
+                                a.DeviceType.ToLower() == "relay #2" ? 5 : 6)
+                  .ToList()
+           : drags.OrderBy(a => a.DeviceType.ToLower() == "relay #2" ? 1 :
+                                a.DeviceType.ToLower() == "pc" ? 2 :
+                                a.DeviceType.ToLower() == "프로젝터" ? 3 :
+                                a.DeviceType.ToLower() == "pdu" ? 4 :
+                                a.DeviceType.ToLower() == "relay #1" ? 5 : 6)
+                  .ToList();
+
+
+
 
             foreach (var i in dragItems)
             {
                 i.StopPingCheck();
             }
+
+            //isOn true 인것만
+            sortedDragItems = sortedDragItems.FindAll(a => a.IsOn == true).ToList();
 
             int totalItems = sortedDragItems.Count;
             for (int i = 0; i < totalItems; i++)
@@ -219,9 +231,6 @@ namespace WpfApp9
                         break;
                     case "relay #1":
                         ProcessRelay1(item, onOff);
-                        break;
-                    case "relay #2":
-                        ProcessRelay2(item, onOff);
                         break;
                     case "pdu":
                         ProcessPDU(item, onOff);
@@ -311,14 +320,16 @@ namespace WpfApp9
             }
         }
 
-        private void ProcessRelay1(ItemConfiguration item, bool onOff)
+        private async void ProcessRelay1(ItemConfiguration item, bool onOff)
         {
-            // Implement Relay1 logic here
-        }
-
-        private void ProcessRelay2(ItemConfiguration item, bool onOff)
-        {
-            // Implement Relay2 logic here
+            if (onOff)
+            {
+                await UdpRelayHelper.Instance.SendPowerOn(item.IpAddress, item.port, item.Channel);
+            }
+            else
+            {
+                await UdpRelayHelper.Instance.SendPowerOff(item.IpAddress, item.port, item.Channel);
+            }
         }
 
         private void ProcessPDU(ItemConfiguration item, bool onOff)
@@ -791,7 +802,7 @@ namespace WpfApp9
         public string MacAddress { get; set; }
         public string IpAddress { get; set; }
         public string port { get; set; }
-        public string Description { get; set; }
+        public string Channel { get; set; }
         public int Row { get; set; }
         public int Column { get; set; }
         public int ZIndex { get; set; }
