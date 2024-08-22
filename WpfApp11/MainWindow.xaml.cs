@@ -317,13 +317,19 @@ namespace WpfApp9
 
         private void ProcessPC(ItemConfiguration item, bool onOff)
         {
-            if (onOff)
+            try
             {
-                WakeOnLanHelper.Instance.TurnOnPC(item.IpAddress, item.MacAddress);
-            }
-            else
+                if (onOff)
+                {
+                    WakeOnLanHelper.Instance.TurnOnPC(item.IpAddress, item.MacAddress);
+                }
+                else
+                {
+                    UdpHelper.Instance.SendWithIpAsync("off", item.IpAddress, 8889);
+                }
+            }catch(Exception e)
             {
-                UdpHelper.Instance.SendWithIpAsync("off", item.IpAddress, 8889);
+
             }
         }
 
