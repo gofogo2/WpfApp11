@@ -166,11 +166,14 @@ namespace WpfApp11.UserControls
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
+            cancle_popup();
+        }
+
+        public void cancle_popup()
+        {
             var main = Application.Current.MainWindow as MainWindow;
             main.add_device_ppanel.Visibility = Visibility.Collapsed;
             data_clear();
-
-            //DialogResult = false;
         }
 
         private void EditButton_Click(object sender, RoutedEventArgs e)
@@ -206,10 +209,38 @@ namespace WpfApp11.UserControls
 
 
 
+        private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            // Regular expression to match only alphanumeric characters
+            var regex = new Regex("^[a-zA-Z0-9]*$");
+
+            // Check if the input text matches the regular expression
+            e.Handled = !regex.IsMatch(e.Text);
+        }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            // Remove any non-alphanumeric characters from the text
+            var textBox = sender as TextBox;
+            if (textBox != null)
+            {
+                // Use regular expression to remove invalid characters
+                var cleanedText = Regex.Replace(textBox.Text, "[^a-zA-Z0-9]", "");
+
+                // Check if the length exceeds the maximum allowed length
+                if (cleanedText.Length > 12)
+                {
+                    cleanedText = cleanedText.Substring(0, 12);
+                }
+
+                // Update the textBox text and set the cursor position
+                textBox.Text = cleanedText;
+                textBox.SelectionStart = textBox.Text.Length; // Move cursor to the end
+            }
+        }
 
 
 
-        
 
         void data_clear()
         {

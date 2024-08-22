@@ -47,7 +47,7 @@
 
             <StackPanel Grid.Row="3"  Orientation="Horizontal" Margin="0,20,0,0">
                 <Label  Content="MAC" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="25" Width="100"/>
-                <TextBox  x:Name="MacAddressTextBox" Margin="0,5,0,5" Width="250"  FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBox  x:Name="MacAddressTextBox" Margin="0,5,0,5" Width="250"  FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Center" TextChanged="TextBox_TextChanged"  PreviewTextInput="TextBox_PreviewTextInput"/>
             </StackPanel>
 
             <StackPanel Grid.Row="4"  Orientation="Horizontal"  Margin="0,20,0,0">

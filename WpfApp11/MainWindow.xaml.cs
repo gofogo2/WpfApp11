@@ -42,6 +42,11 @@ namespace WpfApp9
         private double Progress_duration = 50;
         public bool isvnc = false;
         public bool isftp = false;
+
+        private int clickCount = 0;
+        private DispatcherTimer clickTimer;
+
+
         private static readonly Dictionary<string, int> deviceTypeSortOrder = new Dictionary<string, int>
         {
             {"projector", 1},
@@ -60,6 +65,11 @@ namespace WpfApp9
         public MainWindow()
         {
             InitializeComponent();
+            clickTimer = new DispatcherTimer();
+            clickTimer.Interval = TimeSpan.FromMilliseconds(500); // 500 ms interval for double-click detection
+            clickTimer.Tick += ClickTimer_Tick;
+            AutoPowerSettingsControl.init();
+
             occupiedCells = new bool[GridRows, GridColumns];
             CreateGrid();
             if (!File.Exists(SettingsFile))
@@ -79,6 +89,20 @@ namespace WpfApp9
             pow_timer.Interval = TimeSpan.FromMinutes(1);
 
             first_init = true;
+
+
+            this.KeyDown += MainWindow_KeyDown;
+
+          
+        }
+
+        private void MainWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                addDeviceWindow.cancle_popup();
+                AutoPowerSettingsControl.cancle_ev();
+            }
         }
 
         private void LoadSettings()
@@ -590,6 +614,7 @@ namespace WpfApp9
                 existingConfig.IpAddress = updatedConfiguration.IpAddress;
                 existingConfig.DeviceType = updatedConfiguration.DeviceType;
                 existingConfig.MacAddress = updatedConfiguration.MacAddress;
+                existingConfig.Channel = updatedConfiguration.Channel;
             }
 
             string updatedJsonString = JsonConvert.SerializeObject(currentConfigurations, Formatting.Indented);
@@ -679,6 +704,72 @@ namespace WpfApp9
         {
             OverlayGrid.Visibility = Visibility.Collapsed;
         }
+
+        private void tt(object sender, EventArgs e)
+        {
+            var canvas = sender as Canvas;
+            if (canvas != null)
+            {
+                // Get the ContextMenu associated with the Canvas
+                var contextMenu = canvas.ContextMenu;
+
+                // Show the ContextMenu at the position of the mouse click
+                if (contextMenu != null)
+                {
+                    contextMenu.IsOpen = true;
+                }
+            }
+        }
+
+        private void add_devi(object sender, RoutedEventArgs e)
+        {
+            add_device_ppanel.Visibility = Visibility.Visible;
+            addDeviceWindow.addbtn.Visibility = Visibility.Visible;
+            addDeviceWindow.editbtn.Visibility = Visibility.Collapsed;
+            addDeviceWindow.title.Content = "기기 등록";
+            addDeviceWindow.DeviceTypeComboBox.IsEnabled = true;
+        }
+
+        private void del_devi(object sender, RoutedEventArgs e)
+        {
+            editpanel.Visibility = Visibility.Visible;
+            for (int i = 0; i < dragItems.Count; i++)
+            {
+                dragItems[i].delete_select.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void Canvas_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            clickCount++;
+            if (clickCount == 2)
+            {
+                // Double-click detected
+
+
+                add_device_ppanel.Visibility = Visibility.Visible;
+                addDeviceWindow.addbtn.Visibility = Visibility.Visible;
+                addDeviceWindow.editbtn.Visibility = Visibility.Collapsed;
+                addDeviceWindow.title.Content = "기기 등록";
+                addDeviceWindow.DeviceTypeComboBox.IsEnabled = true;
+
+
+                clickCount = 0; // Reset click count
+                clickTimer.Stop(); // Stop the timer
+            }
+            else
+            {
+                clickTimer.Start(); // Start or restart the timer
+            }
+        }
+
+        private void ClickTimer_Tick(object sender, EventArgs e)
+        {
+            clickTimer.Stop(); // Stop the timer when interval expires
+            clickCount = 0; // Reset click count
+        }
+
+
 
         private void AddDevice_Click(object sender, RoutedEventArgs e)
         {
@@ -796,6 +887,11 @@ namespace WpfApp9
             ItemCanvas.Children.Remove(deviceControl);
             dragItems.Remove(deviceControl);
             SaveItemConfigurations();
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 

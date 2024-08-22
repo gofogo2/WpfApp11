@@ -114,7 +114,74 @@ namespace WpfApp9
                     }
                 }
             }
+            else
+            {
+
+                var schedule = new Dictionary<string, DaySchedule>();
+
+
+                DaySchedule d = new DaySchedule();
+                d.StartTime = TimeSpan.Parse("01:00");
+                d.EndTime = TimeSpan.Parse("03:00");
+
+                schedule.Add("월요일", d);
+                schedule.Add("화요일", d);
+                schedule.Add("수요일", d);
+                schedule.Add("목요일", d);
+                schedule.Add("금요일", d);
+                schedule.Add("토요일", d);
+                schedule.Add("일요일", d);
+
+                pow_schedule = schedule;
+                string json = JsonConvert.SerializeObject(schedule, Formatting.Indented);
+                File.WriteAllText(ScheduleFile, json);
+
+
+
+                 string json2 = File.ReadAllText(ScheduleFile);
+                var schedule2 = JsonConvert.DeserializeObject<Dictionary<string, DaySchedule>>(json2);
+                pow_schedule = schedule2;
+                foreach (var daySetting in daySettings)
+                {
+                    if (schedule2.TryGetValue(daySetting.Day, out var daySchedule))
+                    {
+                        daySetting.SetSchedule(daySchedule);
+                    }
+                }
+
+
+
+
+
+
+            }
         }
+
+        public void init()
+        {
+            //if (!File.Exists(ScheduleFile))
+            //{
+            //    var schedule = new Dictionary<string, DaySchedule>();
+
+
+            //    DaySchedule d = new DaySchedule();
+            //    d.StartTime = TimeSpan.Parse("01:00");
+            //    d.EndTime = TimeSpan.Parse("03:00");
+
+            //    schedule.Add("월요일", d);
+            //    schedule.Add("화요일", d);
+            //    schedule.Add("수요일", d);
+            //    schedule.Add("목요일", d);
+            //    schedule.Add("금요일", d);
+            //    schedule.Add("토요일", d);
+            //    schedule.Add("일요일", d);
+
+            //    pow_schedule = schedule;
+            //    string json = JsonConvert.SerializeObject(schedule, Formatting.Indented);
+            //    File.WriteAllText(ScheduleFile, json);
+            //}
+        }
+
 
         private void SaveSchedule()
         {
@@ -124,6 +191,11 @@ namespace WpfApp9
             {
                 schedule[daySetting.Day] = daySetting.GetSchedule();
             }
+          
+
+            //daySettings[0].Day = "월요일";
+            //daySettings[0].
+            //schedule.Add
 
             pow_schedule = schedule;
             string json = JsonConvert.SerializeObject(schedule, Formatting.Indented);
@@ -137,6 +209,11 @@ namespace WpfApp9
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            CloseRequested?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void cancle_ev()
         {
             CloseRequested?.Invoke(this, EventArgs.Empty);
         }

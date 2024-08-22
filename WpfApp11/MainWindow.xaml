@@ -134,7 +134,15 @@
         <Border Grid.Row="2" BorderThickness="1" BorderBrush="Black" Margin="20" >
             <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                 <Grid x:Name="GridContainer" Background="White" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,50,0,50">
-                    <Canvas x:Name="GridCanvas"/>
+                    <Canvas x:Name="GridCanvas" MouseRightButtonDown="tt" MouseDown="Canvas_MouseDown">
+                        <Canvas.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="기기 추가" Click="add_devi"/>
+                                <MenuItem Header="기기 삭제" Click="del_devi"/>
+                                
+                            </ContextMenu>
+                        </Canvas.ContextMenu>
+                    </Canvas>
                     <Canvas x:Name="ItemCanvas"/>
                 </Grid>
             </ScrollViewer>

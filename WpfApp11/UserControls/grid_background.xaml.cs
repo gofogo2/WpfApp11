@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace WpfApp11.UserControls
 {
@@ -20,9 +21,53 @@ namespace WpfApp11.UserControls
     /// </summary>
     public partial class grid_background : UserControl
     {
+        private int clickCount = 0;
+        private DispatcherTimer clickTimer;
+
         public grid_background()
         {
             InitializeComponent();
+            clickTimer = new DispatcherTimer();
+            clickTimer.Interval = TimeSpan.FromMilliseconds(500); // 500 ms interval for double-click detection
+            clickTimer.Tick += ClickTimer_Tick;
         }
+
+        private void MenuItem1_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Menu Item 1 clicked");
+        }
+
+        private void MenuItem2_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Menu Item 2 clicked");
+        }
+
+        private void MenuItem3_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Menu Item 3 clicked");
+        }
+
+        private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            clickCount++;
+            if (clickCount == 2)
+            {
+                // Double-click detected
+                MessageBox.Show("Grid inside UserControl was double-clicked!");
+                clickCount = 0; // Reset click count
+                clickTimer.Stop(); // Stop the timer
+            }
+            else
+            {
+                clickTimer.Start(); // Start or restart the timer
+            }
+        }
+
+        private void ClickTimer_Tick(object sender, EventArgs e)
+        {
+            clickTimer.Stop(); // Stop the timer when interval expires
+            clickCount = 0; // Reset click count
+        }
+
     }
 }

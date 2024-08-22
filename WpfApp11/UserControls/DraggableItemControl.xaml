@@ -7,7 +7,7 @@
              
              d:DesignHeight="200" d:DesignWidth="180" Background="White">
     <UserControl.ContextMenu>
-        <ContextMenu>
+        <ContextMenu> 
             <MenuItem Header="수정" Click="EditMenuItem_Click"/>
             <!--<MenuItem Header="삭제" Click="DeleteMenuItem_Click"/>-->
             <MenuItem Header="정보" Click="InfoMenuItem_Click"/>
