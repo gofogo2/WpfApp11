@@ -378,7 +378,7 @@ namespace WpfApp9
             Debug.WriteLine(Configuration);
             if (Configuration.DeviceType == "pc")
             {
-                await UdpHelper.Instance.SendWithIpAsync("power-off", Configuration.IpAddress, 8889);
+                await UdpHelper.Instance.SendWithIpAsync("power|0", Configuration.IpAddress, 8889);
             }
             else if (Configuration.DeviceType == "프로젝터")
             {
@@ -404,7 +404,7 @@ namespace WpfApp9
             Debug.WriteLine(Configuration);
             if (Configuration.DeviceType == "pc")
             {
-                await UdpHelper.Instance.SendWithIpAsync("power-reboot", Configuration.IpAddress, 8889);
+                await UdpHelper.Instance.SendWithIpAsync("power|1", Configuration.IpAddress, 8889);
             }
             else if (Configuration.DeviceType == "프로젝터")
             {

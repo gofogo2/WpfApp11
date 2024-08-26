@@ -86,7 +86,7 @@ namespace WpfApp9
             FileExplorerControl.CloseRequested += FileExplorerControl_CloseRequested;
 
             pow_timer.Tick += Pow_timer_Tick;
-            pow_timer.Interval = TimeSpan.FromMinutes(1);
+            pow_timer.Interval = TimeSpan.FromSeconds(30);
 
             first_init = true;
 
@@ -349,7 +349,7 @@ namespace WpfApp9
                 }
                 else
                 {
-                    UdpHelper.Instance.SendWithIpAsync("off", item.IpAddress, 8889);
+                    UdpHelper.Instance.SendWithIpAsync("power|0", item.IpAddress, 8889);
                 }
             }catch(Exception e)
             {
