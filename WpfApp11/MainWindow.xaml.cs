@@ -102,6 +102,12 @@ namespace WpfApp9
             {
                 addDeviceWindow.cancle_popup();
                 AutoPowerSettingsControl.cancle_ev();
+
+                editpanel.Visibility = Visibility.Collapsed;
+                for (int i = 0; i < dragItems.Count; i++)
+                {
+                    dragItems[i].delete_select.Visibility = Visibility.Collapsed;
+                }
             }
         }
 
