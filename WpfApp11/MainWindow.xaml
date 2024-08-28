@@ -8,7 +8,32 @@
         Title="Test" Height="1080" Width="1920">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
-       
+
+
+
+
+        <Style x:Key="CustomContextMenuStyle" TargetType="ContextMenu">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ContextMenu}">
+                        <Border Background="White" BorderBrush="Gray" BorderThickness="1" CornerRadius="3">
+                            <StackPanel IsItemsHost="True" Margin="0"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="ItemsPanel">
+                <Setter.Value>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical" Margin="0"/>
+                    </ItemsPanelTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        
+
     </Window.Resources>
     
     <Grid x:Name="MainGrid">
@@ -134,9 +159,10 @@
         <Border Grid.Row="2" BorderThickness="1" BorderBrush="Black" Margin="20" >
             <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                 <Grid x:Name="GridContainer" Background="White" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,50,0,50">
-                    <Canvas x:Name="GridCanvas" MouseRightButtonDown="tt" MouseDown="Canvas_MouseDown">
+                    <Canvas x:Name="GridCanvas" MouseRightButtonDown="tt" MouseLeftButtonDown="Canvas_MouseDown">
                         <Canvas.ContextMenu>
-                            <ContextMenu>
+                            <ContextMenu Style="{StaticResource CustomContextMenuStyle}">
+                            <!--<ContextMenu>-->
                                 <MenuItem Header="기기 추가" Click="add_devi"/>
                                 <MenuItem Header="기기 삭제" Click="del_devi"/>
                                 

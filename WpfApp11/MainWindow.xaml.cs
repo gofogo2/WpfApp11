@@ -66,7 +66,7 @@ namespace WpfApp9
         {
             InitializeComponent();
             clickTimer = new DispatcherTimer();
-            clickTimer.Interval = TimeSpan.FromMilliseconds(500); // 500 ms interval for double-click detection
+            clickTimer.Interval = TimeSpan.FromMilliseconds(200); // 500 ms interval for double-click detection
             clickTimer.Tick += ClickTimer_Tick;
             AutoPowerSettingsControl.init();
 
