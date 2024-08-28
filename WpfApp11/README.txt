@@ -87,9 +87,6 @@ Set-ExecutionPolicy Unrestricted
 
 [IIS 설치 FTP 설치 ftpuser // 1 생성]
 cd c:\exe
-.\ Setup-IIS-FTP.ps1
+.\ Setup-II ineS-FTP.ps1
 
-시작 -> 실행 -> inetmgr -> 사이트 우클릭 [FTP 사이트 추가] -> 사이트 이름 : contentServer -> 경로 서버로 둘 경로 -> 다음 ->SSL 사용 안함 -> 다음 -> 기본인증 -> 엑세스허용 모든 사용자 -> 읽기,쓰기 -> 마침
-
-
-
+시작 -> 실행 ->tmgr -> 사이트 우클릭 [FTP 사이트 추가] -> 사이트 이름 : contentServer -> 경로 서버로 둘 경로 -> 다음 ->SSL 사용 안함 -> 다음 -> 기본인증 -> 엑세스허용 모든 사용자 -> 읽기,쓰기 -> 마침
