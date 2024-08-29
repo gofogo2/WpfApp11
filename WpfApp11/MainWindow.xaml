@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp9" xmlns:usercontrols="clr-namespace:WpfApp11.UserControls"
         mc:Ignorable="d"
-        Title="Test" Height="1080" Width="1920">
+        Title="CMS" Height="1080" Width="1920">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
 
@@ -36,7 +36,7 @@
 
     </Window.Resources>
     
-    <Grid x:Name="MainGrid">
+    <Grid x:Name="MainGrid" Background="#EEEEEE">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -54,22 +54,16 @@
                     <StackPanel Grid.Column="0" Orientation="Vertical" x:Name="sp_auto" >
                         <!--<TextBlock Text="자동 전원 설정" VerticalAlignment="Center"/>
                         <TextBlock Text="요일 별 시간 설정" FontSize="10" VerticalAlignment="Center" Margin="0,0,0,0"/>-->
-                      
-                        <Button x:Name="auto_wol_btn" Background="White" Padding="10,2,10,2">
-                            
-                            <StackPanel Orientation="Horizontal">
+                        <Image Source="Images/auto_pow.png" MouseLeftButtonDown="Auto_wol_btn_Click" Width="200" Height="69">
 
-                                <Image Source="Images/time.png">
-                                    
-                                </Image>
-                                <StackPanel >
-                                    <TextBlock Text="자동 전원 설정" VerticalAlignment="Center"/>
-                                    <TextBlock Text="요일 별 시간 설정" FontSize="10" VerticalAlignment="Center" Margin="0,0,0,0"/>
-                                </StackPanel>
-                            </StackPanel>
+                        </Image>
+                        
+                        <!--<Button x:Name="auto_wol_btn"  Width="200" Height="69"  Background="Transparent">
+                            
+                         
                             
                             
-                        </Button>
+                        </Button>-->
                     </StackPanel>
                 </Border>
                 <ToggleButton x:Name="AutoPowerToggle" Grid.Column="0" Width="50" Height="25" HorizontalAlignment="Center" Margin="30,0,0,0" Checked="AutoPowerToggle_Checked" Unchecked="AutoPowerToggle_Unchecked">
@@ -100,10 +94,17 @@
                     </ToggleButton.Style>
                 </ToggleButton>
             </StackPanel>
-            <TextBlock Grid.Column="1" Text="PROJECT TITLE" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" x:Name="p_title"/>
+            <TextBlock Grid.Column="1" Text="PROJECT TITLE" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" x:Name="p_title" FontSize="50"/>
             <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Content="전체 전원 ON" x:Name="TotalPowerONBtn" Width="100" Height="30" Background="Green" Foreground="Black" Margin="0,0,10,0" Click="TotalPowerBtnOn_Click"/>
-                <Button Content="전체 전원 OFF" x:Name="TotalPowerOFFBtn" Width="100" Height="30" Background="Red" Foreground="black" Click="TotalPowerBtnOff_Click" />
+                <Image Source="Images/pow_on.png"   Width="150" Height="69"  MouseLeftButtonDown="TotalPowerBtnOn_Click" />
+                <!--<Button x:Name="TotalPowerONBtn" Click="">
+                    
+                </Button>-->
+
+                <Image Source="Images/pow_off.png"   Width="150" Height="69"  MouseLeftButtonDown="TotalPowerBtnOff_Click" Margin="20,0,0,0"/>
+
+                <!--<Button  x:Name="TotalPowerOFFBtn" >
+                </Button>-->
             </StackPanel>
         </Grid>
         <Grid Grid.Row="1" Margin="50,10,50,0" >
@@ -112,8 +113,8 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="1" Text="기기 관리" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"   />
-            <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" >
+            <!--<TextBlock Grid.Column="1" Text="기기 관리" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"   />-->
+            <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right"  Visibility="Collapsed">
                 <Button  Width="80" Height="25" Margin="0,0,10,0" Click="AddDevice_Click">
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
@@ -157,25 +158,25 @@
         </Grid>
         <!-- Grid and Draggable Items Canvas -->
         <Border Grid.Row="2" BorderThickness="1" BorderBrush="Black" Margin="20" >
-            <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="White">
                 <Grid x:Name="GridContainer" Background="White" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,50,0,50">
                     <Canvas x:Name="GridCanvas" MouseRightButtonDown="tt" MouseLeftButtonDown="Canvas_MouseDown">
                         <Canvas.ContextMenu>
                             <ContextMenu Style="{StaticResource CustomContextMenuStyle}">
                             <!--<ContextMenu>-->
                                 <MenuItem Header="기기 추가" Click="add_devi"/>
-                                <MenuItem Header="기기 삭제" Click="del_devi"/>
+                                <!--<MenuItem Header="기기 삭제" Click="del_devi"/>-->
                                 
                             </ContextMenu>
                         </Canvas.ContextMenu>
                     </Canvas>
-                    <Canvas x:Name="ItemCanvas"/>
+                    <Canvas x:Name="ItemCanvas" Margin="0,0,0,0"/>
                 </Grid>
             </ScrollViewer>
         </Border>
         <!-- Overlay for FileExplorer -->
         <Grid x:Name="OverlayGrid" Grid.RowSpan="3" Visibility="Collapsed">
-            <Rectangle Fill="Black" Opacity="0.5"/>
+            <Rectangle Fill="Black" Opacity="0.8"/>
             <Border x:Name="FileExplorerBorder" Width="1280" Height="800" Background="Transparent" CornerRadius="10">
                 <local:FileExplorerControl x:Name="FileExplorerControl"/>
             </Border>

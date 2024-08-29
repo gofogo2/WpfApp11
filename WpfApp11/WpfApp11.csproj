@@ -81,6 +81,9 @@
     <Compile Include="UserControls\DaySettingControl.xaml.cs">
       <DependentUpon>DaySettingControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\delete_dialog.xaml.cs">
+      <DependentUpon>delete_dialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\DraggableItemControl.xaml.cs">
       <DependentUpon>DraggableItemControl.xaml</DependentUpon>
     </Compile>
@@ -109,6 +112,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\DaySettingControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\delete_dialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -182,6 +189,26 @@
     <None Include="sample\itemConfig.json" />
     <None Include="sample\setting_updated.json" />
     <None Include="sample\settings.json" />
+    <Resource Include="Images\icons\icon_bat.png" />
+    <Resource Include="Images\icons\icon_etc.png" />
+    <Resource Include="Images\icons\icon_exe.png" />
+    <Resource Include="Images\icons\icon_img.png" />
+    <Resource Include="Images\icons\icon_sound.png" />
+    <Resource Include="Images\icons\icon_txt.png" />
+    <Resource Include="Images\icons\icon_video.png" />
+    <Resource Include="Images\auto_pow.png" />
+    <Resource Include="Images\pow_on.png" />
+    <Resource Include="Images\pow_off.png" />
+    <Resource Include="Images\frame_5.png" />
+    <Resource Include="Images\frame_6.png" />
+    <Resource Include="Images\label1.png" />
+    <Resource Include="Images\cancel.png" />
+    <Resource Include="Images\confirm.png" />
+    <Resource Include="Images\new.png" />
+    <Resource Include="Images\rename.png" />
+    <Resource Include="Images\del.png" />
+    <Resource Include="Images\receive.png" />
+    <Resource Include="Images\send.png" />
     <Content Include="Settings\Setup-IIS-FTP.ps1">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -220,13 +247,9 @@
     <Resource Include="Images\to_local.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\icons\icon_bat.png" />
     <Resource Include="Images\icons\icon_doc.png" />
-    <Resource Include="Images\icons\icon_img.png" />
     <Resource Include="Images\icons\icon_pdf.png" />
     <Resource Include="Images\icons\icon_ppt.png" />
-    <Resource Include="Images\icons\icon_txt.png" />
-    <Resource Include="Images\icons\icon_video.png" />
     <Resource Include="Images\icons\icon_xls.png" />
   </ItemGroup>
   <ItemGroup>

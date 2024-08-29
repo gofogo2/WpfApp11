@@ -8,7 +8,7 @@
              HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
     <Grid>
         <Border Background="Black" Opacity="0.8"></Border>
-        <Grid Margin="10" Width="400" Height="650" VerticalAlignment="Center">
+        <Grid Margin="10" Width="600" Height="750" VerticalAlignment="Center">
             <Grid.RowDefinitions>
                 <RowDefinition Height="80"/>
                 <RowDefinition Height="Auto"/>
@@ -28,22 +28,45 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>-->
 
-            <Label Grid.Row="0"   Content="기기 등록" Foreground="White" HorizontalAlignment="Center" FontSize="40" x:Name="title"/>
+            <Label Grid.Row="0"   Content="장비 등록" Foreground="White" HorizontalAlignment="Center" FontSize="40" x:Name="title"/>
 
-            <StackPanel Grid.Row="1"  Orientation="Horizontal" Margin="0,30,0,0">
-                <Label  Content="이름" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="25" Width="100" />
-                <TextBox  x:Name="NameTextBox" Margin="0,5,0,5" Width="250"  FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <StackPanel Grid.Row="1"  Orientation="Horizontal" Margin="0,30,0,0" HorizontalAlignment="Center">
+                <Grid Width="400" Height="80" Background="#8D8D8D" >
+                    <StackPanel >
+                        <TextBlock  Text="이름" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="15" Margin="0,6,0,0" />
+                        <TextBox  x:Name="NameTextBox" Margin="0,10,0,5" Width="360"  Height="35" FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" />
+                    </StackPanel>    
+                </Grid>
+                
             </StackPanel>
 
-            <StackPanel Grid.Row="2" Orientation="Horizontal"  Margin="0,20,0,0">
-                <Label  Content="유형" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="25" Width="100"/>
-                <ComboBox  x:Name="DeviceTypeComboBox" Margin="0,5,0,5" Width="250" FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <ComboBoxItem Content="pc" FontSize="25"/>
-                    <ComboBoxItem Content="프로젝터" FontSize="25"/>
-                    <ComboBoxItem Content="DLP프로젝터" FontSize="25"/>
-                    <ComboBoxItem Content="RELAY" FontSize="25"/>
-                    <ComboBoxItem Content="PDU" FontSize="25"/>
-                </ComboBox>
+            <StackPanel Grid.Row="2" Orientation="Horizontal"  Margin="0,20,0,0" HorizontalAlignment="Center">
+
+
+
+
+
+                <Grid Width="400" Height="80" Background="#8D8D8D" >
+                    <StackPanel >
+                        <TextBlock  Text="유형" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="15" Margin="0,6,0,0" />
+                        <ComboBox  x:Name="DeviceTypeComboBox" Margin="0,5,0,5" Width="360"  Height="35" FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Center"  HorizontalContentAlignment="Center">
+                            <ComboBoxItem Content="pc" FontSize="25" HorizontalAlignment="Center"/>
+                            <ComboBoxItem Content="프로젝터" FontSize="25" HorizontalAlignment="Center"/>
+                            <ComboBoxItem Content="DLP프로젝터" FontSize="25" HorizontalAlignment="Center"/>
+                            <ComboBoxItem Content="RELAY" FontSize="25" HorizontalAlignment="Center"/>
+                            <ComboBoxItem Content="PDU" FontSize="25" HorizontalAlignment="Center"/>
+                        </ComboBox>
+                    </StackPanel>
+                </Grid>
+
+
+
+
+
+
+
+
+              
             </StackPanel>
 
             <StackPanel Grid.Row="3"  Orientation="Horizontal" Margin="0,20,0,0">

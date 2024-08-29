@@ -11,7 +11,7 @@
         <Rectangle Fill="White" >
            
         </Rectangle>
-        <Ellipse Width="5" Height="5" Fill="Gray">
+        <Ellipse Width="0" Height="0" Fill="Gray">
             
         </Ellipse>
 

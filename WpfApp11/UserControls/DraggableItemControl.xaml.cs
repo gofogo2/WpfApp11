@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using WpfApp11.Helpers;
 using WpfApp11.Helpers.Launcher_SE.Helpers;
+using WpfApp11.UserControls;
 
 namespace WpfApp9
 {
@@ -26,7 +27,7 @@ namespace WpfApp9
         private CancellationTokenSource pingCancellationTokenSource;
         string vncViewerPath = @"C:\Program Files\TightVNC\tvnviewer.exe"; // TightVNC 뷰어 경로
         public ItemConfiguration Configuration { get; private set; }
-        SolidColorBrush onColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E8F5E9"));
+        SolidColorBrush onColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#ACD7FE"));
         SolidColorBrush offColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E0E0E0"));
 
         public bool ispow = false;
@@ -126,7 +127,7 @@ namespace WpfApp9
                  
             }
             menu.Items.Add(CreateMenuItem("EDIT", EditMenuItem_Click));
-            menu.Items.Add(CreateMenuItem("DELETE", DeleteMenuItem_Click));
+            menu.Items.Add(CreateMenuItem("DELETE", DeleteMenuItem_Click));  //여기다
 
             this.ContextMenu = menu;
         }
@@ -157,20 +158,20 @@ namespace WpfApp9
             Configuration.IsOn = isOn;
             PowerState.Fill = isOn ? onColor : offColor;
 
-            if (isOn)
-            {
-                if (Configuration.DeviceType == "pc")
-                {
-                    StatusIndicator.Visibility = Visibility.Visible;
-                }
-            }
-            else
-            {
-                if (Configuration.DeviceType == "pc")
-                {
-                    StatusIndicator.Visibility = Visibility.Collapsed;
-                }
-            }
+            //if (isOn)
+            //{
+            //    if (Configuration.DeviceType == "pc")
+            //    {
+            //        StatusIndicator.Visibility = Visibility.Visible;
+            //    }
+            //}
+            //else
+            //{
+            //    if (Configuration.DeviceType == "pc")
+            //    {
+            //        StatusIndicator.Visibility = Visibility.Collapsed;
+            //    }
+            //}
         }
 
         public void StartPingCheck()
@@ -322,10 +323,29 @@ namespace WpfApp9
 
         private void DeleteMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show("이 기기를 삭제하시겠습니까?", "기기 삭제", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            //if (MessageBox.Show("이 기기를 삭제하시겠습니까?", "기기 삭제", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            //{
+            //    var mainWindow = Window.GetWindow(this) as MainWindow;
+            //    mainWindow?.RemoveDevice(this);
+            //}
+
+
+            delete_dialog dialog = new delete_dialog
+            {
+                Owner = Application.Current.MainWindow
+            };
+
+            bool? result = dialog.ShowDialog(); // 모달 다이얼로그로 표시됨
+
+            if (dialog.DialogResult == true)
             {
                 var mainWindow = Window.GetWindow(this) as MainWindow;
-                mainWindow?.RemoveDevice(this);
+                    mainWindow?.RemoveDevice(this);
+            }
+            else if (dialog.DialogResult == false)
+            {
+                
+                // 사용자 클릭 No 처리
             }
         }
 

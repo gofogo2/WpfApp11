@@ -35,14 +35,17 @@
     <Grid>
         <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="70"/>
+            <RowDefinition Height="620"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="100"/>
         </Grid.RowDefinitions>
-            <Button Grid.Row="3" x:Name="CloseButton"  HorizontalAlignment="Center" VerticalAlignment="Center"  Width="120" Height="60" Margin="0,25,5,0" Click="CloseButton_Click" >
+            <Button Grid.Row="3" x:Name="CloseButton"  HorizontalAlignment="Center" VerticalAlignment="Center"  Width="150" Height="50" Margin="0,25,5,0" Click="CloseButton_Click" >
                 <TextBlock Text="닫기" FontSize="25"/>
             </Button>
+            <Grid Grid.Row="0">
+                <TextBlock Text="파일 전송" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="30"/>
+            </Grid>
             <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -70,7 +73,7 @@
 
                     <ListView x:Name="LeftFileListView" Grid.Row="1" BorderThickness="0"
                           ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                          ScrollViewer.VerticalScrollBarVisibility="Auto"
+                          ScrollViewer.VerticalScrollBarVisibility="Auto" MouseLeftButtonDown="local_empty_click"
                           ItemContainerStyle="{StaticResource FileItemStyle}">
                     <ListView.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -101,9 +104,10 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>-->
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <Button x:Name="LocalCreateFolderButton" Content="폴더 생성" Margin="5" Padding="5,2"  Click="LocalCreateFolder_Click" Width="100"/>
-                            <Button x:Name="LocalEditButton" Content="이름 수정" Margin="5" Padding="5,2"  Click="LocalEdit_Click" Width="100"/>
-                            <Button x:Name="LocalDeleteButton" Content="삭제" Margin="5" Padding="5,2"  Click="LocalDelete_Click" Width="100"/>
+                            <Image Source="../Images/new.png" Width="40" Height="40" MouseLeftButtonDown="LocalCreateFolder_Click" x:Name="LocalCreateFolderButton"/>
+                            <Image x:Name="LocalDeleteButton" Source="../Images/del.png" Margin="30,0,0,0"  MouseLeftButtonDown="LocalDelete_Click"  Width="40" Height="40" Visibility="Collapsed"/>
+                            <Image x:Name="LocalEditButton"  Source="../Images/rename.png" Margin="30,0,0,0"  MouseLeftButtonDown="LocalEdit_Click" Width="40" Height="40" Visibility="Collapsed"/>
+                            
                         </StackPanel>
                     
                     <!--<Button x:Name="TransferButton" Content="전송" Margin="5" Padding="5,2" Grid.Column="3" />-->
@@ -114,13 +118,15 @@
             <!--<GridSplitter Grid.Column="1" Width="80" HorizontalAlignment="Center" VerticalAlignment="Stretch" Background="#FFC0C0C0"/>-->
             <Grid Grid.Column="1">
                 <StackPanel VerticalAlignment="Center" >
-                    <Button Width="70" Height=" 70" Click="TransferButton_Click">
-                        <!--<Image Source="../Images/to_ftp.png"/>-->
-                            <TextBlock Text="→" FontSize="50" Height="70"/>
+                        <Image Source="../Images/send.png" MouseLeftButtonDown="TransferButton_Click" Width="80" Height="80"/>
+                        <Image Source="../Images/receive.png" MouseLeftButtonDown="FtpToLocalTransferButton_Click"  Width="80" Height=" 80"  Margin="0,40,0,0"/>
+
+                        <!--<Button  Click="TransferButton_Click">
+                        --><!--<Image Source="../Images/to_ftp.png"/>--><!--
                         </Button>
-                    <Button Width="70" Height=" 70"  Margin="0,40,0,0" Click="FtpToLocalTransferButton_Click">
-                            <TextBlock Text="←" FontSize="50" Height="70"/>
-                        </Button>
+                    
+                    <Button Click="FtpToLocalTransferButton_Click">
+                        </Button>-->
                 </StackPanel>
                 
 
@@ -145,7 +151,7 @@
 
                 <ListView x:Name="RightFileListView" Grid.Row="1" BorderThickness="0"
                           ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                          ScrollViewer.VerticalScrollBarVisibility="Auto"
+                          ScrollViewer.VerticalScrollBarVisibility="Auto" MouseLeftButtonDown="ftp_empty_click"
                           ItemContainerStyle="{StaticResource FileItemStyle}">
                     <ListView.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -176,9 +182,15 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>-->
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <Button x:Name="FtpCreateFolderButton" Content="폴더 생성" Margin="5" Padding="5,2"  Click="FtpCreateFolder_Click" Width="100"/>
+                            <!--<Button x:Name="FtpCreateFolderButton" Content="폴더 생성" Margin="5" Padding="5,2"  Click="FtpCreateFolder_Click" Width="100"/>
                             <Button x:Name="FtpEditButton" Content="이름 수정" Margin="5" Padding="5,2"  Click="FtpEdit_Click" Width="100"/>
-                            <Button x:Name="FtpDeleteButton" Content="삭제" Margin="5" Padding="5,2"  Click="FtpDelete_Click" Width="100"/>
+                            <Button x:Name="FtpDeleteButton" Content="삭제" Margin="5" Padding="5,2"  Click="FtpDelete_Click" Width="100"/>-->
+
+
+                            <Image x:Name="FtpCreateFolderButton" Source="../Images/new.png" Width="40" Height="40" MouseLeftButtonDown="FtpCreateFolder_Click" />
+                            <Image x:Name="FtpDeleteButton" Source="../Images/del.png" Margin="30,0,0,0"  MouseLeftButtonDown="FtpDelete_Click"  Width="40" Height="40" Visibility="Collapsed"/>
+                            <Image x:Name="FtpEditButton"  Source="../Images/rename.png" Margin="30,0,0,0"  MouseLeftButtonDown="FtpEdit_Click" Width="40" Height="40" Visibility="Collapsed"/>
+
                         </StackPanel>
                  
                     <!--<Button x:Name="FtpToLocalTransferButton" Content="로컬로 전송" Margin="5" Padding="5,2" Grid.Column="3" Click="FtpToLocalTransferButton_Click"/>-->

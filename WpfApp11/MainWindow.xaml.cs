@@ -30,9 +30,9 @@ namespace WpfApp9
         private DraggableItemControl draggedItem;
         private const string ConfigFile = "itemConfig.json";
         private const int GridCellHeight = 200;
-        private const int GridCellWidth = 180;
+        private const int GridCellWidth = 200;
         private const int GridRows = 8;
-        private const int GridColumns = 10;
+        private const int GridColumns = 9;
         private bool[,] occupiedCells;
         private int highestZIndex = 1;
         private DateTime lastClickTime = DateTime.MinValue;
@@ -470,10 +470,13 @@ namespace WpfApp9
                 {
                     Rectangle cell = new Rectangle
                     {
-                        Width = GridCellWidth,
-                        Height = GridCellHeight,
+                        //Width = GridCellWidth,
+                        //Height = GridCellHeight,
+                        Width = 200,
+                        Height = 200,
                         Stroke = Brushes.White,
                         StrokeThickness = 1
+                        
                     };
                     Canvas.SetLeft(cell, j * GridCellWidth);
                     Canvas.SetTop(cell, i * GridCellHeight);
@@ -494,15 +497,17 @@ namespace WpfApp9
         {
             var itemControl = new DraggableItemControl(config)
             {
-                Width = GridCellWidth - (ItemMargin * 2),
-                Height = GridCellHeight - (ItemMargin * 2)
+                Width = 180,
+                Height = 180
+                //Width = GridCellWidth - (ItemMargin * 2),
+                //Height = GridCellHeight - (ItemMargin * 2)
             };
 
             itemControl.MouseLeftButtonDown += Item_MouseLeftButtonDown;
             itemControl.MouseLeftButtonUp += Item_MouseLeftButtonUp;
             itemControl.MouseMove += Item_MouseMove;
 
-            itemControl.StatusIndicator.Visibility = config.DeviceType == "pc" ? Visibility.Visible : Visibility.Collapsed;
+            //itemControl.StatusIndicator.Visibility = config.DeviceType == "pc" ? Visibility.Visible : Visibility.Collapsed;
 
             double left = (config.Column * GridCellWidth) + ItemMargin;
             double top = (config.Row * GridCellHeight) + ItemMargin;
@@ -779,7 +784,7 @@ namespace WpfApp9
             add_device_ppanel.Visibility = Visibility.Visible;
             addDeviceWindow.addbtn.Visibility = Visibility.Visible;
             addDeviceWindow.editbtn.Visibility = Visibility.Collapsed;
-            addDeviceWindow.title.Content = "기기 등록";
+            addDeviceWindow.title.Content = "장비 등록";
             addDeviceWindow.DeviceTypeComboBox.IsEnabled = true;
         }
 
@@ -803,7 +808,7 @@ namespace WpfApp9
                 add_device_ppanel.Visibility = Visibility.Visible;
                 addDeviceWindow.addbtn.Visibility = Visibility.Visible;
                 addDeviceWindow.editbtn.Visibility = Visibility.Collapsed;
-                addDeviceWindow.title.Content = "기기 등록";
+                addDeviceWindow.title.Content = "장비 등록";
                 addDeviceWindow.DeviceTypeComboBox.IsEnabled = true;
 
 
@@ -829,7 +834,7 @@ namespace WpfApp9
             add_device_ppanel.Visibility = Visibility.Visible;
             addDeviceWindow.addbtn.Visibility = Visibility.Visible;
             addDeviceWindow.editbtn.Visibility = Visibility.Collapsed;
-            addDeviceWindow.title.Content = "기기 등록";
+            addDeviceWindow.title.Content = "장비 등록";
             addDeviceWindow.DeviceTypeComboBox.IsEnabled = true;
         }
 
@@ -908,7 +913,7 @@ namespace WpfApp9
             {
                 AutoPowerSettingsControl.Visibility = Visibility.Collapsed;
             };
-            auto_wol_btn.Click += Auto_wol_btn_Click;
+            //auto_wol_btn.Click += Auto_wol_btn_Click;
         }
 
         private void Auto_wol_btn_Click(object sender, RoutedEventArgs e)

@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="200" d:DesignWidth="180" Background="White">
+             d:DesignHeight="180" d:DesignWidth="180" Background="White">
    <UserControl.Resources>
 
         <Style x:Key="CustomSeparatorStyle" TargetType="{x:Type Separator}">
@@ -49,35 +49,35 @@
         </Setter>
     </Style>
 </UserControl.Resources>
-    <Border BorderThickness="2" BorderBrush="Black" CornerRadius="10">
+    <Border BorderThickness="1" BorderBrush="Black" CornerRadius="10">
         <Grid>
-            <Grid x:Name="MainGrid" Width="160" Height="180">
+            <Grid x:Name="MainGrid" Width="180" Height="180">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="110"/>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="80"/>
+                        <RowDefinition Height="50"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" x:Name="TitleTextBlock" Text="Title" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,0"/>
+                    <TextBlock Grid.Row="0" x:Name="TitleTextBlock" Text="Title" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,0"/>
 
                     <Border Grid.Row="1" BorderThickness="0.5" BorderBrush="Black">
                         <Rectangle Fill="#E0E0E0" x:Name="PowerState"/>
                     </Border>
 
-                    <Image Grid.Row="1" x:Name="IconImage" Width="40" Height="40" Stretch="Uniform" 
+                    <Image Grid.Row="1" x:Name="IconImage" Width="70" Height="70" Stretch="Uniform" 
                        HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0"/>
 
-                    <Image Source="../Images/StatusIndicator.png" x:Name="StatusIndicator" Grid.Row="1"  Width="25" Height="25" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,5,6,80"  MouseLeftButtonDown="StatusIndicator_MouseLeftButtonDown"/>
+                    <Image Source="../Images/StatusIndicator.png" x:Name="StatusIndicator" Grid.Row="1"  Width="25" Height="25" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,5,6,80"  MouseLeftButtonDown="StatusIndicator_MouseLeftButtonDown" Visibility="Collapsed"/>
 
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Button Width="30" Height="30" Margin="0,0,0,0" Click="pow_on" Background="Transparent" BorderThickness="0">
-                            <Image Source="../Images/on.png"/>
+                        <Button Width="57" Height="30" Margin="0,0,0,0" Click="pow_on" Background="Transparent" BorderThickness="0">
+                            <Image Source="../Images/frame_5.png"/>
                         </Button>
-                        <Button Width="30" Height="30" Margin="20,0,0,0" Click="pow_off" Background="Transparent" BorderThickness="0">
-                            <Image Source="../Images/off.png"/>
+                        <Button Width="57" Height="30" Margin="20,0,0,0" Click="pow_off" Background="Transparent" BorderThickness="0">
+                            <Image Source="../Images/frame_6.png"/>
                         </Button>
-                        <Button Width="30" Height="30" Margin="20,0,0,0" Click="pow_re" Background="Transparent" BorderThickness="0">
+                        <!--<Button Width="30" Height="30" Margin="20,0,0,0" Click="pow_re" Background="Transparent" BorderThickness="0">
                             <Image Source="../Images/re.png"/>
-                        </Button>
+                        </Button>-->
                     </StackPanel>
 
                     <Grid Grid.Row="1" x:Name="OverlayGrid" Visibility="Collapsed">

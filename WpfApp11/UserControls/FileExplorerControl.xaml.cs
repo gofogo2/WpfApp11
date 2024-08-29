@@ -149,7 +149,151 @@ namespace WpfApp9
             LeftFileListView.MouseDoubleClick += LeftFileListView_MouseDoubleClick;
             RightFileListView.MouseDoubleClick += RightFileListView_MouseDoubleClick;
 
+            LeftFileListView.SelectionChanged += LeftFileListView_SelectionChanged;
+
+            RightFileListView.SelectionChanged += RightFileListView_SelectionChanged;
+
         }
+
+        private void RightFileListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var selectedItems_ct = RightFileListView.SelectedItems.Cast<FileSystemItem>().ToList();
+
+            if (selectedItems_ct.Count == 0)
+            {
+
+
+
+
+
+
+
+
+                set_ftp_select_not();
+            }
+            else if (selectedItems_ct.Count == 1)
+            {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                if (selectedItems_ct[0].Type == "Parent Directory")
+                {
+                    set_ftp_select_not();
+                }
+                else
+                {
+                    set_ftp_select_one();
+
+                }
+
+
+
+
+
+
+
+
+
+
+            }
+            else
+            {
+                set_ftp_select_multi();
+            }
+        }
+
+        private void LeftFileListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var selectedItems_ct = LeftFileListView.SelectedItems.Cast<FileSystemItem>().ToList();
+
+            if (selectedItems_ct.Count == 0)
+            {
+                set_local_select_not();
+            }
+            else if (selectedItems_ct.Count == 1)
+            {
+
+
+
+
+                if (selectedItems_ct[0].Type == "Parent Directory")
+                {
+                    set_local_select_not();
+                }
+                else
+                {
+                    set_local_select_one();
+
+
+                }
+            }
+            else
+            {
+                set_local_select_multi();
+            }
+        }
+
+        void set_local_select_not()
+        {
+            LocalCreateFolderButton.Visibility = Visibility.Visible;
+            LocalEditButton.Visibility = Visibility.Collapsed;
+            LocalDeleteButton.Visibility = Visibility.Collapsed;
+
+
+        }
+
+        void set_local_select_one()
+        {
+            LocalCreateFolderButton.Visibility = Visibility.Visible;
+            LocalEditButton.Visibility = Visibility.Visible;
+            LocalDeleteButton.Visibility = Visibility.Visible;
+        }
+
+        void set_local_select_multi()
+        {
+            LocalCreateFolderButton.Visibility = Visibility.Visible;
+            LocalEditButton.Visibility = Visibility.Collapsed;
+            LocalDeleteButton.Visibility = Visibility.Visible;
+        }
+
+
+
+
+
+        void set_ftp_select_not()
+        {
+            FtpCreateFolderButton.Visibility = Visibility.Visible;
+            FtpEditButton.Visibility = Visibility.Collapsed;
+            FtpDeleteButton.Visibility = Visibility.Collapsed;
+
+
+        }
+
+        void set_ftp_select_one()
+        {
+            FtpCreateFolderButton.Visibility = Visibility.Visible;
+            FtpEditButton.Visibility = Visibility.Visible;
+            FtpDeleteButton.Visibility = Visibility.Visible;
+        }
+
+        void set_ftp_select_multi()
+        {
+            FtpCreateFolderButton.Visibility = Visibility.Visible;
+            FtpEditButton.Visibility = Visibility.Collapsed;
+            FtpDeleteButton.Visibility = Visibility.Visible;
+        }
+
 
         public void Initialize(string ftpAddress)
         {
@@ -443,10 +587,27 @@ namespace WpfApp9
         //===================================================
 
 
+      
 
 
+        private void local_empty_click(object sender, MouseButtonEventArgs e)
+        {
+            //MessageBox.Show("빈거");
+            //LeftFileListView.SelectedItems = 0;
+            LeftFileListView.SelectedIndex = -1;
+
+            
+        }
 
 
+        private void ftp_empty_click(object sender, MouseButtonEventArgs e)
+        {
+            //MessageBox.Show("빈거");
+            //LeftFileListView.SelectedItems = 0;
+            RightFileListView.SelectedIndex = -1;
+
+
+        }
 
 
 
