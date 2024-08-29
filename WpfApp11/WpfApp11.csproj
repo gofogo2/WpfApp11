@@ -69,6 +69,7 @@
     <Compile Include="Helpers\UdpHelper.cs" />
     <Compile Include="Helpers\UdpReceiver.cs" />
     <Compile Include="Helpers\UdpRelayHelper.cs" />
+    <Compile Include="Helpers\Utils.cs" />
     <Compile Include="Helpers\WakeOnlanHelper.cs" />
     <Compile Include="Helpers\WebApiHelper.cs" />
     <Compile Include="UserControls\AddDeviceControl.xaml.cs">

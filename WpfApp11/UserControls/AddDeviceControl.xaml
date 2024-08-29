@@ -40,7 +40,8 @@
                 <ComboBox  x:Name="DeviceTypeComboBox" Margin="0,5,0,5" Width="250" FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <ComboBoxItem Content="pc" FontSize="25"/>
                     <ComboBoxItem Content="프로젝터" FontSize="25"/>
-                    <ComboBoxItem Content="RELAY #1" FontSize="25"/>
+                    <ComboBoxItem Content="DLP프로젝터" FontSize="25"/>
+                    <ComboBoxItem Content="RELAY" FontSize="25"/>
                     <ComboBoxItem Content="PDU" FontSize="25"/>
                 </ComboBox>
             </StackPanel>

@@ -227,17 +227,17 @@ namespace WpfApp9
         public async Task SortAndProcessDragItems(List<ItemConfiguration> drags, bool onOff, double startProgress, double endProgress)
         {
             var sortedDragItems = onOff
-           ? drags.OrderBy(a => a.DeviceType.ToLower() == "relay #1" ? 1 :
+           ? drags.OrderBy(a => a.DeviceType.ToLower() == "relay" ? 1 :
                                 a.DeviceType.ToLower() == "pdu" ? 2 :
                                 a.DeviceType.ToLower() == "프로젝터" ? 3 :
-                                a.DeviceType.ToLower() == "pc" ? 4 :
-                                a.DeviceType.ToLower() == "relay #2" ? 5 : 6)
+                                a.DeviceType.ToLower() == "DLP프로젝터" ? 4 :
+                                a.DeviceType.ToLower() == "pc" ? 5 : 6)
                   .ToList()
-           : drags.OrderBy(a => a.DeviceType.ToLower() == "relay #2" ? 1 :
-                                a.DeviceType.ToLower() == "pc" ? 2 :
+           : drags.OrderBy(a => a.DeviceType.ToLower() == "pc" ? 1 :
+                                a.DeviceType.ToLower() == "DLP프로젝터" ? 2 :
                                 a.DeviceType.ToLower() == "프로젝터" ? 3 :
                                 a.DeviceType.ToLower() == "pdu" ? 4 :
-                                a.DeviceType.ToLower() == "relay #1" ? 5 : 6)
+                                a.DeviceType.ToLower() == "relay" ? 5 : 6)
                   .ToList();
 
 
@@ -263,10 +263,14 @@ namespace WpfApp9
                         await ProcessProjector(item, onOff);
                         await Task.Delay(1000);
                         break;
+                    case "dlp프로젝터":
+                        await ProcessDLPProjector(item, onOff);
+                        await Task.Delay(1000);
+                        break;
                     case "pc":
                         ProcessPC(item, onOff);
                         break;
-                    case "relay #1":
+                    case "relay":
                         ProcessRelay1(item, onOff);
                         break;
                     case "pdu":
@@ -318,11 +322,13 @@ namespace WpfApp9
 
         private async void TotalPowerBtnOn_Click(object sender, RoutedEventArgs e)
         {
+            PowerStatusText.Text = "전원 ON";
             await OnDevice();
         }
 
         private async void TotalPowerBtnOff_Click(object sender, RoutedEventArgs e)
         {
+            PowerStatusText.Text = "전원 OFF";
             await OffDevice();
         }
 
@@ -333,6 +339,25 @@ namespace WpfApp9
                 bool result = onOff
                     ? await PJLinkHelper.Instance.PowerOnAsync(item.IpAddress)
                     : await PJLinkHelper.Instance.PowerOffAsync(item.IpAddress);
+
+                if (!result)
+                {
+                    Debug.WriteLine($"Failed to {(onOff ? "power on" : "power off")} projector at {item.IpAddress}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error processing projector: {ex.Message}");
+            }
+        }
+
+        private async Task ProcessDLPProjector(ItemConfiguration item, bool onOff)
+        {
+            try
+            {
+                bool result = onOff
+                    ? await UdpHelper.Instance.SendPowerOnCommandToDLPProjector(item.IpAddress)
+                    : await UdpHelper.Instance.SendPowerOffCommandToDLPProjector(item.IpAddress);
 
                 if (!result)
                 {
@@ -363,27 +388,49 @@ namespace WpfApp9
             }
         }
 
-        private async void ProcessRelay1(ItemConfiguration item, bool onOff)
+        private void ProcessRelay1(ItemConfiguration item, bool onOff)
         {
             if (onOff)
             {
-                await UdpRelayHelper.Instance.SendPowerOn(item.IpAddress, item.port, item.Channel);
+                OnRelay(item);
             }
             else
             {
-                await UdpRelayHelper.Instance.SendPowerOff(item.IpAddress, item.port, item.Channel);
+                OffRelay(item);
             }
         }
+
+
+        private async void OnRelay(ItemConfiguration item )
+        {
+            string hexStr = Utils.Instance.IntToHex(item.Channel);
+            Debug.WriteLine(hexStr);
+            string hex = $"525920{hexStr}20310D";
+            Logger.Log(item.IpAddress, item.port, "Power ON", hex);
+            await UdpHelper.Instance.SendHexAsync(hex, false, int.Parse(item.port), item.IpAddress);
+        }
+
+        private async void OffRelay(ItemConfiguration item)
+        {
+            string hexStr = Utils.Instance.IntToHex(item.Channel);
+            Debug.WriteLine(hexStr);
+
+
+            string hex = $"525920{hexStr}20300D";
+            Logger.Log(item.IpAddress, item.port, "Power OFF", hex);
+            await UdpHelper.Instance.SendHexAsync(hex, false, int.Parse(item.port), item.IpAddress);
+        }
+
 
         private void ProcessPDU(ItemConfiguration item, bool onOff)
         {
             if (onOff)
             {
-                _ = WebApiHelper.Instance.OnAll(item.IpAddress);
+                _ = WebApiHelper.Instance.OnPDU(item.IpAddress, item.Channel);
             }
             else
             {
-                _ = WebApiHelper.Instance.OffAll(item.IpAddress);
+                _ = WebApiHelper.Instance.OffPDU(item.IpAddress,item.Channel);
             }
         }
 

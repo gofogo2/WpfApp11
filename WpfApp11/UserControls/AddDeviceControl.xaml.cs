@@ -144,7 +144,7 @@ namespace WpfApp11.UserControls
             {
                 DeviceTypeComboBox.SelectedIndex = 1;
             }
-            else if (config.DeviceType == "RELAY #1")
+            else if (config.DeviceType == "RELAY")
             {
                 DeviceTypeComboBox.SelectedIndex = 2;
             }

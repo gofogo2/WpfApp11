@@ -1,5 +1,6 @@
 ﻿using Launcher_SE.Helpers;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
 using System.Net.NetworkInformation;
@@ -20,6 +21,7 @@ namespace WpfApp9
         private UdpReceiver _udpReceiver;
 
         private const int PingInterval = 5000; // 5초마다 핑 체크
+        private CancellationTokenSource pduStatusCancellationTokenSource;
         private bool isPinging = false;
         private CancellationTokenSource pingCancellationTokenSource;
         string vncViewerPath = @"C:\Program Files\TightVNC\tvnviewer.exe"; // TightVNC 뷰어 경로
@@ -43,20 +45,72 @@ namespace WpfApp9
             {
                 StartPingCheck();
             }
+            else if (Configuration.DeviceType == "DLP프로젝터")
+            {
+                StartPingCheck();
+            }
             else if (Configuration.DeviceType == "PDU")
             {
+                StartPDUStatus();
 
             }
-            else if (Configuration.DeviceType == "RELAY #1")
+            else if (Configuration.DeviceType == "RELAY")
             {
-                //var allowedIp = IPAddress.Parse(config.IpAddress); // 허용할 IP 주소를 설정합니다.
-                //_udpReceiver = new UdpReceiver(int.Parse(config.port), allowedIp);
-                //Task.Run(() => _udpReceiver.StartReceivingAsync(OnMessageReceived, OnInvalidIpReceived));
+        
             }
 
 
             // ContextMenu 생성
             CreateContextMenu();
+        }
+
+        public async void StartPDUStatus()
+        {
+            StopPDUStatus(); // 기존 체크가 실행 중이면 중지
+            pduStatusCancellationTokenSource = new CancellationTokenSource();
+            await PDUStatusCheckLoop(pduStatusCancellationTokenSource.Token);
+        }
+
+        public void StopPDUStatus()
+        {
+            pduStatusCancellationTokenSource?.Cancel();
+            pduStatusCancellationTokenSource?.Dispose();
+            pduStatusCancellationTokenSource = null;
+        }
+
+        private async Task PDUStatusCheckLoop(CancellationToken cancellationToken)
+        {
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                try
+                {
+                    Dictionary<string, string> p = await WebApiHelper.Instance.StatusPDU(Configuration.IpAddress, Configuration.Channel);
+                    await Dispatcher.InvokeAsync(() =>
+                    {
+                        if (!cancellationToken.IsCancellationRequested)
+                        {
+                            if (p["Error"] == "Fail")
+                            {
+                                UpdatePowerState(false);
+                            }
+                            else
+                            {
+                                int channelNumber = Convert.ToInt32(Configuration.Channel);
+                                string formattedChannel = channelNumber.ToString("00");
+                                bool isOn = p[formattedChannel] == "ON";
+                                UpdatePowerState(isOn);
+                            }
+                        }
+                    });
+                }
+                catch (Exception ex)
+                {
+                    // 오류 처리 (로깅 등)
+                    Debug.WriteLine($"PDU 상태 체크 중 오류 발생: {ex.Message}");
+                }
+
+                await Task.Delay(PingInterval, cancellationToken);
+            }
         }
 
         private void CreateContextMenu()
@@ -127,6 +181,8 @@ namespace WpfApp9
                 pingCancellationTokenSource = new CancellationTokenSource();
                 _ = PingCheckLoop(pingCancellationTokenSource.Token);
             }
+
+
         }
 
         public void StopPingCheck()
@@ -176,17 +232,21 @@ namespace WpfApp9
             {
                 IconImage.Source = new BitmapImage(new Uri($"pack://application:,,,/Images/projector.png"));
             }
+            else if (Configuration.DeviceType == "DLP프로젝터")
+            {
+                IconImage.Source = new BitmapImage(new Uri($"pack://application:,,,/Images/projector.png"));
+            }
             else if (Configuration.DeviceType == "PDU")
             {
                 IconImage.Source = new BitmapImage(new Uri($"pack://application:,,,/Images/projector.png"));
             }
-            else if (Configuration.DeviceType == "RELAY #1")
+            else if (Configuration.DeviceType == "RELAY")
             {
                 IconImage.Source = new BitmapImage(new Uri($"pack://application:,,,/Images/projector.png"));
             }
             else
             {
-                IconImage.Source = new BitmapImage(new Uri($"pack://application:,,,/Images/{Configuration.DeviceType}.png"));
+                IconImage.Source = new BitmapImage(new Uri($"pack://application:,,,/Images/pc.png"));
             }
         }
 
@@ -284,18 +344,19 @@ namespace WpfApp9
                 }
                 else if (Configuration.DeviceType == "DLP프로젝터")
                 {
-                    await UdpHelper.Instance.SendPowerOnCommandToDLPProjector(Configuration.IpAddress);
+                    await UdpHelper.Instance.SendPowerOffCommandToDLPProjector(Configuration.IpAddress);
                 }
                 else if (Configuration.DeviceType == "PDU")
                 {
-                    await WebApiHelper.Instance.OnAll(Configuration.IpAddress);
+                    await WebApiHelper.Instance.OnPDU(Configuration.IpAddress, Configuration.Channel);
                 }
-                else if (Configuration.DeviceType == "RELAY #1")
+                else if (Configuration.DeviceType == "RELAY")
                 {
 
 
-                    string hexStr = IntToHex(Configuration.Channel);
+                    string hexStr = Utils.Instance.IntToHex(Configuration.Channel);
                     Debug.WriteLine(hexStr);
+                    //16진수로 제어
                     string hex = $"525920{hexStr}20310D";
                     Logger.Log(Configuration.IpAddress, Configuration.port, "Power ON", hex);
                     await UdpHelper.Instance.SendHexAsync(hex, false, int.Parse(Configuration.port), Configuration.IpAddress);
@@ -312,66 +373,7 @@ namespace WpfApp9
 
 
 
-        private string IntToHex(string it)
-        {
-            string hex;
-            switch (it)
-            {
-                case "1":
-                    hex = "31";
-                    break;
-                case "2":
-                    hex = "32";
-                    break;
-                case "3":
-                    hex = "33";
-                    break;
-                case "4":
-                    hex = "34";
-                    break;
-                case "5":
-                    hex = "35";
-                    break;
-                case "6":
-                    hex = "36";
-                    break;
-                case "7":
-                    hex = "37";
-                    break;
-                case "8":
-                    hex = "38";
-                    break;
-                case "9":
-                    hex = "39";
-                    break;
-                case "10":
-                    hex = "3a";
-                    break;
-                case "11":
-                    hex = "3b";
-                    break;
-                case "12":
-                    hex = "3c";
-                    break;
-                case "13":
-                    hex = "3d";
-                    break;
-                case "14":
-                    hex = "3e";
-                    break;
-                case "15":
-                    hex = "3f";
-                    break;
-                case "16":
-                    hex = "40";
-                    break;
-                default:
-                    hex = "31";
-                    break;
-            }
-            return hex;
-        }
-
+       
 
         private async void pow_off(object sender, RoutedEventArgs e)
         {
@@ -392,12 +394,12 @@ namespace WpfApp9
                 }
                 else if (Configuration.DeviceType == "PDU")
                 {
-                    await WebApiHelper.Instance.OffAll(Configuration.IpAddress);
+                    await WebApiHelper.Instance.OffPDU(Configuration.IpAddress,Configuration.Channel);
                 }
-                else if (Configuration.DeviceType == "RELAY #1")
+                else if (Configuration.DeviceType == "RELAY")
                 {
 
-                    string hexStr = IntToHex(Configuration.Channel);
+                    string hexStr = Utils.Instance.IntToHex(Configuration.Channel);
                     Debug.WriteLine(hexStr);
 
 
@@ -454,19 +456,15 @@ namespace WpfApp9
                 }
                 else if (Configuration.DeviceType == "프로젝터")
                 {
-                    // 프로젝터 재시작 로직
+                    //PJLinkHelper.Instance.PowerOff(Configuration.IpAddress);
                 }
                 else if (Configuration.DeviceType == "DLP프로젝터")
                 {
-                    // DLP 프로젝터 재시작 로직
+                    //await UdpHelper.Instance.SendPowerOffCommandToDLPProjector(Configuration.IpAddress);
                 }
                 else if (Configuration.DeviceType == "PDU")
                 {
-                    await WebApiHelper.Instance.RebootAll(Configuration.IpAddress);
-                }
-                else if (Configuration.DeviceType == "RELAY #1")
-                {
-                    // RELAY #1 재시작 로직
+                    await WebApiHelper.Instance.RebootPDU(Configuration.IpAddress, Configuration.Channel);
                 }
             }
             catch (Exception ex)
