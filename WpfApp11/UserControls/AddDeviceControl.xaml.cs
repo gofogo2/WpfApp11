@@ -144,17 +144,13 @@ namespace WpfApp11.UserControls
             {
                 DeviceTypeComboBox.SelectedIndex = 1;
             }
-            else if (config.DeviceType == "RELAY")
+            else if (config.DeviceType == "RELAY #1")
             {
                 DeviceTypeComboBox.SelectedIndex = 2;
             }
-            else if (config.DeviceType == "RELAY #2")
-            {
-                DeviceTypeComboBox.SelectedIndex = 3;
-            }
             else if (config.DeviceType == "PDU")
             {
-                DeviceTypeComboBox.SelectedIndex = 4;
+                DeviceTypeComboBox.SelectedIndex = 3;
             }
 
             DeviceTypeComboBox.IsEnabled = false;
@@ -183,11 +179,8 @@ namespace WpfApp11.UserControls
 
 
 
-            tempconfig.Name = NameTextBox.Text;
+            tempconfig.Name = NameTextBox.Text.ToUpper();
             tempconfig.DeviceType = ((ComboBoxItem)DeviceTypeComboBox.SelectedItem).Content.ToString();
-
-           
-
             tempconfig.MacAddress = MacAddressTextBox.Text;
             tempconfig.IpAddress = IpAddressTextBox.Text;
             tempconfig.port = DescriptionTextBox.Text;

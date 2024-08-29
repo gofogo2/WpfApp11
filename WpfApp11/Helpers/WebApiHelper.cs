@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Windows;
 
 public class WebApiHelper
 {
@@ -9,8 +10,8 @@ public class WebApiHelper
     private static readonly object _lock = new object();
     private readonly HttpClient _httpClient;
     private string _baseUrl;
-    private string _username;
-    private string _password;
+    private string _username= "administrator";
+    private string _password= "password";
 
     private WebApiHelper()
     {
@@ -67,28 +68,49 @@ public class WebApiHelper
 
     public async Task<string> RebootAll(string url)
     {
-        _baseUrl = $"http://{url}/";
-        return await PostAsync("/api/device/relay", new Dictionary<string, string>
+        try
+        {
+            _baseUrl = $"http://{url}";
+            return await PostAsync("/api/device/relay", new Dictionary<string, string>
         {
             {"method", "reboot"}
         });
+        }catch(Exception e)
+        {
+            MessageBox.Show(e.Message);
+            return "Fail";
+        }
     }
 
     public async Task<string> OnAll(string url)
     {
-        _baseUrl =  $"http://{url}/";
-        return await PostAsync("/api/device/relay", new Dictionary<string, string>
+        try
+        {
+            _baseUrl = $"http://{url}";
+            return await PostAsync("/api/device/relay", new Dictionary<string, string>
         {
             {"method", "on"}
         });
+        }catch(Exception e)
+        {
+            MessageBox.Show(e.Message);
+            return "Fail";
+        }
     }
 
     public async Task<string> OffAll(string url)
     {
-        _baseUrl = $"http://{url}/";
-        return await PostAsync("/api/device/relay", new Dictionary<string, string>
+        try
+        {
+            _baseUrl = $"http://{url}";
+            return await PostAsync("/api/device/relay", new Dictionary<string, string>
         {
             {"method", "off"}
         });
+        }catch(Exception e)
+        {
+            MessageBox.Show(e.Message);
+            return "Fail";
+        }
     }
 }

@@ -63,6 +63,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Helpers\GlobalMessageService.cs" />
+    <Compile Include="Helpers\Logger.cs" />
     <Compile Include="Helpers\PJLinkHelper.cs" />
     <Compile Include="Helpers\TcpHelper.cs" />
     <Compile Include="Helpers\UdpHelper.cs" />

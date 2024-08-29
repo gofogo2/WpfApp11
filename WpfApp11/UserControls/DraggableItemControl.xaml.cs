@@ -53,12 +53,7 @@ namespace WpfApp9
                 //_udpReceiver = new UdpReceiver(int.Parse(config.port), allowedIp);
                 //Task.Run(() => _udpReceiver.StartReceivingAsync(OnMessageReceived, OnInvalidIpReceived));
             }
-            else if (Configuration.DeviceType == "RELAY #2")
-            {
-                //var allowedIp = IPAddress.Parse(config.IpAddress); // 허용할 IP 주소를 설정합니다.
-                //_udpReceiver = new UdpReceiver(int.Parse(config.port), allowedIp);
-                //Task.Run(() => _udpReceiver.StartReceivingAsync(OnMessageReceived, OnInvalidIpReceived));
-            }
+
 
             // ContextMenu 생성
             CreateContextMenu();
@@ -189,10 +184,6 @@ namespace WpfApp9
             {
                 IconImage.Source = new BitmapImage(new Uri($"pack://application:,,,/Images/projector.png"));
             }
-            else if (Configuration.DeviceType == "RELAY #2")
-            {
-                IconImage.Source = new BitmapImage(new Uri($"pack://application:,,,/Images/projector.png"));
-            }
             else
             {
                 IconImage.Source = new BitmapImage(new Uri($"pack://application:,,,/Images/{Configuration.DeviceType}.png"));
@@ -280,80 +271,209 @@ namespace WpfApp9
 
         private async void pow_on(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine(Configuration);
-            if (Configuration.DeviceType == "pc")
+            string result = "Success";
+            try
             {
-                WakeOnLanHelper.Instance.TurnOnPC(Configuration.IpAddress, Configuration.MacAddress);
+                if (Configuration.DeviceType == "pc")
+                {
+                    WakeOnLanHelper.Instance.TurnOnPC(Configuration.IpAddress, Configuration.MacAddress);
+                }
+                else if (Configuration.DeviceType == "프로젝터")
+                {
+                    PJLinkHelper.Instance.PowerOn(Configuration.IpAddress);
+                }
+                else if (Configuration.DeviceType == "DLP프로젝터")
+                {
+                    await UdpHelper.Instance.SendPowerOnCommandToDLPProjector(Configuration.IpAddress);
+                }
+                else if (Configuration.DeviceType == "PDU")
+                {
+                    await WebApiHelper.Instance.OnAll(Configuration.IpAddress);
+                }
+                else if (Configuration.DeviceType == "RELAY #1")
+                {
+
+
+                    string hexStr = IntToHex(Configuration.Channel);
+                    Debug.WriteLine(hexStr);
+                    string hex = $"525920{hexStr}20310D";
+                    Logger.Log(Configuration.IpAddress, Configuration.port, "Power ON", hex);
+                    await UdpHelper.Instance.SendHexAsync(hex, false, int.Parse(Configuration.port), Configuration.IpAddress);
+                }
             }
-            else if (Configuration.DeviceType == "프로젝터")
+            catch (Exception ex)
             {
-                PJLinkHelper.Instance.PowerOn(Configuration.IpAddress);
-            }
-            else if (Configuration.DeviceType == "DLP프로젝터")
-            {
-                await UdpHelper.Instance.SendPowerOnCommandToDLPProjector(Configuration.IpAddress);
-            }
-            else if (Configuration.DeviceType == "PDU")
-            {
-                await WebApiHelper.Instance.OnAll(Configuration.IpAddress);
-            }
-            else if (Configuration.DeviceType == "RELAY #1")
-            {
-                await UdpRelayHelper.Instance.SendPowerOn(Configuration.IpAddress, Configuration.port, "0");
+                result = $"Error: {ex.Message}";
             }
 
+            Logger.Log(Configuration.Name, Configuration.DeviceType, "Power On", result);
             MessageBox.Show("on");
         }
 
+
+
+        private string IntToHex(string it)
+        {
+            string hex;
+            switch (it)
+            {
+                case "1":
+                    hex = "31";
+                    break;
+                case "2":
+                    hex = "32";
+                    break;
+                case "3":
+                    hex = "33";
+                    break;
+                case "4":
+                    hex = "34";
+                    break;
+                case "5":
+                    hex = "35";
+                    break;
+                case "6":
+                    hex = "36";
+                    break;
+                case "7":
+                    hex = "37";
+                    break;
+                case "8":
+                    hex = "38";
+                    break;
+                case "9":
+                    hex = "39";
+                    break;
+                case "10":
+                    hex = "3a";
+                    break;
+                case "11":
+                    hex = "3b";
+                    break;
+                case "12":
+                    hex = "3c";
+                    break;
+                case "13":
+                    hex = "3d";
+                    break;
+                case "14":
+                    hex = "3e";
+                    break;
+                case "15":
+                    hex = "3f";
+                    break;
+                case "16":
+                    hex = "40";
+                    break;
+                default:
+                    hex = "31";
+                    break;
+            }
+            return hex;
+        }
+
+
         private async void pow_off(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine(Configuration);
-            if (Configuration.DeviceType == "pc")
+            string result = "Success";
+            try
             {
-                await UdpHelper.Instance.SendWithIpAsync("power|0", Configuration.IpAddress, 8889);
+                if (Configuration.DeviceType == "pc")
+                {
+                    await UdpHelper.Instance.SendWithIpAsync("power|0", Configuration.IpAddress, 8889);
+                }
+                else if (Configuration.DeviceType == "프로젝터")
+                {
+                    PJLinkHelper.Instance.PowerOff(Configuration.IpAddress);
+                }
+                else if (Configuration.DeviceType == "DLP프로젝터")
+                {
+                    await UdpHelper.Instance.SendPowerOffCommandToDLPProjector(Configuration.IpAddress);
+                }
+                else if (Configuration.DeviceType == "PDU")
+                {
+                    await WebApiHelper.Instance.OffAll(Configuration.IpAddress);
+                }
+                else if (Configuration.DeviceType == "RELAY #1")
+                {
+
+                    string hexStr = IntToHex(Configuration.Channel);
+                    Debug.WriteLine(hexStr);
+
+
+                    string hex = $"525920{hexStr}20300D";
+                    Logger.Log(Configuration.IpAddress, Configuration.port, "Power OFF", hex);
+                    await UdpHelper.Instance.SendHexAsync(hex, false, int.Parse(Configuration.port), Configuration.IpAddress);
+                }
             }
-            else if (Configuration.DeviceType == "프로젝터")
+            catch (Exception ex)
             {
-                PJLinkHelper.Instance.PowerOff(Configuration.IpAddress);
+                result = $"Error: {ex.Message}";
             }
-            else if (Configuration.DeviceType == "DLP프로젝터")
-            {
-                await UdpHelper.Instance.SendPowerOffCommandToDLPProjector(Configuration.IpAddress);
-            }
-            else if (Configuration.DeviceType == "PDU")
-            {
-                await WebApiHelper.Instance.OffAll(Configuration.IpAddress);
-            }
-            else if (Configuration.DeviceType == "RELAY #1")
-            {
-                await UdpRelayHelper.Instance.SendPowerOff(Configuration.IpAddress, Configuration.port, "0");
-            }
+
+            Logger.Log(Configuration.Name, Configuration.DeviceType, "Power Off", result);
             MessageBox.Show("off");
+        }
+
+        public static string ConvertStringToHex(string input)
+        {
+            try
+            {
+                // 문자열을 정수로 변환
+                if (!int.TryParse(input, out int number))
+                {
+                    throw new ArgumentException("입력 문자열을 정수로 변환할 수 없습니다.");
+                }
+
+                // 정수를 16진수 문자열로 변환
+                string hexString = number.ToString("X");
+
+                // 16진수 문자열의 길이가 홀수인 경우 앞에 0 추가
+                if (hexString.Length % 2 != 0)
+                {
+                    hexString = "0" + hexString;
+                }
+
+                return hexString;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"변환 중 오류 발생: {ex.Message}");
+                return string.Empty;
+            }
         }
 
         private async void pow_re(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine(Configuration);
-            if (Configuration.DeviceType == "pc")
+            string result = "Success";
+            try
             {
-                await UdpHelper.Instance.SendWithIpAsync("power|1", Configuration.IpAddress, 8889);
+                if (Configuration.DeviceType == "pc")
+                {
+                    await UdpHelper.Instance.SendWithIpAsync("power|1", Configuration.IpAddress, 8889);
+                }
+                else if (Configuration.DeviceType == "프로젝터")
+                {
+                    // 프로젝터 재시작 로직
+                }
+                else if (Configuration.DeviceType == "DLP프로젝터")
+                {
+                    // DLP 프로젝터 재시작 로직
+                }
+                else if (Configuration.DeviceType == "PDU")
+                {
+                    await WebApiHelper.Instance.RebootAll(Configuration.IpAddress);
+                }
+                else if (Configuration.DeviceType == "RELAY #1")
+                {
+                    // RELAY #1 재시작 로직
+                }
             }
-            else if (Configuration.DeviceType == "프로젝터")
+            catch (Exception ex)
             {
-                // 프로젝터 재시작 로직
+                result = $"Error: {ex.Message}";
             }
-            else if (Configuration.DeviceType == "DLP프로젝터")
-            {
-                // DLP 프로젝터 재시작 로직
-            }
-            else if (Configuration.DeviceType == "PDU")
-            {
-                await WebApiHelper.Instance.RebootAll(Configuration.IpAddress);
-            }
-            else if (Configuration.DeviceType == "RELAY #1")
-            {
-                // RELAY #1 재시작 로직
-            }
+
             MessageBox.Show("재시작");
         }
 

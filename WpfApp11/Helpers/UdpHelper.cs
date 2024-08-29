@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
+using WpfApp11.Helpers;
 
 namespace Launcher_SE.Helpers
 {
@@ -178,6 +180,63 @@ namespace Launcher_SE.Helpers
                 catch (Exception e)
                 {
                     Debug.WriteLine($"SendByteAsync error: {e.Message}");
+                }
+            });
+        }
+
+        public Task SendHexAsync(string hexString, bool isBroadcast = false, int port = SenderPort, string ip = null)
+        {
+            return Task.Run(async () =>
+            {
+                try
+                {
+                    // 16진수 문자열을 바이트 배열로 변환
+                    byte[] msg = HexStringToByteArray(hexString);
+
+                    using (var sender = new UdpClient())
+                    {
+                        var endpoint = new IPEndPoint(
+                            IPAddress.Parse(ip ?? (isBroadcast ? ServerBroadcast : ServerHost)),
+                            port
+                        );
+                        await sender.SendAsync(msg, msg.Length, endpoint);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine($"SendHexAsync error: {e.Message}");
+                }
+            });
+        }
+
+        private byte[] HexStringToByteArray(string hex)
+        {
+            return Enumerable.Range(0, hex.Length)
+                             .Where(x => x % 2 == 0)
+                             .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
+                             .ToArray();
+        }
+
+
+        public Task SendAsciiAsyncASCII(string msg, bool isBroadcast = false, int port = SenderPort, string ip = null)
+        {
+            return Task.Run(async () =>
+            {
+                try
+                {
+                    using (var sender = new UdpClient())
+                    {
+                        var endpoint = new IPEndPoint(
+                            IPAddress.Parse(ip ?? (isBroadcast ? ServerBroadcast : ServerHost)),
+                            port
+                        );
+                        byte[] asciiBytes = Encoding.ASCII.GetBytes(msg);
+                        await sender.SendAsync(asciiBytes, asciiBytes.Length, endpoint);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine($"SendAsciiAsync error: {e.Message}");
                 }
             });
         }
