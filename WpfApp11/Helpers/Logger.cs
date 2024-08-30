@@ -25,5 +25,19 @@ namespace WpfApp11.Helpers
                 Console.WriteLine($"Error writing to log file: {ex.Message}");
             }
         }
+
+        public static void Log2(string result)
+        {
+            string logMessage = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - 내용: {result}";
+
+            try
+            {
+                File.AppendAllText(LogFilePath, logMessage + Environment.NewLine);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error writing to log file: {ex.Message}");
+            }
+        }
     }
 }

@@ -144,13 +144,17 @@ namespace WpfApp11.UserControls
             {
                 DeviceTypeComboBox.SelectedIndex = 1;
             }
-            else if (config.DeviceType == "RELAY")
+            else if (config.DeviceType == "DLP프로젝터")
             {
                 DeviceTypeComboBox.SelectedIndex = 2;
             }
-            else if (config.DeviceType == "PDU")
+            else if (config.DeviceType == "RELAY")
             {
                 DeviceTypeComboBox.SelectedIndex = 3;
+            }
+            else if (config.DeviceType == "PDU")
+            {
+                DeviceTypeComboBox.SelectedIndex = 4;
             }
 
             DeviceTypeComboBox.IsEnabled = false;

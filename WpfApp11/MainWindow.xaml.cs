@@ -45,7 +45,7 @@ namespace WpfApp9
 
         private int clickCount = 0;
         private DispatcherTimer clickTimer;
-
+        public WakeOnLan wol;
 
         private static readonly Dictionary<string, int> deviceTypeSortOrder = new Dictionary<string, int>
         {
@@ -69,7 +69,7 @@ namespace WpfApp9
             clickTimer.Interval = TimeSpan.FromMilliseconds(200); // 500 ms interval for double-click detection
             clickTimer.Tick += ClickTimer_Tick;
             AutoPowerSettingsControl.init();
-
+            wol = new WakeOnLan();
             occupiedCells = new bool[GridRows, GridColumns];
             CreateGrid();
             if (!File.Exists(SettingsFile))
@@ -249,7 +249,7 @@ namespace WpfApp9
             }
 
             //isOn true 인것만
-            sortedDragItems = sortedDragItems.FindAll(a => a.IsOn == true).ToList();
+            //sortedDragItems = sortedDragItems.FindAll(a => a.IsOn == true).ToList();
 
             int totalItems = sortedDragItems.Count;
             for (int i = 0; i < totalItems; i++)
@@ -281,7 +281,7 @@ namespace WpfApp9
                 double progress = startProgress + (endProgress - startProgress) * ((i + 1) / (double)totalItems);
                 Dispatcher.Invoke(() => PowerProgressBar.Value = progress);
 
-                await Task.Delay(50);
+                await Task.Delay(200);
             }
 
             foreach (var i in dragItems)
@@ -356,8 +356,8 @@ namespace WpfApp9
             try
             {
                 bool result = onOff
-                    ? await UdpHelper.Instance.SendPowerOnCommandToDLPProjector(item.IpAddress)
-                    : await UdpHelper.Instance.SendPowerOffCommandToDLPProjector(item.IpAddress);
+                    ? await DlpProjectorHelper.Instance.SendPowerOnCommandToDLPProjector(item.IpAddress)
+                    : await DlpProjectorHelper.Instance.SendPowerOffCommandToDLPProjector(item.IpAddress);
 
                 if (!result)
                 {
@@ -376,7 +376,8 @@ namespace WpfApp9
             {
                 if (onOff)
                 {
-                    WakeOnLanHelper.Instance.TurnOnPC(item.IpAddress, item.MacAddress);
+                    
+                    wol.TurnOnPC(item.MacAddress);
                 }
                 else
                 {

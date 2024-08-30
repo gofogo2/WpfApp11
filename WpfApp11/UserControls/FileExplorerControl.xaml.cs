@@ -15,13 +15,14 @@ using System.Drawing;
 using System.Windows.Interop;
 using System.Net;
 using System.Collections.Generic;
+using WpfApp11.Helpers;
 
 namespace WpfApp9
 {
     public partial class FileExplorerControl : UserControl
     {
         public event EventHandler CloseRequested;
-
+        
         public class FileSystemItem
         {
             public string Name { get; set; }
@@ -45,6 +46,7 @@ namespace WpfApp9
         {
             InitializeComponent();
 
+            
 
 
 
@@ -52,7 +54,6 @@ namespace WpfApp9
 
 
 
-         
 
 
 
@@ -322,15 +323,15 @@ namespace WpfApp9
             try
             {
                 //원래====================================================================
-                //Uri ftpUri = new Uri(target_ftp);
-                //string host = ftpUri.Host;
-                //string username = "ftp1234";
-                //string password = "1234";
+                Uri ftpUri = new Uri(target_ftp);
+                string host = ftpUri.Host;
+                string username = "ftpuser";
+                string password = "1";
 
-                ////string username = "engium";
-                ////string password = "1";
-                ///
-                //_ftpClient = new FtpClient(host, username, password);
+                //string username = "engium";
+                //string password = "1";
+                
+                _ftpClient = new FtpClient(host, username, password);
                 //====================================================================
 
 
@@ -338,11 +339,11 @@ namespace WpfApp9
 
 
                 //임시====================================================================
-                Uri ftpUri = new Uri("ftp://121.131.142.148:12923");
-                string host = ftpUri.Host;
-                string username = "engium";
-                string password = "1";
-                _ftpClient = new FtpClient(host, username, password,12923);
+                //Uri ftpUri = new Uri("ftp://121.131.142.148:12923");
+                //string host = ftpUri.Host;
+                //string username = "engium";
+                //string password = "1";
+                //_ftpClient = new FtpClient(host, username, password,12923);
                 //====================================================================
 
 
@@ -360,6 +361,7 @@ namespace WpfApp9
             {
                 _isconnect = false;
                 MessageBox.Show("FTP 연결 오류: " + ex.Message);
+                Logger.Log2("FTP 연결 오류: " + ex.Message);
 
               
             }
@@ -422,7 +424,7 @@ namespace WpfApp9
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error loading local directory: " + ex.Message);
+                    Logger.Log2(ex.Message);
                 }
             }
            
@@ -529,7 +531,7 @@ namespace WpfApp9
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error loading FTP directory: " + ex.Message);
+                    Logger.Log2(ex.Message);
                 }
             }
             else
@@ -579,6 +581,7 @@ namespace WpfApp9
             }
             catch (Exception ex)
             {
+                Logger.Log2(ex.Message);
                 MessageBox.Show($"Error extracting icon: {ex.Message}");
             }
             return null;
@@ -769,6 +772,7 @@ namespace WpfApp9
                             if (is_exit)
                             {
                                 MessageBox.Show("같은 이름이 있습니다");
+                                
                             }
                             else
                             {

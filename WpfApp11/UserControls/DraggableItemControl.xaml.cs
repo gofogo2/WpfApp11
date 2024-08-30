@@ -20,7 +20,7 @@ namespace WpfApp9
     public partial class DraggableItemControl : UserControl
     {
         private UdpReceiver _udpReceiver;
-
+        public WakeOnLan wol;
         private const int PingInterval = 5000; // 5초마다 핑 체크
         private CancellationTokenSource pduStatusCancellationTokenSource;
         private bool isPinging = false;
@@ -37,7 +37,7 @@ namespace WpfApp9
             InitializeComponent();
             Configuration = config;
             UpdateUI();
-
+            wol = new WakeOnLan();
             if (Configuration.DeviceType == "pc")
             {
                 StartPingCheck();
@@ -107,6 +107,7 @@ namespace WpfApp9
                 catch (Exception ex)
                 {
                     // 오류 처리 (로깅 등)
+                    Logger.Log2($"PDU 상태 체크 중 오류 발생: {ex.Message}");
                     Debug.WriteLine($"PDU 상태 체크 중 오류 발생: {ex.Message}");
                 }
 
@@ -176,12 +177,13 @@ namespace WpfApp9
 
         public void StartPingCheck()
         {
-            if (Configuration.DeviceType == "pc")
+            if (Configuration.DeviceType == "pc" || Configuration.DeviceType == "프로젝터" || Configuration.DeviceType == "DLP프로젝터")
             {
                 StopPingCheck();
                 pingCancellationTokenSource = new CancellationTokenSource();
                 _ = PingCheckLoop(pingCancellationTokenSource.Token);
             }
+            
 
 
         }
@@ -356,7 +358,7 @@ namespace WpfApp9
             {
                 if (Configuration.DeviceType == "pc")
                 {
-                    WakeOnLanHelper.Instance.TurnOnPC(Configuration.IpAddress, Configuration.MacAddress);
+                    wol.TurnOnPC(Configuration.MacAddress);
                 }
                 else if (Configuration.DeviceType == "프로젝터")
                 {
@@ -364,7 +366,7 @@ namespace WpfApp9
                 }
                 else if (Configuration.DeviceType == "DLP프로젝터")
                 {
-                    await UdpHelper.Instance.SendPowerOffCommandToDLPProjector(Configuration.IpAddress);
+                    await DlpProjectorHelper.Instance.SendPowerOffCommandToDLPProjector(Configuration.IpAddress);
                 }
                 else if (Configuration.DeviceType == "PDU")
                 {
@@ -385,10 +387,11 @@ namespace WpfApp9
             catch (Exception ex)
             {
                 result = $"Error: {ex.Message}";
+                Logger.Log2($"Error: {ex.Message}");
             }
 
             Logger.Log(Configuration.Name, Configuration.DeviceType, "Power On", result);
-            MessageBox.Show("on");
+            MessageBox.Show("전원이 켜졌습니다");
         }
 
 
@@ -410,7 +413,7 @@ namespace WpfApp9
                 }
                 else if (Configuration.DeviceType == "DLP프로젝터")
                 {
-                    await UdpHelper.Instance.SendPowerOffCommandToDLPProjector(Configuration.IpAddress);
+                    await DlpProjectorHelper.Instance.SendPowerOffCommandToDLPProjector(Configuration.IpAddress);
                 }
                 else if (Configuration.DeviceType == "PDU")
                 {
@@ -431,10 +434,11 @@ namespace WpfApp9
             catch (Exception ex)
             {
                 result = $"Error: {ex.Message}";
+                Logger.Log2($"Error: {ex.Message}");
             }
 
             Logger.Log(Configuration.Name, Configuration.DeviceType, "Power Off", result);
-            MessageBox.Show("off");
+            MessageBox.Show("전원이 꺼졌습니다.");
         }
 
         public static string ConvertStringToHex(string input)
@@ -490,6 +494,7 @@ namespace WpfApp9
             catch (Exception ex)
             {
                 result = $"Error: {ex.Message}";
+                Logger.Log2($"Error: {ex.Message}");
             }
 
             MessageBox.Show("재시작");

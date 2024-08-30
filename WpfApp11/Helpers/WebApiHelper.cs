@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Windows;
 using System.Xml.Linq;
+using WpfApp11.Helpers;
 
 public class WebApiHelper
 {
@@ -127,7 +128,7 @@ public class WebApiHelper
         });
         }catch(Exception e)
         {
-            MessageBox.Show(e.Message);
+            Logger.Log2(e.Message);
             return "Fail";
         }
     }
@@ -143,7 +144,7 @@ public class WebApiHelper
         });
         }catch(Exception e)
         {
-            MessageBox.Show(e.Message);
+            Logger.Log2(e.Message);
             return "Fail";
         }
     }
@@ -161,7 +162,7 @@ public class WebApiHelper
         }
         catch (Exception e)
         {
-            MessageBox.Show(e.Message);
+            Logger.Log2(e.Message);
             return "Fail";
         }
     }
@@ -180,7 +181,7 @@ public class WebApiHelper
         }
         catch (Exception e)
         {
-            MessageBox.Show(e.Message);
+            Logger.Log2(e.Message);
             return "Fail";
         }
     }
@@ -200,7 +201,7 @@ public class WebApiHelper
         }
         catch (Exception e)
         {
-            MessageBox.Show(e.Message);
+            Logger.Log2(e.Message);
             return "Fail";
         }
     }
@@ -217,7 +218,7 @@ public class WebApiHelper
         });
         }catch(Exception e)
         {
-            MessageBox.Show(e.Message);
+            Logger.Log2(e.Message);
             return "Fail";
         }
     }
