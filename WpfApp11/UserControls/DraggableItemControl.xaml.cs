@@ -229,7 +229,17 @@ namespace WpfApp9
 
         private void UpdateUI()
         {
-            TitleTextBlock.Text = Configuration.Name;
+
+            if (Configuration.Name.Length > 15)
+            {
+                TitleTextBlock.Text = Configuration.Name.Substring(0, 13) + "..";
+            }
+            else
+            {
+                TitleTextBlock.Text = Configuration.Name;
+            }
+            
+
 
             if (Configuration.DeviceType == "프로젝터")
             {
