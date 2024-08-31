@@ -22,6 +22,9 @@ using Launcher_SE.Helpers;
 
 namespace WpfApp9
 {
+
+
+
     public partial class MainWindow : Window
     {
         private List<DraggableItemControl> dragItems = new List<DraggableItemControl>();
@@ -189,7 +192,19 @@ namespace WpfApp9
         {
             DateTime now = DateTime.Now;
             string[] days = { "월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일" };
-            string currentDay = days[(int)now.DayOfWeek - 1];
+            //string currentDay = days[(int)now.DayOfWeek - 1];
+            string currentDay;
+            if ((int)now.DayOfWeek == 0)
+            {
+                currentDay = days[6];
+            }
+            else
+            {
+                currentDay = days[(int)now.DayOfWeek - 1];
+            }
+
+
+            //string currentDay = days[(int)now.DayOfWeek];
 
             if (AutoPowerSettingsControl.pow_schedule[currentDay].IsEnabled)
             {
@@ -280,7 +295,7 @@ namespace WpfApp9
 
                 double progress = startProgress + (endProgress - startProgress) * ((i + 1) / (double)totalItems);
                 Dispatcher.Invoke(() => PowerProgressBar.Value = progress);
-
+                
                 await Task.Delay(200);
             }
 
@@ -782,6 +797,7 @@ namespace WpfApp9
 
         private void add_devi(object sender, RoutedEventArgs e)
         {
+            add_Device_init();
             add_device_ppanel.Visibility = Visibility.Visible;
             addDeviceWindow.addbtn.Visibility = Visibility.Visible;
             addDeviceWindow.editbtn.Visibility = Visibility.Collapsed;
@@ -804,7 +820,7 @@ namespace WpfApp9
             if (clickCount == 2)
             {
                 // Double-click detected
-
+                add_Device_init();
 
                 add_device_ppanel.Visibility = Visibility.Visible;
                 addDeviceWindow.addbtn.Visibility = Visibility.Visible;
@@ -832,11 +848,25 @@ namespace WpfApp9
 
         private void AddDevice_Click(object sender, RoutedEventArgs e)
         {
+            add_Device_init();
             add_device_ppanel.Visibility = Visibility.Visible;
             addDeviceWindow.addbtn.Visibility = Visibility.Visible;
             addDeviceWindow.editbtn.Visibility = Visibility.Collapsed;
             addDeviceWindow.title.Content = "장비 등록";
             addDeviceWindow.DeviceTypeComboBox.IsEnabled = true;
+        }
+
+
+        void add_Device_init()
+        {
+            addDeviceWindow.NameTextBox.Text = "";
+            addDeviceWindow.DeviceTypeComboBox.SelectedIndex = -1;
+            addDeviceWindow.IpAddressTextBox.Text = "";
+            addDeviceWindow.DescriptionTextBox.Text = "";
+            addDeviceWindow.MacAddressTextBox.Text = "";
+            addDeviceWindow.ChannelTextBox.Text = "";
+
+            addDeviceWindow.InitialStateCheckBox.IsChecked = false;
         }
 
         public void createitem(ItemConfiguration newconfig)

@@ -8,36 +8,51 @@
         <Border Background="Transparent"  CornerRadius="10">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="120"/>
+                    <RowDefinition Height="0"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <TextBlock Text="자동 전원 시간 설정" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10" Foreground="White"/>
+                
                 <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
                     <StackPanel x:Name="DaySettingsPanel" Margin="10" HorizontalAlignment="Center" >
-                        <Grid Background="#7F7F7F" x:Name="allDay_bg" Margin="10">
-                            <!--7F7F7F-->
-                            <StackPanel Orientation="Horizontal" Margin="0,10,20,10" HorizontalAlignment="Center">
+                        <TextBlock Text="자동 전원 시간 설정" FontSize="25" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,120,0,80" Foreground="White"/>
+                        <!--<local:DaySettingControl x:Name="w" Margin="10" />-->
+                        <Border  BorderBrush="Black" BorderThickness="2" CornerRadius="5" Background="#8D8D8D" x:Name="allDay_bg" Width="700" Height="50">
+                            <Grid >
+                                
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,0" HorizontalAlignment="Left">
+                                    <CheckBox x:Name="DayCheckBox" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="20">
+                                        <CheckBox.Style>
+                                            <Style TargetType="CheckBox">
+                                                <Setter Property="LayoutTransform">
+                                                    <Setter.Value>
+                                                        <ScaleTransform ScaleX="2" ScaleY="2"/>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </CheckBox.Style>
+                                    </CheckBox>
+                                    <TextBlock Text="전체" VerticalAlignment="Center" Margin="20,0,5,0" Foreground="White" FontSize="20"  FontWeight="Bold" TextAlignment="Center"/>
 
-                              
-                                <TextBlock Text="" VerticalAlignment="Center" Margin="5,0,5,0" Foreground="White" FontSize="20" x:Name="DayName"/>
-                                <TextBlock Text="시작" VerticalAlignment="Center" Margin="20,0,5,0" Foreground="White" FontSize="20"/>
-                                <ComboBox x:Name="all_StartHourComboBox" Width="50" Margin="10,0,5,0" VerticalAlignment="Center" FontSize="20"/>
-                                <TextBlock Text="시" VerticalAlignment="Center" Margin="0,0,10,0" Foreground="White" FontSize="20"/>
-                                <ComboBox x:Name="all_StartMinuteComboBox" Width="50" Margin="0,0,5,0" VerticalAlignment="Center" FontSize="20"/>
-                                <TextBlock Text="분" VerticalAlignment="Center" Margin="0,0,10,0" Foreground="White" FontSize="20"/>
-                                <TextBlock Text="/  종료" VerticalAlignment="Center" Margin="10,0,5,0" Foreground="White" FontSize="20"/>
-                                <ComboBox x:Name="all_EndHourComboBox" Width="50" Margin="10,0,5,0" VerticalAlignment="Center" FontSize="20"/>
-                                <TextBlock Text="시" VerticalAlignment="Center" Margin="0,0,10,0" Foreground="White" FontSize="20"/>
-                                <ComboBox x:Name="all_EndMinuteComboBox" Width="50" Margin="0,0,5,0" VerticalAlignment="Center" FontSize="20"/>
-                                <TextBlock Text="분" VerticalAlignment="Center" Foreground="White" FontSize="20"/>
-                                <Button Width="120" Height="35" Margin="20,0,0,0" Click="allapply_click">
+                                    <!--<TextBlock Text="" VerticalAlignment="Center" Margin="5,0,5,0" Foreground="White" FontSize="20" x:Name="DayName"/>-->
+                                    <TextBlock Text="시작 시간" VerticalAlignment="Center" Margin="35,0,5,0" Foreground="White" FontSize="15" FontWeight="Bold"/>
+                                    <ComboBox x:Name="all_StartHourComboBox" Width="50" Height="40" Margin="10,0,5,0" VerticalAlignment="Center" FontSize="20"/>
+                                    <TextBlock Text=" 시 " VerticalAlignment="Center" Margin="0,0,10,0" Foreground="White" FontSize="15" FontWeight="Bold"/>
+                                    <ComboBox x:Name="all_StartMinuteComboBox" Width="50" Height="40" Margin="0,0,5,0" VerticalAlignment="Center" FontSize="20"/>
+                                    <TextBlock Text=" 분" VerticalAlignment="Center" Margin="0,0,10,0" Foreground="White" FontSize="15" FontWeight="Bold"/>
+                                    <TextBlock Text="/  종료 시간" VerticalAlignment="Center" Margin="10,0,5,0" Foreground="White" FontSize="15" FontWeight="Bold"/>
+                                    <ComboBox x:Name="all_EndHourComboBox" Width="50" Height="40" Margin="10,0,5,0" VerticalAlignment="Center" FontSize="20"/>
+                                    <TextBlock Text=" 시 " VerticalAlignment="Center" Margin="0,0,10,0" Foreground="White" FontSize="15" FontWeight="Bold"/>
+                                    <ComboBox x:Name="all_EndMinuteComboBox" Width="50" Height="40" Margin="0,0,5,0" VerticalAlignment="Center" FontSize="20"/>
+                                    <TextBlock Text=" 분" VerticalAlignment="Center" Foreground="White" FontSize="15" FontWeight="Bold"/>
+                                    <!--<Button Width="120" Height="35" Margin="20,0,0,0" Click="allapply_click">
                                     <TextBlock Text="전체 적용" FontSize="20"/>
-                                </Button>
-                            </StackPanel>
-                        </Grid>
-                        <Grid>
-                            <TextBlock Text="-------------------------------------------------------------------------------" Foreground="White" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Button>-->
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    
+                        <Grid Margin="0,40,0,0">
                         </Grid>
                         <local:DaySettingControl x:Name="w1" Margin="10" />
                         <local:DaySettingControl x:Name="w2" Margin="10" />
@@ -48,14 +63,18 @@
                         <local:DaySettingControl x:Name="w7" Margin="10" />
                     </StackPanel>
                 </ScrollViewer>
-                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-                    <Button Content="적용" Width="80" Height="40" Margin="0,0,20,0" Click="ApplyButton_Click"/>
-                    <Button Content="취소" Width="80" Height="40" Click="CancelButton_Click">
-                        <Button.Style>
+                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,40,0,0">
+                    <Button  Width="150" Height="50" Margin="0,0,20,0" Click="ApplyButton_Click" Background="White">
+                        <TextBlock Text="적용" FontWeight="Bold" FontSize="20"/>
+                    </Button>
+
+                    <Button  Width="150" Height="50" Click="CancelButton_Click" Background="#CCCCCC">
+                        <TextBlock Text="취소" FontWeight="Bold" FontSize="20"/>
+                        <!--<Button.Style>
                             <Style TargetType="Button">
                                 <Setter Property="Background" Value="#7F7F7F"/>
                             </Style>
-                        </Button.Style>
+                        </Button.Style>-->
                     </Button>
                 </StackPanel>
             </Grid>

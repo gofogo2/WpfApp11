@@ -183,17 +183,39 @@
         </Grid>
         <local:AutoPowerSettingsControl x:Name="AutoPowerSettingsControl" Visibility="Collapsed" Grid.RowSpan="3"/>
         <Grid x:Name="PowerOverlay" Visibility="Collapsed" Grid.RowSpan="3">
-            <Rectangle Fill="Black" Opacity="0.5"/>
-            <Border Background="White" Width="300" Height="150" CornerRadius="10">
+            <Rectangle Fill="Black" Opacity="0.8"/>
+            <!--<Border Background="White" Width="300" Height="150" CornerRadius="10">-->
                 <Grid>
-                    <Grid.RowDefinitions>
+                    <!--<Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <TextBlock x:Name="PowerStatusText" Text="전원 ON" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,20,0,0" FontSize="20"/>
-                    <ProgressBar Foreground="#FFC000" x:Name="PowerProgressBar" Grid.Row="1" Width="250" Height="20" Minimum="0" Maximum="100" Value="0"/>
+                    </Grid.RowDefinitions>-->
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock x:Name="PowerStatusText" Text="전원 ON" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,20" FontSize="25" Foreground="White" FontWeight="Bold"/>
+                    <ProgressBar Foreground="#FFC000" x:Name="PowerProgressBar"  Width="500" Height="50" Minimum="0" Maximum="100" Value="0">
+                        <ProgressBar.Template>
+                            <ControlTemplate TargetType="ProgressBar">
+                                <Grid>
+                                    <!-- Track -->
+                                    <Border x:Name="PART_Track"
+                                Background="Transparent"
+                                BorderBrush="Black"
+                                BorderThickness="1"
+                                CornerRadius="5">
+                                        <Border x:Name="PART_Indicator"  Background="#FFC000"  HorizontalAlignment="Left" Height="50" CornerRadius="5">
+                                            <TextBlock Text="{Binding ElementName=PowerProgressBar, Path=Value, StringFormat={}{0:0}%}"  VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="Black" FontWeight="Bold" Margin="0,00,30,0" FontSize="20" x:Name="pow_progress_value"/>
+                                        </Border>
+                                    </Border>
+
+                                    
+                                </Grid>
+                            </ControlTemplate>
+                        </ProgressBar.Template>
+                    </ProgressBar>
+                </StackPanel>
+                    
                 </Grid>
-            </Border>
+            <!--</Border>-->
         </Grid>
             <usercontrols:GlobalMessageControl x:Name="GlobalMessage" VerticalAlignment="Top" 
                           Height="0" Panel.ZIndex="9999"/>

@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Newtonsoft.Json;
 using System.IO;
+using System.Windows.Media;
 
 namespace WpfApp9
 {
@@ -17,15 +18,175 @@ namespace WpfApp9
 
         public Dictionary<string, DaySchedule> pow_schedule = new Dictionary<string, DaySchedule>();
 
+        bool all_check = false;
+
         public AutoPowerSettingsControl()
         {
             InitializeComponent();
             PopulateComboBoxes();
             PopulateDaySettings();
             LoadSchedule();
+
+            DayCheckBox.Checked += DayCheckBox_Checked;
+            DayCheckBox.Unchecked += DayCheckBox_Unchecked;
+
+
+            w1.DayCheckBox.Unchecked += DayCheckBox_Unchecked1;
+            w2.DayCheckBox.Unchecked += DayCheckBox_Unchecked1;
+            w3.DayCheckBox.Unchecked += DayCheckBox_Unchecked1;
+            w4.DayCheckBox.Unchecked += DayCheckBox_Unchecked1;
+            w5.DayCheckBox.Unchecked += DayCheckBox_Unchecked1;
+            w6.DayCheckBox.Unchecked += DayCheckBox_Unchecked1;
+            w7.DayCheckBox.Unchecked += DayCheckBox_Unchecked1;
+
+
+
+            w1.StartHourComboBox.SelectionChanged += StartHourComboBox_SelectionChanged;
+            w2.StartHourComboBox.SelectionChanged += StartHourComboBox_SelectionChanged;
+            w3.StartHourComboBox.SelectionChanged += StartHourComboBox_SelectionChanged;
+            w4.StartHourComboBox.SelectionChanged += StartHourComboBox_SelectionChanged;
+            w5.StartHourComboBox.SelectionChanged += StartHourComboBox_SelectionChanged;
+            w6.StartHourComboBox.SelectionChanged += StartHourComboBox_SelectionChanged;
+            w7.StartHourComboBox.SelectionChanged += StartHourComboBox_SelectionChanged;
+
+
+
+
+
+            w1.StartMinuteComboBox.SelectionChanged += StartMinuteComboBox_SelectionChanged;
+            w2.StartMinuteComboBox.SelectionChanged += StartMinuteComboBox_SelectionChanged;
+            w3.StartMinuteComboBox.SelectionChanged += StartMinuteComboBox_SelectionChanged;
+            w4.StartMinuteComboBox.SelectionChanged += StartMinuteComboBox_SelectionChanged;
+            w5.StartMinuteComboBox.SelectionChanged += StartMinuteComboBox_SelectionChanged;
+            w6.StartMinuteComboBox.SelectionChanged += StartMinuteComboBox_SelectionChanged;
+            w7.StartMinuteComboBox.SelectionChanged += StartMinuteComboBox_SelectionChanged;
+
+
+            w1.EndHourComboBox.SelectionChanged += EndHourComboBox_SelectionChanged;
+            w2.EndHourComboBox.SelectionChanged += EndHourComboBox_SelectionChanged;
+            w3.EndHourComboBox.SelectionChanged += EndHourComboBox_SelectionChanged;
+            w4.EndHourComboBox.SelectionChanged += EndHourComboBox_SelectionChanged;
+            w5.EndHourComboBox.SelectionChanged += EndHourComboBox_SelectionChanged;
+            w6.EndHourComboBox.SelectionChanged += EndHourComboBox_SelectionChanged;
+            w7.EndHourComboBox.SelectionChanged += EndHourComboBox_SelectionChanged;
+
+
+            w1.EndMinuteComboBox.SelectionChanged += EndMinuteComboBox_SelectionChanged;
+            w2.EndMinuteComboBox.SelectionChanged += EndMinuteComboBox_SelectionChanged;
+            w3.EndMinuteComboBox.SelectionChanged += EndMinuteComboBox_SelectionChanged;
+            w4.EndMinuteComboBox.SelectionChanged += EndMinuteComboBox_SelectionChanged;
+            w5.EndMinuteComboBox.SelectionChanged += EndMinuteComboBox_SelectionChanged;
+            w6.EndMinuteComboBox.SelectionChanged += EndMinuteComboBox_SelectionChanged;
+            w7.EndMinuteComboBox.SelectionChanged += EndMinuteComboBox_SelectionChanged;
+
+
+
+
         }
 
+        private void EndMinuteComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (all_check == false)
+            {
+                if (DayCheckBox.IsChecked == true)
+                {
+                    if (e.AddedItems[0] != all_EndMinuteComboBox.SelectedValue)
+                    {
 
+                        DayCheckBox.IsChecked = false;
+                        allDay_bg.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#8D8D8D"));
+
+                    }
+                }
+            }
+        }
+
+        private void EndHourComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (all_check == false)
+            {
+                if (DayCheckBox.IsChecked == true)
+                {
+                    if (e.AddedItems[0] != all_EndHourComboBox.SelectedValue)
+                    {
+
+                        DayCheckBox.IsChecked = false;
+                        allDay_bg.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#8D8D8D"));
+
+                    }
+                }
+            }
+        }
+
+        private void StartMinuteComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (all_check == false)
+            {
+                if (DayCheckBox.IsChecked == true)
+                {
+                    if (e.AddedItems[0] != all_StartMinuteComboBox.SelectedValue)
+                    {
+
+                        DayCheckBox.IsChecked = false;
+                        allDay_bg.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#8D8D8D"));
+
+                    }
+                }
+            }
+        }
+
+        private void StartHourComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (all_check == false)
+            {
+                if (DayCheckBox.IsChecked == true)
+                {
+                    if (e.AddedItems[0] != all_StartHourComboBox.SelectedValue)
+                    {
+
+                        DayCheckBox.IsChecked = false;
+                        allDay_bg.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#8D8D8D"));
+
+                    }
+                }
+            }
+        }
+
+        private void DayCheckBox_Unchecked1(object sender, RoutedEventArgs e)
+        {
+            DayCheckBox.IsChecked = false;
+        }
+
+        private void DayCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            allDay_bg.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#8D8D8D"));
+        }
+
+        private void DayCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            all_check = true;
+            if (all_StartHourComboBox.SelectedIndex != -1 && all_StartMinuteComboBox.SelectedIndex != -1 && all_EndHourComboBox.SelectedIndex != -1 && all_EndMinuteComboBox.SelectedIndex != -1)
+            {
+                for (int i = 0; i < daySettings.Count; i++)
+                {
+                    daySettings[i].StartHourComboBox.SelectedIndex = all_StartHourComboBox.SelectedIndex;
+                    daySettings[i].StartMinuteComboBox.SelectedIndex = all_StartMinuteComboBox.SelectedIndex;
+                    daySettings[i].EndHourComboBox.SelectedIndex = all_EndHourComboBox.SelectedIndex;
+                    daySettings[i].EndMinuteComboBox.SelectedIndex = all_EndMinuteComboBox.SelectedIndex;
+
+                    daySettings[i].DayCheckBox.IsChecked = true;
+
+
+                    allDay_bg.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#5BB0FE"));
+                }
+            }
+            else
+            {
+                MessageBox.Show("모든 시간을 입력하세요.", "오류", MessageBoxButton.OK, MessageBoxImage.Error);
+                DayCheckBox.IsChecked = false;
+            }
+            all_check = false;
+        }
 
         private void PopulateComboBoxes()
         {

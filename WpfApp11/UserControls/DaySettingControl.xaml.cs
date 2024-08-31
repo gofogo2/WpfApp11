@@ -96,11 +96,11 @@ namespace WpfApp9
                 if (checkBox.IsChecked == true)
                 {
                         
-                    Day_bg.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#2E75B6"));
+                    Day_bg.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#5BB0FE"));
                 }
                 else
                 {
-                    Day_bg.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#7F7F7F"));
+                    Day_bg.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#8D8D8D"));
                 }
             }
 
@@ -112,7 +112,7 @@ namespace WpfApp9
             {
                 if (checkBox.IsChecked == false)
                 {
-                    Day_bg.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#7F7F7F"));
+                    Day_bg.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#8D8D8D"));
                 }
             }
         }
