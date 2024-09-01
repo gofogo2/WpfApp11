@@ -79,6 +79,9 @@
     <Compile Include="UserControls\AutoPowerSettingsControl.xaml.cs">
       <DependentUpon>AutoPowerSettingsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\confirm_dialog.xaml.cs">
+      <DependentUpon>confirm_dialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\DaySettingControl.xaml.cs">
       <DependentUpon>DaySettingControl.xaml</DependentUpon>
     </Compile>
@@ -109,6 +112,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\AutoPowerSettingsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\confirm_dialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -210,6 +217,8 @@
     <Resource Include="Images\del.png" />
     <Resource Include="Images\receive.png" />
     <Resource Include="Images\send.png" />
+    <Resource Include="Images\Arrow_right.png" />
+    <Resource Include="Images\Arrow_left.png" />
     <Content Include="Settings\Setup-IIS-FTP.ps1">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

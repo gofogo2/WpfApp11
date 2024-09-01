@@ -5,19 +5,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp11.UserControls"
         mc:Ignorable="d"
-       Title="Custom Dialog" Height="210" Width="390" WindowStartupLocation="CenterOwner" ResizeMode="NoResize" WindowStyle="None"  AllowsTransparency="True">
+       Title="Custom Dialog" Height="210" Width="390" WindowStartupLocation="CenterOwner" ResizeMode="NoResize" WindowStyle="None"  AllowsTransparency="True" Background="Transparent">
     <Grid>
-        <Border  BorderThickness="2" BorderBrush="Black" CornerRadius="15">
+        <Border  BorderThickness="2" BorderBrush="Black" CornerRadius="15" Background="White">
         <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center">
                 <!--<TextBlock Text="해당 장비를 삭제하시겠습니까?" Margin="0" FontSize="16" HorizontalAlignment="Center"/>
                 <TextBlock Text="삭제 후 되돌릴 수 없습니다." Margin="0" FontSize="16" HorizontalAlignment="Center"/>-->
-                <Image Source="../Images/label1.png" Margin="0,30,0,0" Width="259" Height="70"/>
+                <!--<Image Source="../Images/label1.png" Margin="0,30,0,0" Width="259" Height="70"/>-->
+
+                <TextBlock Text="해당 장비를 삭제하시겠습니까? &#10; 삭제 후 되돌릴 수 없습니다." FontWeight="Bold" TextAlignment="Center" FontSize="20" Margin="0,40,0,0" x:Name="popup_msg"/>
                 <StackPanel Orientation="Horizontal" Margin="0,30,0,0">
-                    <!--<Button>
-                        
-                    </Button>-->
-                    <Image Source="../Images/confirm.png" Margin="0,0,0,0" Width="150" Height="50" MouseLeftButtonDown="YesButton_Click"/>
-                    <Image Source="../Images/cancel.png" Margin="30,0,0,0" Width="150" Height="50" MouseLeftButtonDown="NoButton_Click"/>
+                    <Button Width="150" Height="50" Background="White" Click="YesButton_Click">
+                        <TextBlock Text="확인" FontWeight="Bold" FontSize="20"/>
+                    </Button>
+                    <!--<Image Source="../Images/confirm.png" Margin="0,0,0,0" Width="150" Height="50" MouseLeftButtonDown="YesButton_Click"/>-->
+                    <Button Width="150" Height="50" Background="#CCCCCC" Click="NoButton_Click"  Margin="30,0,0,0">
+                        <TextBlock Text="취소" FontWeight="Bold" FontSize="20"/>
+                    </Button>
+                    <!--<Image Source="../Images/cancel.png" Margin="30,0,0,0" Width="150" Height="50" MouseLeftButtonDown="NoButton_Click"/>-->
                     
                 </StackPanel>
             </StackPanel>

@@ -16,13 +16,14 @@ using System.Windows.Interop;
 using System.Net;
 using System.Collections.Generic;
 using WpfApp11.Helpers;
+using WpfApp11.UserControls;
 
 namespace WpfApp9
 {
     public partial class FileExplorerControl : UserControl
     {
         public event EventHandler CloseRequested;
-        
+
         public class FileSystemItem
         {
             public string Name { get; set; }
@@ -35,6 +36,7 @@ namespace WpfApp9
         private ObservableCollection<FileSystemItem> _rightItems;
         private FtpClient _ftpClient;
         private string _currentLocalPath = @"C:\GL-MEDIA";
+        private string _currentLocalPath_real = @"C:\GL-MEDIA";
         private string _currentFtpPath = "/";
         string ftp_port = "21";
         //private string _currentFtpPath = "ftp://192.168.0.5";
@@ -46,7 +48,7 @@ namespace WpfApp9
         {
             InitializeComponent();
 
-            
+
 
 
 
@@ -319,7 +321,7 @@ namespace WpfApp9
         private void InitializeFtpConnection(string ftpAddress)
         {
 
-            var target_ftp = "ftp://" + ftpAddress +":" + ftp_port;
+            var target_ftp = "ftp://" + ftpAddress + ":" + ftp_port;
             try
             {
                 //원래====================================================================
@@ -328,9 +330,8 @@ namespace WpfApp9
                 string username = "ftpuser";
                 string password = "1";
 
-                //string username = "engium";
-                //string password = "1";
-                
+
+
                 _ftpClient = new FtpClient(host, username, password);
                 //====================================================================
 
@@ -343,7 +344,7 @@ namespace WpfApp9
                 //string host = ftpUri.Host;
                 //string username = "engium";
                 //string password = "1";
-                //_ftpClient = new FtpClient(host, username, password,12923);
+                //_ftpClient = new FtpClient(host, username, password, 12923);
                 //====================================================================
 
 
@@ -363,7 +364,7 @@ namespace WpfApp9
                 MessageBox.Show("FTP 연결 오류: " + ex.Message);
                 Logger.Log2("FTP 연결 오류: " + ex.Message);
 
-              
+
             }
         }
 
@@ -421,13 +422,14 @@ namespace WpfApp9
                     //_currentLocalPath = path;
                     //_currentLocalPath = @"C:\";
                     _currentLocalPath = main.local_path;
+                    _currentLocalPath_real = path;
                 }
                 catch (Exception ex)
                 {
                     Logger.Log2(ex.Message);
                 }
             }
-           
+
         }
 
         private void LoadFtpDirectory(string path)
@@ -493,7 +495,7 @@ namespace WpfApp9
 
 
                         }
-                        else if (extension == ".png" || extension == ".jpg"|| extension == ".jpeg")
+                        else if (extension == ".png" || extension == ".jpg" || extension == ".jpeg")
                         {
 
 
@@ -546,51 +548,51 @@ namespace WpfApp9
 
         //=======================================
 
-        private Icon GetShellIcon(int index)
-        {
-            IntPtr hIcon;
-            hIcon = NativeMethods.ExtractIcon(IntPtr.Zero, @"C:\Windows\System32\shell32.dll", index);
-            if (hIcon != IntPtr.Zero)
-            {
-                return Icon.FromHandle(hIcon);
-            }
-            return null;
-        }
+        //private Icon GetShellIcon(int index)
+        //{
+        //    IntPtr hIcon;
+        //    hIcon = NativeMethods.ExtractIcon(IntPtr.Zero, @"C:\Windows\System32\shell32.dll", index);
+        //    if (hIcon != IntPtr.Zero)
+        //    {
+        //        return Icon.FromHandle(hIcon);
+        //    }
+        //    return null;
+        //}
 
-        // 네이티브 메서드 선언
-        private static class NativeMethods
-        {
-            [System.Runtime.InteropServices.DllImport("shell32.dll", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-            public extern static IntPtr ExtractIcon(IntPtr hInst, string lpszExeFileName, int nIconIndex);
-        }
-
-
+        //// 네이티브 메서드 선언
+        //private static class NativeMethods
+        //{
+        //    [System.Runtime.InteropServices.DllImport("shell32.dll", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+        //    public extern static IntPtr ExtractIcon(IntPtr hInst, string lpszExeFileName, int nIconIndex);
+        //}
 
 
 
-        private Icon GetIconFromDll(string dllPath, int iconIndex)
-        {
-            IntPtr hIcon = IntPtr.Zero;
-            try
-            {
-                hIcon = NativeMethods.ExtractIcon(IntPtr.Zero, dllPath, iconIndex);
-                if (hIcon != IntPtr.Zero)
-                {
-                    return Icon.FromHandle(hIcon);
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Log2(ex.Message);
-                MessageBox.Show($"Error extracting icon: {ex.Message}");
-            }
-            return null;
-        }
+
+
+        //private Icon GetIconFromDll(string dllPath, int iconIndex)
+        //{
+        //    IntPtr hIcon = IntPtr.Zero;
+        //    try
+        //    {
+        //        hIcon = NativeMethods.ExtractIcon(IntPtr.Zero, dllPath, iconIndex);
+        //        if (hIcon != IntPtr.Zero)
+        //        {
+        //            return Icon.FromHandle(hIcon);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Logger.Log2(ex.Message);
+        //        MessageBox.Show($"Error extracting icon: {ex.Message}");
+        //    }
+        //    return null;
+        //}
 
         //===================================================
 
 
-      
+
 
 
         private void local_empty_click(object sender, MouseButtonEventArgs e)
@@ -599,7 +601,7 @@ namespace WpfApp9
             //LeftFileListView.SelectedItems = 0;
             LeftFileListView.SelectedIndex = -1;
 
-            
+
         }
 
 
@@ -632,10 +634,10 @@ namespace WpfApp9
             var item = ((ListView)sender).SelectedItem as FileSystemItem;
             if (item != null && (item.Type == "Folder" || item.Type == "Parent Directory"))
             {
-                
-                    LoadFtpDirectory(item.FullPath);
-                    e.Handled = true;
-                
+
+                LoadFtpDirectory(item.FullPath);
+                e.Handled = true;
+
             }
         }
         private long CalculateTotalSize(string path)
@@ -660,7 +662,7 @@ namespace WpfApp9
         private void goto_c(object sender, RoutedEventArgs e)
         {
 
-         
+
             LoadLocalDirectory(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.System)));
         }
 
@@ -677,16 +679,16 @@ namespace WpfApp9
         {
 
             var uniqueFolderName = Get_local_UniqueFolderName("새폴더");
-            var newFolderPath = $"{_currentLocalPath}/{uniqueFolderName}";
+            var newFolderPath = $"{_currentLocalPath_real}/{uniqueFolderName}";
 
             Directory.CreateDirectory(newFolderPath);
-            LoadLocalDirectory(_currentLocalPath);
+            LoadLocalDirectory(_currentLocalPath_real);
         }
 
         public string Get_local_UniqueFolderName(string baseFolderName)
         {
             List<string> directories = new List<string>();
-            DirectoryInfo di = new DirectoryInfo(_currentLocalPath);
+            DirectoryInfo di = new DirectoryInfo(_currentLocalPath_real);
 
             foreach (var directory in di.GetDirectories())
             {
@@ -719,14 +721,14 @@ namespace WpfApp9
                 MessageBox.Show("한개의 이름만 변경 가능합니다.");
                 return;
             }
-          
+
 
             List<string> folder_name_list = new List<string>();
             List<string> file_name_list = new List<string>();
 
-            DirectoryInfo di = new DirectoryInfo(_currentLocalPath);
+            DirectoryInfo di = new DirectoryInfo(_currentLocalPath_real);
 
-            
+
 
             foreach (var directory in di.GetDirectories())
             {
@@ -744,9 +746,9 @@ namespace WpfApp9
             bool is_exit = false;
 
 
-          
 
-                var selectedItem = LeftFileListView.SelectedItem as FileSystemItem;
+
+            var selectedItem = LeftFileListView.SelectedItem as FileSystemItem;
             if (selectedItem != null)
             {
                 InputDialog inputDialog = new InputDialog("새 이름을 입력하세요.", selectedItem.Name);
@@ -772,7 +774,7 @@ namespace WpfApp9
                             if (is_exit)
                             {
                                 MessageBox.Show("같은 이름이 있습니다");
-                                
+
                             }
                             else
                             {
@@ -797,11 +799,11 @@ namespace WpfApp9
                                 File.Move(selectedItem.FullPath, newPath);
                             }
                         }
-                        LoadLocalDirectory(_currentLocalPath);
+                        LoadLocalDirectory(_currentLocalPath_real);
                     }
                     else
                     {
-                            MessageBox.Show("이름을 넣어주세요");
+                        MessageBox.Show("이름을 넣어주세요");
                     }
                 }
             }
@@ -816,7 +818,28 @@ namespace WpfApp9
                 return;
             }
 
-            if (MessageBox.Show($"선택한 {selectedItems.Count}개의 항목을 삭제하시겠습니까?", "삭제 확인", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+         
+
+
+
+
+
+
+
+
+
+            delete_dialog dialog = new delete_dialog
+            {
+                Owner = Application.Current.MainWindow,
+
+            };
+
+            dialog.popup_msg.Text = "삭제하시겠습니까?\n삭제 후 되돌릴 수 없습니다.";
+
+
+            bool? result = dialog.ShowDialog(); // 모달 다이얼로그로 표시됨
+
+            if (dialog.DialogResult == true)
             {
                 try
                 {
@@ -831,18 +854,29 @@ namespace WpfApp9
                             File.Delete(item.FullPath);
                         }
                     }
-                    MessageBox.Show("선택한 항목이 삭제되었습니다.", "알림", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"삭제 중 오류가 발생했습니다: {ex.Message}", "오류", MessageBoxButton.OK, MessageBoxImage.Error);
+                 
                 }
                 finally
                 {
-                    LoadLocalDirectory(_currentLocalPath);
+                    LoadLocalDirectory(_currentLocalPath_real);
                 }
+
             }
+
+
+
+
+
+
+
+
+
         }
+    
+
 
         private void FtpCreateFolder_Click(object sender, RoutedEventArgs e)
         {
@@ -990,7 +1024,34 @@ namespace WpfApp9
                 return;
             }
 
-            if (MessageBox.Show($"선택한 {selectedItems.Count}개의 항목을 삭제하시겠습니까?", "삭제 확인", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            delete_dialog dialog = new delete_dialog
+            {
+                Owner = Application.Current.MainWindow,
+
+            };
+
+            dialog.popup_msg.Text = "삭제하시겠습니까?\n삭제 후 되돌릴 수 없습니다.";
+
+
+            bool? result = dialog.ShowDialog(); // 모달 다이얼로그로 표시됨
+
+            if (dialog.DialogResult == true)
             {
                 try
                 {
@@ -1005,17 +1066,83 @@ namespace WpfApp9
                             _ftpClient.DeleteFile(item.FullPath);
                         }
                     }
-                    MessageBox.Show("선택한 항목이 삭제되었습니다.", "알림", MessageBoxButton.OK, MessageBoxImage.Information);
+                    
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"삭제 중");
+                    
                 }
                 finally
                 {
                     LoadFtpDirectory(_currentFtpPath);
                 }
+
             }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            //if (MessageBox.Show($"선택한 {selectedItems.Count}개의 항목을 삭제하시겠습니까?", "삭제 확인", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            //{
+            //    try
+            //    {
+            //        foreach (var item in selectedItems)
+            //        {
+            //            if (item.Type == "Folder")
+            //            {
+            //                _ftpClient.DeleteDirectory(item.FullPath, FtpListOption.Recursive);
+            //            }
+            //            else
+            //            {
+            //                _ftpClient.DeleteFile(item.FullPath);
+            //            }
+            //        }
+            //        MessageBox.Show("선택한 항목이 삭제되었습니다.", "알림", MessageBoxButton.OK, MessageBoxImage.Information);
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        MessageBox.Show($"삭제 중");
+            //    }
+            //    finally
+            //    {
+            //        LoadFtpDirectory(_currentFtpPath);
+            //    }
+            //}
         }
 
        
@@ -1095,7 +1222,35 @@ namespace WpfApp9
 
                 if (check_finish == true)
                 {
-                    MessageBox.Show("전송이 완료되었습니다.", "알림", MessageBoxButton.OK, MessageBoxImage.Information);
+
+
+
+
+
+
+
+
+                    confirm_dialog dialog = new confirm_dialog
+                    {
+                        Owner = Application.Current.MainWindow,
+
+                    };
+
+
+
+
+                    bool? result = dialog.ShowDialog(); // 모달 다이얼로그로 표시됨
+
+                    if (dialog.DialogResult == true)
+                    {
+                        
+
+                    }
+
+
+
+
+                    //MessageBox.Show("전송이 완료되었습니다.", "알림", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
 
             }
@@ -1129,7 +1284,7 @@ namespace WpfApp9
             List<string> filename = new List<string>();
             List<string> foldername = new List<string>();
 
-            DirectoryInfo di = new DirectoryInfo(_currentLocalPath);
+            DirectoryInfo di = new DirectoryInfo(_currentLocalPath_real);
 
 
             foreach (var item in di.GetFiles())
@@ -1212,7 +1367,27 @@ namespace WpfApp9
 
                         if (check_finish == true)
                         {
-                            MessageBox.Show("전송이 완료되었습니다.", "알림", MessageBoxButton.OK, MessageBoxImage.Information);
+                            //MessageBox.Show("전송이 완료되었습니다.", "알림", MessageBoxButton.OK, MessageBoxImage.Information);
+
+
+                            confirm_dialog dialog = new confirm_dialog
+                            {
+                                Owner = Application.Current.MainWindow,
+
+                            };
+
+
+
+
+                            bool? result2 = dialog.ShowDialog(); // 모달 다이얼로그로 표시됨
+
+                            if (dialog.DialogResult == true)
+                            {
+
+
+                            }
+
+
                         }
 
                     }
@@ -1225,7 +1400,7 @@ namespace WpfApp9
                         Transferpopup.Visibility = Visibility.Collapsed;
                         TransferProgressBar.Visibility = Visibility.Collapsed;
                         TransferProgressText.Text = "";
-                        LoadLocalDirectory(_currentLocalPath);
+                        LoadLocalDirectory(_currentLocalPath_real);
                     }
 
                 }
@@ -1246,13 +1421,30 @@ namespace WpfApp9
                 {
                     foreach (var item in selectedItems)
                     {
-                        await FtpToLocalTransferItemAsync(item, _currentLocalPath, totalSize, progress);
+                        await FtpToLocalTransferItemAsync(item, _currentLocalPath_real, totalSize, progress);
                     }
 
 
                     if (check_finish == true)
                     {
-                        MessageBox.Show("전송이 완료되었습니다.", "알림", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                        confirm_dialog dialog = new confirm_dialog
+                        {
+                            Owner = Application.Current.MainWindow,
+
+                        };
+
+
+
+
+                        bool? result = dialog.ShowDialog(); // 모달 다이얼로그로 표시됨
+
+                        if (dialog.DialogResult == true)
+                        {
+
+
+                        }
+
                     }
 
                 }
@@ -1265,7 +1457,7 @@ namespace WpfApp9
                     Transferpopup.Visibility = Visibility.Collapsed;
                     TransferProgressBar.Visibility = Visibility.Collapsed;
                     TransferProgressText.Text = "";
-                    LoadLocalDirectory(_currentLocalPath);
+                    LoadLocalDirectory(_currentLocalPath_real);
                 }
             }
 

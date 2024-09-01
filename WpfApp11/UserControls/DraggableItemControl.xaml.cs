@@ -344,8 +344,12 @@ namespace WpfApp9
 
             delete_dialog dialog = new delete_dialog
             {
-                Owner = Application.Current.MainWindow
+                Owner = Application.Current.MainWindow,
+                
             };
+
+            dialog.popup_msg.Text = "해당 장비를 삭제하시겠습니까?\n삭제 후 되돌릴 수 없습니다.";
+
 
             bool? result = dialog.ShowDialog(); // 모달 다이얼로그로 표시됨
 
@@ -354,11 +358,7 @@ namespace WpfApp9
                 var mainWindow = Window.GetWindow(this) as MainWindow;
                     mainWindow?.RemoveDevice(this);
             }
-            else if (dialog.DialogResult == false)
-            {
-                
-                // 사용자 클릭 No 처리
-            }
+          
         }
 
         private async void pow_on(object sender, RoutedEventArgs e)
