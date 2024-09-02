@@ -69,15 +69,83 @@
                     <Image Source="../Images/StatusIndicator.png" x:Name="StatusIndicator" Grid.Row="1"  Width="25" Height="25" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,5,6,80"  MouseLeftButtonDown="StatusIndicator_MouseLeftButtonDown" Visibility="Collapsed"/>
 
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Button Width="57" Height="30" Margin="0,0,0,0" Click="pow_on" Background="Transparent" BorderThickness="0">
+
+
+
+
+                    <Button  Width="57" Height="30"  Background="#5BB0FE" Click="pow_on">
+
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}"  x:Name="BorderElement"
+                            BorderBrush="Black"
+                            BorderThickness="1"
+                            CornerRadius="5">
+                                    <!-- 둥근 모서리 설정 -->
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="BorderElement" Property="Background" Value="SkyBlue"/>
+                                        <Setter TargetName="BorderElement" Property="BorderBrush" Value="DodgerBlue"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+
+                        <TextBlock Text="ON" FontWeight="Bold"/>
+                    </Button>
+
+
+
+
+
+
+
+
+                    <Button  Width="57" Height="30"  Background="#D9D9D9" Click="pow_off" Margin="20,0,0,0">
+
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}"  x:Name="BorderElement2"
+                            BorderBrush="Black"
+                            BorderThickness="1"
+                            CornerRadius="5">
+                                    <!-- 둥근 모서리 설정 -->
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="BorderElement2" Property="Background" Value="SkyBlue"/>
+                                        <Setter TargetName="BorderElement2" Property="BorderBrush" Value="DodgerBlue"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+
+                        <TextBlock Text="OFF" FontWeight="Bold"/>
+                    </Button>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    
+                        <!--<Button Width="57" Height="30" Margin="0,0,0,0" Click="pow_on" Background="Transparent" BorderThickness="0">
                             <Image Source="../Images/frame_5.png"/>
                         </Button>
                         <Button Width="57" Height="30" Margin="20,0,0,0" Click="pow_off" Background="Transparent" BorderThickness="0">
                             <Image Source="../Images/frame_6.png"/>
-                        </Button>
-                        <!--<Button Width="30" Height="30" Margin="20,0,0,0" Click="pow_re" Background="Transparent" BorderThickness="0">
-                            <Image Source="../Images/re.png"/>
                         </Button>-->
+                        
                     </StackPanel>
 
                     <Grid Grid.Row="1" x:Name="OverlayGrid" Visibility="Collapsed">

@@ -4,12 +4,27 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp9" xmlns:usercontrols="clr-namespace:WpfApp11.UserControls"
+          FontFamily="/Wpf.FontTest;component/fonts/#Donoun"
         mc:Ignorable="d"
         Title="CMS" Height="1080" Width="1920">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
+        <BitmapImage x:Key="OnImage" UriSource="pack://application:,,,/Images/pc.png"/>
+        <BitmapImage x:Key="OffImage" UriSource="pack://application:,,,/Images/re.png"/>
 
 
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
 
         <Style x:Key="CustomContextMenuStyle" TargetType="ContextMenu">
@@ -54,37 +69,69 @@
                     <StackPanel Grid.Column="0" Orientation="Vertical" x:Name="sp_auto" >
                         <!--<TextBlock Text="자동 전원 설정" VerticalAlignment="Center"/>
                         <TextBlock Text="요일 별 시간 설정" FontSize="10" VerticalAlignment="Center" Margin="0,0,0,0"/>-->
-                        <Image Source="Images/auto_pow.png" MouseLeftButtonDown="Auto_wol_btn_Click" Width="200" Height="69">
+                        <!--<Image Source="Images/auto_pow.png" MouseLeftButtonDown="Auto_wol_btn_Click" Width="200" Height="69">
 
-                        </Image>
+                        </Image>-->
+
+                        <Button x:Name="auto_wol_btn"  Width="200" Height="69"  Background="White" Click="Auto_wol_btn_Click">
+
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}"  x:Name="BorderElement"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="5">
+                                        <!-- 둥근 모서리 설정 -->
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="BorderElement" Property="Background" Value="SkyBlue"/>
+                                            <Setter TargetName="BorderElement" Property="BorderBrush" Value="DodgerBlue"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
                         
-                        <!--<Button x:Name="auto_wol_btn"  Width="200" Height="69"  Background="Transparent">
-                            
+                        
+                        
+                        <StackPanel Orientation="Horizontal">
+                                <Image Source="Images/on_1.png"  Width="40" Height="40"/>
+                                <StackPanel Margin="7,0,0,0">
+                                    <TextBlock Text="자동 전원 설정" FontWeight="ExtraBold" FontSize="20" TextAlignment="Center"/>
+                                    <TextBlock Text="요일별 시간 설정" FontWeight="Black" FontSize="17" TextAlignment="Center"/>
+                                </StackPanel>
+                            </StackPanel>
                          
                             
                             
-                        </Button>-->
+                        </Button>
                     </StackPanel>
                 </Border>
-                <ToggleButton x:Name="AutoPowerToggle" Grid.Column="0" Width="50" Height="25" HorizontalAlignment="Center" Margin="30,0,0,0" Checked="AutoPowerToggle_Checked" Unchecked="AutoPowerToggle_Unchecked">
+               
+
+
+
+
+                <ToggleButton x:Name="AutoPowerToggle" Grid.Column="0" Width="100" Height="50" HorizontalAlignment="Center" Margin="30,0,0,0" Checked="AutoPowerToggle_Checked" Unchecked="AutoPowerToggle_Unchecked">
                     <ToggleButton.Style>
                         <Style TargetType="ToggleButton">
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="ToggleButton">
                                         <Grid>
-                                            <Border x:Name="Border" CornerRadius="10" Background="LightGray">
+                                            <!--<Border x:Name="Border" CornerRadius="10" Background="LightGray">
                                                 <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                            </Border>
+                                            </Border>-->
+                                            <Image Source="Images/pc.png" x:Name="to_img" Width="100" Height="50"/>
                                         </Grid>
                                         <ControlTemplate.Triggers>
                                             <Trigger Property="IsChecked" Value="True">
-                                                <Setter TargetName="Border" Property="Background" Value="LightGreen"/>
-                                                <Setter Property="Content" Value="ON"/>
+                                                <Setter TargetName="to_img" Property="Source" Value="Images/t_on.png"/>
+                                                <!--<Setter Property="Source" Value="Images/pc.png"/>-->
                                             </Trigger>
                                             <Trigger Property="IsChecked" Value="False">
-                                                <Setter TargetName="Border" Property="Background" Value="LightGray"/>
-                                                <Setter Property="Content" Value="OFF"/>
+                                                <Setter TargetName="to_img" Property="Source" Value="Images/t_off.png"/>
                                             </Trigger>
                                         </ControlTemplate.Triggers>
                                     </ControlTemplate>
@@ -96,12 +143,91 @@
             </StackPanel>
             <TextBlock Grid.Column="1" Text="PROJECT TITLE" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" x:Name="p_title" FontSize="50"/>
             <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
-                <Image Source="Images/pow_on.png"   Width="150" Height="69"  MouseLeftButtonDown="TotalPowerBtnOn_Click" />
+                <!--<Image Source="Images/pow_on.png"   Width="150" Height="69"  MouseLeftButtonDown="TotalPowerBtnOn_Click" />-->
+
+
+
+                <Button  Width="150" Height="69"  Background="#5BB0FE" Click="TotalPowerBtnOn_Click" Margin="20,0,0,0">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}"  x:Name="all_on_btn"
+                            BorderBrush="Black"
+                            BorderThickness="1"
+                            CornerRadius="5">
+                                <!-- 둥근 모서리 설정 -->
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="all_on_btn" Property="Background" Value="SkyBlue"/>
+                                    <Setter TargetName="all_on_btn" Property="BorderBrush" Value="DodgerBlue"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                    <StackPanel>
+                        <TextBlock Text="전체 전원" FontWeight="Bold" TextAlignment="Center" FontSize="14" Margin="0,10,0,0"/>
+                        <TextBlock Text="ON" FontWeight="Heavy" TextAlignment="Center" FontSize="35" Margin="0,2,0,0"/>
+                    </StackPanel>
+                </Button>
+
+
+
+
+
+
+
+                <Button  Width="150" Height="69"  Background="#D9D9D9" Click="TotalPowerBtnOff_Click" Margin="20,0,0,0">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}"  x:Name="all_off_btn"
+                            BorderBrush="Black"
+                            BorderThickness="1"
+                            CornerRadius="5">
+                                <!-- 둥근 모서리 설정 -->
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="all_off_btn" Property="Background" Value="SkyBlue"/>
+                                    <Setter TargetName="all_off_btn" Property="BorderBrush" Value="DodgerBlue"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                    <StackPanel>
+                        <TextBlock Text="전체 전원" FontWeight="Bold" TextAlignment="Center" FontSize="14" Margin="0,10,0,0"/>
+                        <TextBlock Text="OFF" FontWeight="Heavy" TextAlignment="Center" FontSize="35" Margin="0,2,0,0"/>
+                    </StackPanel>
+                </Button>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 <!--<Button x:Name="TotalPowerONBtn" Click="">
+                
                     
                 </Button>-->
 
-                <Image Source="Images/pow_off.png"   Width="150" Height="69"  MouseLeftButtonDown="TotalPowerBtnOff_Click" Margin="20,0,0,0"/>
+                <!--<Image Source="Images/pow_off.png"   Width="150" Height="69"  MouseLeftButtonDown="TotalPowerBtnOff_Click" Margin="20,0,0,0"/>-->
 
                 <!--<Button  x:Name="TotalPowerOFFBtn" >
                 </Button>-->

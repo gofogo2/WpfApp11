@@ -92,6 +92,8 @@ namespace WpfApp11.UserControls
             // 문자열로 변환
             string uniqueIdString = uniqueId.ToString();
 
+            var main = Application.Current.MainWindow as MainWindow;
+
 
 
             NewDeviceConfig = new ItemConfiguration
@@ -108,14 +110,14 @@ namespace WpfApp11.UserControls
                 Row = 0,
                 Column = 0,
                 ZIndex = 1,
-                VncPw = "1111"
+                VncPw = main.vnc_pw
             };
 
 
             //ItemConfiguration newConfig = addDeviceWindow.NewDeviceConfig;
             //CreateDraggableItem(newConfig);
             //SaveItemConfigurations();
-            var main = Application.Current.MainWindow as MainWindow;
+            //var main = Application.Current.MainWindow as MainWindow;
             main.createitem(NewDeviceConfig);
 
             main.add_device_ppanel.Visibility = Visibility.Collapsed;

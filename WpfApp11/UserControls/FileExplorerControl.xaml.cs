@@ -329,9 +329,6 @@ namespace WpfApp9
                 string host = ftpUri.Host;
                 string username = "ftpuser";
                 string password = "1";
-
-
-
                 _ftpClient = new FtpClient(host, username, password);
                 //====================================================================
 
@@ -396,28 +393,232 @@ namespace WpfApp9
 
                     foreach (var directory in di.GetDirectories())
                     {
+                        BitmapSource bitmapSource = new BitmapImage(new Uri("../Images/icons/icon_folder.png", UriKind.Relative));
                         _leftItems.Add(new FileSystemItem
                         {
                             Name = directory.Name,
                             Type = "Folder",
                             FullPath = directory.FullName,
-                            IconSource = GetIconForFileType("folder")
+                            IconSource = bitmapSource,
+
+
                         });
                     }
 
-                    foreach (var file in di.GetFiles())
+                    //foreach (var file in di.GetFiles())
+                    //{
+                    //    _leftItems.Add(new FileSystemItem
+                    //    {
+                    //        Name = file.Name,
+                    //        Type = "File",
+                    //        FullPath = file.FullName,
+                    //        IconSource = GetIconForFileType(file.FullName)
+                    //    });
+
+
+
+                    //}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    //var listing = di.GetDirectories(path);
+                    ////var sortedListing = listing
+                    ////    .OrderByDescending(item => item.Type == di.Directory)
+                    ////    .ThenBy(item => item.Name);
+
+                    //foreach (var item in listing)
+                    //{
+
+                    //    FileSystemItem fs = new FileSystemItem();
+                    //    fs.Name = item.Name;
+                    //    fs.Type = "Folder";
+                    //    fs.FullPath = item.FullName;
+
+
+
+                    //    string extension = Path.GetExtension(fs.FullPath).ToLower();
+
+
+                    //    if (extension == "")
+                    //    {
+                    //        //fs.IconSource = GetIconForFileType(item.Type == FtpObjectType.Directory ? "folder" : item.Name);
+                    //        BitmapSource bitmapSource = new BitmapImage(new Uri("../Images/icons/icon_folder.png", UriKind.Relative));
+                    //        fs.IconSource = bitmapSource;
+                    //    }
+
+                    //    _leftItems.Add(fs);
+                    //}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    var listing2 = di.GetFiles();
+                    //var sortedListing = listing
+                    //    .OrderByDescending(item => item.Type == di.Directory)
+                    //    .ThenBy(item => item.Name);
+
+                    foreach (var item in listing2)
                     {
-                        _leftItems.Add(new FileSystemItem
+
+                        FileSystemItem fs = new FileSystemItem();
+                        fs.Name = item.Name;
+                        fs.Type = "File";
+                        fs.FullPath = item.FullName;
+
+
+
+                        string extension = Path.GetExtension(fs.FullPath).ToLower();
+
+                        if (extension == "")
                         {
-                            Name = file.Name,
-                            Type = "File",
-                            FullPath = file.FullName,
-                            IconSource = GetIconForFileType(file.FullName)
-                        });
+                            //fs.IconSource = GetIconForFileType(item.Type == FtpObjectType.Directory ? "folder" : item.Name);
+                            BitmapSource bitmapSource = new BitmapImage(new Uri("../Images/icons/icon_folder.png", UriKind.Relative));
+                            fs.IconSource = bitmapSource;
+                        }
+                        else if (extension == ".exe")
+                        {
+                            System.Drawing.Icon errorIcon = SystemIcons.Application;
+                            BitmapSource bitmapSource = Imaging.CreateBitmapSourceFromHIcon(
+                                errorIcon.Handle,
+                                Int32Rect.Empty,
+                                BitmapSizeOptions.FromEmptyOptions());
+                            fs.IconSource = bitmapSource;
+                        }
+                        else if (extension == ".txt" || extension == ".zip" || extension == ".bat")
+                        {
+
+                            var temp_extension = extension.Split('.');
 
 
 
+                            BitmapSource bitmapSource = new BitmapImage(new Uri($"../Images/icons/icon_{temp_extension[1]}.png", UriKind.Relative));
+                            fs.IconSource = bitmapSource;
+
+
+                        }
+                        else if (extension == ".png" || extension == ".jpg" || extension == ".jpeg")
+                        {
+
+
+                            BitmapSource bitmapSource = new BitmapImage(new Uri("../Images/icons/icon_img.png", UriKind.Relative));
+                            fs.IconSource = bitmapSource;
+
+
+                        }
+                        else if (extension == ".mp4" || extension == ".wmv" || extension == ".avi" || extension == ".mkv")
+                        {
+
+
+                            BitmapSource bitmapSource = new BitmapImage(new Uri("../Images/icons/icon_video.png", UriKind.Relative));
+                            fs.IconSource = bitmapSource;
+
+                        }
+
+                        else if (extension == ".mp3" || extension == ".wav")
+                        {
+
+
+                            BitmapSource bitmapSource = new BitmapImage(new Uri("../Images/icons/icon_sound.png", UriKind.Relative));
+                            fs.IconSource = bitmapSource;
+
+                        }
+                        else if (extension == ".exe")
+                        {
+
+
+                            BitmapSource bitmapSource = new BitmapImage(new Uri("../Images/icons/icon_exe.png", UriKind.Relative));
+                            fs.IconSource = bitmapSource;
+
+                        }
+                        else
+                        {
+                            //System.Drawing.Icon errorIcon = SystemIcons.Application;
+                            //BitmapSource bitmapSource = Imaging.CreateBitmapSourceFromHIcon(
+                            //    errorIcon.Handle,
+                            //    Int32Rect.Empty,
+                            //    BitmapSizeOptions.FromEmptyOptions());
+                            //fs.IconSource = bitmapSource;
+
+
+
+                            BitmapSource bitmapSource = new BitmapImage(new Uri("../Images/icons/icon_etc.png", UriKind.Relative));
+                            fs.IconSource = bitmapSource;
+
+
+                        }
+
+                        _leftItems.Add(fs);
                     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                     //_currentLocalPath = path;
                     //_currentLocalPath = @"C:\";
@@ -472,7 +673,9 @@ namespace WpfApp9
 
                         if (extension == "")
                         {
-                            fs.IconSource = GetIconForFileType(item.Type == FtpObjectType.Directory ? "folder" : item.Name);
+                            //fs.IconSource = GetIconForFileType(item.Type == FtpObjectType.Directory ? "folder" : item.Name);
+                            BitmapSource bitmapSource = new BitmapImage(new Uri("../Images/icons/icon_folder.png", UriKind.Relative));
+                            fs.IconSource = bitmapSource;
                         }
                         else if (extension == ".exe")
                         {
@@ -512,16 +715,38 @@ namespace WpfApp9
                             fs.IconSource = bitmapSource;
 
                         }
-                        else
+
+                        else if (extension == ".mp3" || extension == ".wav" )
                         {
-                            System.Drawing.Icon errorIcon = SystemIcons.Application;
-                            BitmapSource bitmapSource = Imaging.CreateBitmapSourceFromHIcon(
-                                errorIcon.Handle,
-                                Int32Rect.Empty,
-                                BitmapSizeOptions.FromEmptyOptions());
+
+
+                            BitmapSource bitmapSource = new BitmapImage(new Uri("../Images/icons/icon_sound.png", UriKind.Relative));
                             fs.IconSource = bitmapSource;
 
-                            //BitmapSource bitmapSource = new BitmapImage(new Uri("../Images/time.png", UriKind.Relative));
+                        }
+                        else if (extension == ".exe")
+                        {
+
+
+                            BitmapSource bitmapSource = new BitmapImage(new Uri("../Images/icons/icon_exe.png", UriKind.Relative));
+                            fs.IconSource = bitmapSource;
+
+                        }
+                        else
+                        {
+                            //System.Drawing.Icon errorIcon = SystemIcons.Application;
+                            //BitmapSource bitmapSource = Imaging.CreateBitmapSourceFromHIcon(
+                            //    errorIcon.Handle,
+                            //    Int32Rect.Empty,
+                            //    BitmapSizeOptions.FromEmptyOptions());
+                            //fs.IconSource = bitmapSource;
+
+
+
+                            BitmapSource bitmapSource = new BitmapImage(new Uri("../Images/icons/icon_etc.png", UriKind.Relative));
+                            fs.IconSource = bitmapSource;
+
+                            
                         }
 
 

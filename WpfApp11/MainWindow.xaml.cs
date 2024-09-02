@@ -64,7 +64,10 @@ namespace WpfApp9
         DispatcherTimer pow_timer = new DispatcherTimer();
 
         public string local_pc_name = "pc";
+        public string vnc_pw = "1111";
         public string local_path = @"C:\GL-MEDIA";
+
+        public int pingtime = 5;
         bool first_init = false;
 
         public MainWindow()
@@ -173,6 +176,18 @@ namespace WpfApp9
                 {
                     isftp = ftpvalue;
                 }
+
+
+                if (settings.TryGetValue("VNC_Password", out var vncpw) && vncpw is string vncpw2)
+                {
+                    vnc_pw = vncpw2;
+                }
+
+
+                if (settings.TryGetValue("Status_Check_Interval", out var ping_timer) && ping_timer is int pingtimer)
+                {
+                    pingtime = pingtimer;
+                }
             }
         }
 
@@ -185,7 +200,9 @@ namespace WpfApp9
                 { "AutoPowerEnabled", AutoPowerToggle.IsChecked ?? false },
                 { "Progress_duration", Progress_duration },
                 { "useVNC", isvnc },
-                { "useFTP", isftp}
+                { "useFTP", isftp},
+                { "VNC_Password", vnc_pw},
+                { "Status_Check_Interval", pingtime}
             };
 
             string json = JsonConvert.SerializeObject(settings, Formatting.Indented);

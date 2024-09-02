@@ -21,7 +21,7 @@ namespace WpfApp9
     {
         private UdpReceiver _udpReceiver;
         public WakeOnLan wol;
-        private const int PingInterval = 5000; // 5초마다 핑 체크
+        private  int PingInterval = 5000; // 5초마다 핑 체크
         private CancellationTokenSource pduStatusCancellationTokenSource;
         private bool isPinging = false;
         private CancellationTokenSource pingCancellationTokenSource;
@@ -38,6 +38,18 @@ namespace WpfApp9
             Configuration = config;
             UpdateUI();
             wol = new WakeOnLan();
+
+
+            var main = Application.Current.MainWindow as MainWindow;
+
+            PingInterval = main.pingtime * 1000;
+
+            if (PingInterval < 5000)
+            {
+                PingInterval = 5000;
+            }
+
+
             if (Configuration.DeviceType.ToLower() == "pc")
             {
                 StartPingCheck();
@@ -256,11 +268,16 @@ namespace WpfApp9
             }
             else if (Configuration.DeviceType == "PDU")
             {
-                IconImage.Source = new BitmapImage(new Uri($"pack://application:,,,/Images/projector.png"));
+                IconImage.Source = new BitmapImage(new Uri($"pack://application:,,,/Images/PDU.png"));
+                IconImage.Width = 67;
+                IconImage.Height = 46;
+
             }
             else if (Configuration.DeviceType == "RELAY")
             {
-                IconImage.Source = new BitmapImage(new Uri($"pack://application:,,,/Images/projector.png"));
+                IconImage.Source = new BitmapImage(new Uri($"pack://application:,,,/Images/RELAY.png"));
+                IconImage.Width = 95;
+                IconImage.Height = 46;
             }
             else
             {

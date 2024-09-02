@@ -197,6 +197,12 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <Resource Include="fonts\NotoSansKR-Black.otf" />
+    <Resource Include="fonts\NotoSansKR-Bold.otf" />
+    <Resource Include="fonts\NotoSansKR-Light.otf" />
+    <Resource Include="fonts\NotoSansKR-Medium.otf" />
+    <Resource Include="fonts\NotoSansKR-Regular.otf" />
+    <Resource Include="fonts\NotoSansKR-Thin.otf" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -213,20 +219,40 @@
     <Resource Include="Images\icons\icon_txt.png" />
     <Resource Include="Images\icons\icon_video.png" />
     <Resource Include="Images\auto_pow.png" />
-    <Resource Include="Images\pow_on.png" />
-    <Resource Include="Images\pow_off.png" />
+    <Resource Include="Images\pow_on.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\pow_off.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Images\frame_5.png" />
     <Resource Include="Images\frame_6.png" />
     <Resource Include="Images\label1.png" />
     <Resource Include="Images\cancel.png" />
     <Resource Include="Images\confirm.png" />
     <Resource Include="Images\new.png" />
-    <Resource Include="Images\rename.png" />
+    <Resource Include="Images\rename.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Images\del.png" />
-    <Resource Include="Images\receive.png" />
-    <Resource Include="Images\send.png" />
+    <Resource Include="Images\receive.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\send.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Images\Arrow_right.png" />
     <Resource Include="Images\Arrow_left.png" />
+    <Resource Include="Images\on_1.png" />
+    <Resource Include="Images\t_off.png" />
+    <Resource Include="Images\t_on.png" />
+    <Resource Include="Images\PDU.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\RELAY.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\icons\icon_folder.png" />
     <Content Include="Settings\Setup-IIS-FTP.ps1">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -271,7 +297,9 @@
     <Resource Include="Images\icons\icon_xls.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\StatusIndicator.png" />
+    <Resource Include="Images\StatusIndicator.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\on.png" />
@@ -280,7 +308,9 @@
     <Resource Include="Images\off.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\re.png" />
+    <Resource Include="Images\re.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\icons\icon_zip.PNG" />
