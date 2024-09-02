@@ -104,7 +104,7 @@ namespace WpfApp11.UserControls
                 IpAddress = IpAddressTextBox.Text,
                 port = DescriptionTextBox.Text,
                 Channel = ChannelTextBox.Text,
-                IsOn = InitialStateCheckBox.IsChecked ?? false,
+                IsPower = InitialStateCheckBox.IsChecked ?? false,
                 Row = 0,
                 Column = 0,
                 ZIndex = 1,
@@ -136,15 +136,15 @@ namespace WpfApp11.UserControls
             NameTextBox.Text = config.Name;
 
 
-            if (config.DeviceType == "pc")
+            if (config.DeviceType.ToLower() == "pc")
             {
                 DeviceTypeComboBox.SelectedIndex = 0;
             }
-            else if (config.DeviceType == "프로젝터")
+            else if (config.DeviceType.ToLower() == "프로젝터(pjlink)")
             {
                 DeviceTypeComboBox.SelectedIndex = 1;
             }
-            else if (config.DeviceType == "DLP프로젝터")
+            else if (config.DeviceType.ToLower() == "프로젝터(APPOTRONICS)")
             {
                 DeviceTypeComboBox.SelectedIndex = 2;
             }
@@ -162,6 +162,7 @@ namespace WpfApp11.UserControls
             IpAddressTextBox.Text = config.IpAddress;
             DescriptionTextBox.Text = config.port;
             ChannelTextBox.Text = config.Channel;
+            InitialStateCheckBox.IsChecked = config.IsPower;
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
@@ -189,7 +190,8 @@ namespace WpfApp11.UserControls
             tempconfig.IpAddress = IpAddressTextBox.Text;
             tempconfig.port = DescriptionTextBox.Text;
             tempconfig.Channel = ChannelTextBox.Text;
-            tempconfig.IsOn = InitialStateCheckBox.IsChecked ?? false;
+            tempconfig.IsPower = InitialStateCheckBox.IsChecked ?? false;
+            //tempconfig.IsOn = InitialStateCheckBox.IsChecked ?? false;
 
 
             main.EditItemConfiguration(tempconfig);

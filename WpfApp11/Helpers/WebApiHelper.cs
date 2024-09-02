@@ -111,7 +111,9 @@ public class WebApiHelper
         }
         catch (Exception e)
         {
+            //Logger.Log2($"Error : {e.Message}");
             return new Dictionary<string, string> { { "Error", "Fail" } };
+            
         }
     }
 

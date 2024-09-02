@@ -182,6 +182,7 @@ namespace Launcher_SE.Helpers
                 catch (Exception e)
                 {
                     Debug.WriteLine($"SendByteAsync error: {e.Message}");
+                    Logger.Log2($"Error : {e.Message}");
                 }
             });
         }
@@ -207,6 +208,7 @@ namespace Launcher_SE.Helpers
                 catch (Exception e)
                 {
                     Debug.WriteLine($"SendHexAsync error: {e.Message}");
+                    Logger.Log2($"Error : {e.Message}");
                 }
             });
         }
@@ -239,6 +241,7 @@ namespace Launcher_SE.Helpers
                 catch (Exception e)
                 {
                     Debug.WriteLine($"SendAsciiAsync error: {e.Message}");
+                    Logger.Log2($"Error : {e.Message}");
                 }
             });
         }
@@ -265,6 +268,7 @@ namespace Launcher_SE.Helpers
             }
             catch (Exception e)
             {
+                Logger.Log2($"Error : {e.Message}");
                 Debug.WriteLine($"ReceiveAsync error: {e.Message}");
                 await Task.Delay(1000); // 오류 발생 시 1초 대기 후 재시도
                 await ReceiveAsync(port);

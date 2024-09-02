@@ -38,15 +38,15 @@ namespace WpfApp9
             Configuration = config;
             UpdateUI();
             wol = new WakeOnLan();
-            if (Configuration.DeviceType == "pc")
+            if (Configuration.DeviceType.ToLower() == "pc")
             {
                 StartPingCheck();
             }
-            else if (Configuration.DeviceType == "프로젝터")
+            else if (Configuration.DeviceType.ToLower() == "프로젝터(pjlink)")
             {
                 StartPingCheck();
             }
-            else if (Configuration.DeviceType == "DLP프로젝터")
+            else if (Configuration.DeviceType.ToLower() == "프로젝터(appotronics)")
             {
                 StartPingCheck();
             }
@@ -177,13 +177,18 @@ namespace WpfApp9
 
         public void StartPingCheck()
         {
-            if (Configuration.DeviceType == "pc" || Configuration.DeviceType == "프로젝터" || Configuration.DeviceType == "DLP프로젝터")
+            try
             {
-                StopPingCheck();
-                pingCancellationTokenSource = new CancellationTokenSource();
-                _ = PingCheckLoop(pingCancellationTokenSource.Token);
+                if (Configuration.DeviceType.ToLower() == "pc" || Configuration.DeviceType.ToLower() == "프로젝터(pjlink)" || Configuration.DeviceType.ToLower() == "프로젝터(appotronics)")
+                {
+                    StopPingCheck();
+                    pingCancellationTokenSource = new CancellationTokenSource();
+                    _ = PingCheckLoop(pingCancellationTokenSource.Token);
+                }
+            }catch(Exception e)
+            {
+
             }
-            
 
 
         }
@@ -241,11 +246,11 @@ namespace WpfApp9
             
 
 
-            if (Configuration.DeviceType == "프로젝터")
+            if (Configuration.DeviceType.ToLower() == "프로젝터(pjlink)")
             {
                 IconImage.Source = new BitmapImage(new Uri($"pack://application:,,,/Images/projector.png"));
             }
-            else if (Configuration.DeviceType == "DLP프로젝터")
+            else if (Configuration.DeviceType.ToLower() == "프로젝터(appotronics)")
             {
                 IconImage.Source = new BitmapImage(new Uri($"pack://application:,,,/Images/projector.png"));
             }
@@ -265,7 +270,7 @@ namespace WpfApp9
 
         private void StatusIndicator_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (Configuration.DeviceType == "pc")
+            if (Configuration.DeviceType.ToLower() == "pc")
             {
                 OverlayGrid.Visibility = OverlayGrid.Visibility == Visibility.Visible ?
                                      Visibility.Collapsed : Visibility.Visible;
@@ -366,15 +371,15 @@ namespace WpfApp9
             string result = "Success";
             try
             {
-                if (Configuration.DeviceType == "pc")
+                if (Configuration.DeviceType.ToLower() == "pc")
                 {
                     wol.TurnOnPC(Configuration.MacAddress);
                 }
-                else if (Configuration.DeviceType == "프로젝터")
+                else if (Configuration.DeviceType.ToLower() == "프로젝터(pjlink)")
                 {
-                    PJLinkHelper.Instance.PowerOn(Configuration.IpAddress);
+                  await  PJLinkHelper.Instance.PowerOnAsync(Configuration.IpAddress);
                 }
-                else if (Configuration.DeviceType == "DLP프로젝터")
+                else if (Configuration.DeviceType.ToLower() == "프로젝터(appotronics)")
                 {
                     await DlpProjectorHelper.Instance.SendPowerOffCommandToDLPProjector(Configuration.IpAddress);
                 }
@@ -413,15 +418,15 @@ namespace WpfApp9
             string result = "Success";
             try
             {
-                if (Configuration.DeviceType == "pc")
+                if (Configuration.DeviceType.ToLower() == "pc")
                 {
                     await UdpHelper.Instance.SendWithIpAsync("power|0", Configuration.IpAddress, 8889);
                 }
-                else if (Configuration.DeviceType == "프로젝터")
+                else if (Configuration.DeviceType.ToLower() == "프로젝터(pjlink)")
                 {
-                    PJLinkHelper.Instance.PowerOff(Configuration.IpAddress);
+                    await PJLinkHelper.Instance.PowerOffAsync(Configuration.IpAddress);
                 }
-                else if (Configuration.DeviceType == "DLP프로젝터")
+                else if (Configuration.DeviceType.ToLower() == "프로젝터(appotronics)")
                 {
                     await DlpProjectorHelper.Instance.SendPowerOffCommandToDLPProjector(Configuration.IpAddress);
                 }
@@ -484,15 +489,15 @@ namespace WpfApp9
             string result = "Success";
             try
             {
-                if (Configuration.DeviceType == "pc")
+                if (Configuration.DeviceType.ToLower() == "pc")
                 {
                     await UdpHelper.Instance.SendWithIpAsync("power|1", Configuration.IpAddress, 8889);
                 }
-                else if (Configuration.DeviceType == "프로젝터")
+                else if (Configuration.DeviceType.ToLower() == "프로젝터(pjlink)")
                 {
                     //PJLinkHelper.Instance.PowerOff(Configuration.IpAddress);
                 }
-                else if (Configuration.DeviceType == "DLP프로젝터")
+                else if (Configuration.DeviceType.ToLower() == "프로젝터(appotronics)")
                 {
                     //await UdpHelper.Instance.SendPowerOffCommandToDLPProjector(Configuration.IpAddress);
                 }

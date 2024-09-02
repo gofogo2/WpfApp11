@@ -24,7 +24,8 @@ namespace WpfApp9
             MacAddressTextBox.Text = EditedDeviceConfig.MacAddress;
             IpAddressTextBox.Text = EditedDeviceConfig.IpAddress;
             DescriptionTextBox.Text = EditedDeviceConfig.port;
-            InitialStateCheckBox.IsChecked = EditedDeviceConfig.IsOn;
+            //InitialStateCheckBox.IsChecked = EditedDeviceConfig.IsOn;
+            InitialStateCheckBox.IsChecked = EditedDeviceConfig.IsPower;
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)

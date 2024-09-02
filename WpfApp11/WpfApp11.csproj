@@ -66,6 +66,7 @@
     <Compile Include="Helpers\GlobalMessageService.cs" />
     <Compile Include="Helpers\Logger.cs" />
     <Compile Include="Helpers\PJLinkHelper.cs" />
+    <Compile Include="Helpers\SerialHelper.cs" />
     <Compile Include="Helpers\TcpHelper.cs" />
     <Compile Include="Helpers\UdpHelper.cs" />
     <Compile Include="Helpers\UdpReceiver.cs" />
@@ -73,6 +74,9 @@
     <Compile Include="Helpers\Utils.cs" />
     <Compile Include="Helpers\WakeOnlanHelper.cs" />
     <Compile Include="Helpers\WebApiHelper.cs" />
+    <Compile Include="LogViewerWindow.xaml.cs">
+      <DependentUpon>LogViewerWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\AddDeviceControl.xaml.cs">
       <DependentUpon>AddDeviceControl.xaml</DependentUpon>
     </Compile>
@@ -103,6 +107,10 @@
     <Compile Include="UserControls\RemoveDeviceWindow.xaml.cs">
       <DependentUpon>RemoveDeviceWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="LogViewerWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\AddDeviceControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

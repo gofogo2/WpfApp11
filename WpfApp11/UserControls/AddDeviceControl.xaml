@@ -50,9 +50,9 @@
                     <StackPanel >
                         <TextBlock  Text="유형" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="15" Margin="0,6,0,0" />
                         <ComboBox  x:Name="DeviceTypeComboBox" Margin="0,5,0,5" Width="360"  Height="35" FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Center"  HorizontalContentAlignment="Center">
-                            <ComboBoxItem Content="pc" FontSize="25" HorizontalAlignment="Center"/>
-                            <ComboBoxItem Content="프로젝터" FontSize="25" HorizontalAlignment="Center"/>
-                            <ComboBoxItem Content="DLP프로젝터" FontSize="25" HorizontalAlignment="Center"/>
+                            <ComboBoxItem Content="PC" FontSize="25" HorizontalAlignment="Center"/>
+                            <ComboBoxItem Content="프로젝터(PJLINK)" FontSize="25" HorizontalAlignment="Center"/>
+                            <ComboBoxItem Content="프로젝터(APPOTRONICS)" FontSize="25" HorizontalAlignment="Center"/>
                             <ComboBoxItem Content="RELAY" FontSize="25" HorizontalAlignment="Center"/>
                             <ComboBoxItem Content="PDU" FontSize="25" HorizontalAlignment="Center"/>
                         </ComboBox>

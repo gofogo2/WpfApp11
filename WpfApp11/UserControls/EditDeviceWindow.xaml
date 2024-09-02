@@ -23,7 +23,7 @@
         <TextBox Grid.Row="0" Grid.Column="1" x:Name="NameTextBox" Margin="0,5,0,5"/>
         <Label Grid.Row="1" Grid.Column="0" Content="기기 종류:"/>
         <ComboBox Grid.Row="1" Grid.Column="1" x:Name="DeviceTypeComboBox" Margin="0,5,0,5">
-            <ComboBoxItem Content="pc"/>
+            <ComboBoxItem Content="PC"/>
             <ComboBoxItem Content="projector"/>
             <ComboBoxItem Content="etc"/>
         </ComboBox>

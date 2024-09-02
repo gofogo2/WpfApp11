@@ -19,6 +19,7 @@ using WpfApp11.Helpers.Launcher_SE.Helpers;
 using TcpHelperNamespace;
 using System.Diagnostics;
 using Launcher_SE.Helpers;
+using WpfApp11;
 
 namespace WpfApp9
 {
@@ -27,6 +28,7 @@ namespace WpfApp9
 
     public partial class MainWindow : Window
     {
+        public LogViewerWindow logViewer;
         private List<DraggableItemControl> dragItems = new List<DraggableItemControl>();
         private const string SettingsFile = "settings.json";
         private Point offset;
@@ -99,6 +101,12 @@ namespace WpfApp9
           
         }
 
+
+        private void InitSeria()
+        {
+ 
+        }
+
         private void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
@@ -110,6 +118,19 @@ namespace WpfApp9
                 for (int i = 0; i < dragItems.Count; i++)
                 {
                     dragItems[i].delete_select.Visibility = Visibility.Collapsed;
+                }
+            }
+
+            else if (e.Key == Key.F1)
+            {
+                if (logViewer == null || !logViewer.IsVisible)
+                {
+                    logViewer = new LogViewerWindow(Logger.LogFilePath);
+                    logViewer.Show();
+                }
+                else
+                {
+                    logViewer.Activate();
                 }
             }
         }
@@ -130,6 +151,7 @@ namespace WpfApp9
                 {
                     local_pc_name = name;
                     p_title.Text = local_pc_name;
+                    Title = local_pc_name;
                 }
 
                 if (settings.TryGetValue("ContentsPath", out var local_pathValue) && local_pathValue is string local_path_value)
@@ -211,10 +233,12 @@ namespace WpfApp9
                 string currentTime = now.ToString("HH:mm");
                 if (currentTime == AutoPowerSettingsControl.pow_schedule[currentDay].StartTime.ToString().Substring(0, 5))
                 {
+                    Logger.Log2($"자동 전원 관리 전원 ON - {currentDay}");
                     await OnDevice();
                 }
                 else if (currentTime == AutoPowerSettingsControl.pow_schedule[currentDay].EndTime.ToString().Substring(0, 5))
                 {
+                    Logger.Log2($"자동 전원 관리 전원 OFF - {currentDay}");
                     await OffDevice();
                 }
             }
@@ -244,13 +268,13 @@ namespace WpfApp9
             var sortedDragItems = onOff
            ? drags.OrderBy(a => a.DeviceType.ToLower() == "relay" ? 1 :
                                 a.DeviceType.ToLower() == "pdu" ? 2 :
-                                a.DeviceType.ToLower() == "프로젝터" ? 3 :
-                                a.DeviceType.ToLower() == "DLP프로젝터" ? 4 :
+                                a.DeviceType.ToLower() == "프로젝터(pjlink)" ? 3 :
+                                a.DeviceType.ToLower() == "프로젝터(appotronics)" ? 4 :
                                 a.DeviceType.ToLower() == "pc" ? 5 : 6)
                   .ToList()
            : drags.OrderBy(a => a.DeviceType.ToLower() == "pc" ? 1 :
-                                a.DeviceType.ToLower() == "DLP프로젝터" ? 2 :
-                                a.DeviceType.ToLower() == "프로젝터" ? 3 :
+                                a.DeviceType.ToLower() == "프로젝터(appotronics)" ? 2 :
+                                a.DeviceType.ToLower() == "프로젝터(pjlink)" ? 3 :
                                 a.DeviceType.ToLower() == "pdu" ? 4 :
                                 a.DeviceType.ToLower() == "relay" ? 5 : 6)
                   .ToList();
@@ -263,8 +287,8 @@ namespace WpfApp9
                 i.StopPingCheck();
             }
 
-            //isOn true 인것만
-            //sortedDragItems = sortedDragItems.FindAll(a => a.IsOn == true).ToList();
+            //전원 제어 대상
+            sortedDragItems = sortedDragItems.FindAll(a => a.IsPower == true).ToList();
 
             int totalItems = sortedDragItems.Count;
             for (int i = 0; i < totalItems; i++)
@@ -274,11 +298,11 @@ namespace WpfApp9
 
                 switch (item.DeviceType.ToLower())
                 {
-                    case "프로젝터":
+                    case "프로젝터(pjlink)":
                         await ProcessProjector(item, onOff);
                         await Task.Delay(1000);
                         break;
-                    case "dlp프로젝터":
+                    case "프로젝터(appotronics)":
                         await ProcessDLPProjector(item, onOff);
                         await Task.Delay(1000);
                         break;
@@ -337,12 +361,14 @@ namespace WpfApp9
 
         private async void TotalPowerBtnOn_Click(object sender, RoutedEventArgs e)
         {
+            Logger.Log2("전체 전원 ON");
             PowerStatusText.Text = "전원 ON";
             await OnDevice();
         }
 
         private async void TotalPowerBtnOff_Click(object sender, RoutedEventArgs e)
         {
+            Logger.Log2("전체 전원 OFF");
             PowerStatusText.Text = "전원 OFF";
             await OffDevice();
         }
@@ -358,11 +384,13 @@ namespace WpfApp9
                 if (!result)
                 {
                     Debug.WriteLine($"Failed to {(onOff ? "power on" : "power off")} projector at {item.IpAddress}");
+                    Logger.Log2($"Failed to {(onOff ? "power on" : "power off")} PJLINK projector at {item.IpAddress}");
                 }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error processing projector: {ex.Message}");
+                Logger.Log2($"Error processing projector: {ex.Message}");
             }
         }
 
@@ -377,11 +405,14 @@ namespace WpfApp9
                 if (!result)
                 {
                     Debug.WriteLine($"Failed to {(onOff ? "power on" : "power off")} projector at {item.IpAddress}");
+                    Logger.Log2($"Failed to {(onOff ? "power on" : "power off")} projector at {item.IpAddress}");
                 }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error processing projector: {ex.Message}");
+                Logger.Log2($"Error processing projector: {ex.Message}");
+
             }
         }
 
@@ -400,7 +431,7 @@ namespace WpfApp9
                 }
             }catch(Exception e)
             {
-
+                Logger.Log2($"Error processing PC: {e.Message}");
             }
         }
 
@@ -419,34 +450,53 @@ namespace WpfApp9
 
         private async void OnRelay(ItemConfiguration item )
         {
-            string hexStr = Utils.Instance.IntToHex(item.Channel);
-            Debug.WriteLine(hexStr);
-            string hex = $"525920{hexStr}20310D";
-            Logger.Log(item.IpAddress, item.port, "Power ON", hex);
-            await UdpHelper.Instance.SendHexAsync(hex, false, int.Parse(item.port), item.IpAddress);
+            try
+            {
+                string hexStr = Utils.Instance.IntToHex(item.Channel);
+                Debug.WriteLine(hexStr);
+                string hex = $"525920{hexStr}20310D";
+                Logger.Log(item.IpAddress, item.port, "Power ON", hex);
+                await UdpHelper.Instance.SendHexAsync(hex, false, int.Parse(item.port), item.IpAddress);
+            }catch(Exception e)
+            {
+                Logger.Log2($"Error : {e.Message}");
+            }
         }
 
         private async void OffRelay(ItemConfiguration item)
         {
-            string hexStr = Utils.Instance.IntToHex(item.Channel);
+            try
+            {
+                string hexStr = Utils.Instance.IntToHex(item.Channel);
             Debug.WriteLine(hexStr);
 
 
             string hex = $"525920{hexStr}20300D";
             Logger.Log(item.IpAddress, item.port, "Power OFF", hex);
             await UdpHelper.Instance.SendHexAsync(hex, false, int.Parse(item.port), item.IpAddress);
+            }
+            catch (Exception e)
+            {
+                Logger.Log2($"Error : {e.Message}");
+            }
         }
 
 
         private void ProcessPDU(ItemConfiguration item, bool onOff)
         {
-            if (onOff)
+            try
             {
-                _ = WebApiHelper.Instance.OnPDU(item.IpAddress, item.Channel);
-            }
-            else
+                if (onOff)
+                {
+                    _ = WebApiHelper.Instance.OnPDU(item.IpAddress, item.Channel);
+                }
+                else
+                {
+                    _ = WebApiHelper.Instance.OffPDU(item.IpAddress, item.Channel);
+                }
+            }catch(Exception e)
             {
-                _ = WebApiHelper.Instance.OffPDU(item.IpAddress,item.Channel);
+                Logger.Log2($"Error : {e.Message}");
             }
         }
 
@@ -540,6 +590,35 @@ namespace WpfApp9
             SnapToGrid(itemControl);
         }
 
+
+        //protected override void OnKeyUp(KeyEventArgs e)
+        //{
+        //    if(e.Key == Key.Escape)
+        //    {
+
+        //    }
+
+
+        //    if(e.Key == Key.D1)
+        //    {
+        //        SerialHelper serial1 = new SerialHelper("COM6");
+        //        serial1.OpenConnection();
+        //        serial1.SendData("1");
+        //        serial1.CloseConnection();
+        //        Logger.Log2("send serial");
+        //    }
+        //    else if (e.Key == Key.D2)
+        //    {
+        //        SerialHelper serial1 = new SerialHelper("COM6");
+        //        serial1.OpenConnection();
+        //        serial1.SendData("2");
+        //        serial1.CloseConnection();
+        //        Logger.Log2("send serial");
+        //    }
+
+        //    base.OnKeyUp(e);
+        //}
+
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
             base.OnClosing(e);
@@ -565,7 +644,7 @@ namespace WpfApp9
             if ((now - lastClickTime).TotalMilliseconds <= DoubleClickTime)
             {
                 var item = sender as DraggableItemControl;
-                if (item != null && item.Configuration.DeviceType == "pc" && item.ispow)
+                if (item != null && item.Configuration.DeviceType.ToLower() == "pc" && item.ispow)
                 {
                     ShowFileExplorer(item.Configuration.IpAddress, item.Configuration.Name);
                 }
@@ -689,6 +768,7 @@ namespace WpfApp9
                 existingConfig.DeviceType = updatedConfiguration.DeviceType;
                 existingConfig.MacAddress = updatedConfiguration.MacAddress;
                 existingConfig.Channel = updatedConfiguration.Channel;
+                existingConfig.IsPower = updatedConfiguration.IsPower;
             }
 
             string updatedJsonString = JsonConvert.SerializeObject(currentConfigurations, Formatting.Indented);
@@ -996,6 +1076,7 @@ namespace WpfApp9
         public string Name { get; set; }
         public string DeviceType { get; set; }
         public bool IsOn { get; set; }
+        public bool IsPower { get; set; }
         public string FtpAddress { get; set; }
         public string MacAddress { get; set; }
         public string IpAddress { get; set; }

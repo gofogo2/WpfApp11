@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using WpfApp11.Helpers;
 
 namespace Launcher_SE.Helpers
 {
@@ -21,6 +22,7 @@ namespace Launcher_SE.Helpers
         /// <param name="macAddress">부팅 할 컴퓨터의 맥어드레스</param>
         public void TurnOnPC(string macAddress)
         {
+            try { 
             this.Connect(new System.Net.IPAddress(0xffffffff), 0x2fff); //255.255.255.255 : 12287
 
             if (this.Active)
@@ -32,21 +34,31 @@ namespace Launcher_SE.Helpers
 
             // 컴퓨터를 부팅 할 매직패킷을 보낸다.
             int reterned_value = this.Send(bytes, 1024);
-        }
+        }catch(Exception e)
+            {
+                Logger.Log2($"Error : {e.Message}");
+            }
+}
 
         public void TurnOnPC(string ip, string macAddress)
         {
-            this.Connect(ip, 12287); //255.255.255.255 : 12287
-
-            if (this.Active)
+            try
             {
-                this.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, 0);
+                this.Connect(ip, 12287); //255.255.255.255 : 12287
+
+                if (this.Active)
+                {
+                    this.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, 0);
+                }
+
+                byte[] bytes = GetMagicPacketToByteArray(macAddress);
+
+                // 컴퓨터를 부팅 할 매직패킷을 보낸다.
+                int reterned_value = this.Send(bytes, 1024);
+            }catch(Exception e)
+            {
+                Logger.Log2($"Error : {e.Message}");
             }
-
-            byte[] bytes = GetMagicPacketToByteArray(macAddress);
-
-            // 컴퓨터를 부팅 할 매직패킷을 보낸다.
-            int reterned_value = this.Send(bytes, 1024);
         }
 
         private byte[] GetMagicPacketToByteArray(string macAddress)
