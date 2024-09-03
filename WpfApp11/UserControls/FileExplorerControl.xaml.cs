@@ -324,24 +324,24 @@ namespace WpfApp9
             var target_ftp = "ftp://" + ftpAddress + ":" + ftp_port;
             try
             {
-                //원래====================================================================
-                Uri ftpUri = new Uri(target_ftp);
-                string host = ftpUri.Host;
-                string username = "ftpuser";
-                string password = "1";
-                _ftpClient = new FtpClient(host, username, password);
-                //====================================================================
-
-
-
-
-
-                //임시====================================================================
-                //Uri ftpUri = new Uri("ftp://121.131.142.148:12923");
+                ////원래====================================================================
+                //Uri ftpUri = new Uri(target_ftp);
                 //string host = ftpUri.Host;
-                //string username = "engium";
+                //string username = "ftpuser";
                 //string password = "1";
-                //_ftpClient = new FtpClient(host, username, password, 12923);
+                //_ftpClient = new FtpClient(host, username, password);
+                ////====================================================================
+
+
+
+
+
+                //임시 ====================================================================
+                Uri ftpUri = new Uri("ftp://121.131.142.148:12923");
+                string host = ftpUri.Host;
+                string username = "engium";
+                string password = "1";
+                _ftpClient = new FtpClient(host, username, password, 12923);
                 //====================================================================
 
 

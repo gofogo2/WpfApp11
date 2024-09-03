@@ -66,6 +66,8 @@
     <Compile Include="Helpers\GlobalMessageService.cs" />
     <Compile Include="Helpers\Logger.cs" />
     <Compile Include="Helpers\PJLinkHelper.cs" />
+    <Compile Include="Helpers\ProtocolHelper.cs" />
+    <Compile Include="Helpers\ProtocolUdpHelper.cs" />
     <Compile Include="Helpers\SerialHelper.cs" />
     <Compile Include="Helpers\TcpHelper.cs" />
     <Compile Include="Helpers\UdpHelper.cs" />

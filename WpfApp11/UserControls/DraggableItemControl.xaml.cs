@@ -299,7 +299,7 @@ namespace WpfApp9
             var mainWindow = Window.GetWindow(this) as MainWindow;
             if (mainWindow != null)
             {
-                if (ispow == true)
+                if (Configuration.IsOn == true)
                 {
                     mainWindow.ShowFileExplorer(Configuration.IpAddress, Configuration.Name);
                 }
@@ -317,7 +317,7 @@ namespace WpfApp9
 
             if (main.isvnc)
             {
-                if (ispow)
+                if (Configuration.IsOn)
                 {
                     try
                     {

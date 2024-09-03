@@ -73,6 +73,11 @@ namespace WpfApp9
         public MainWindow()
         {
             InitializeComponent();
+
+
+            ProtocolHelper pl = new ProtocolHelper();
+            pl.Start();
+
             clickTimer = new DispatcherTimer();
             clickTimer.Interval = TimeSpan.FromMilliseconds(200); // 500 ms interval for double-click detection
             clickTimer.Tick += ClickTimer_Tick;
