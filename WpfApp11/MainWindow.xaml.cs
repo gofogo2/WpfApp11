@@ -60,6 +60,8 @@ namespace WpfApp9
         public string local_path = @"C:\GL-MEDIA";
 
         public int pingtime = 5;
+        public int powerInterva01;
+        public int powerInterva02;
         bool first_init = false;
 
         public MainWindow()
@@ -136,49 +138,47 @@ namespace WpfApp9
             {
                 string json = File.ReadAllText(SettingsFile);
                 var settings = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
-
                 if (settings.TryGetValue("AutoPowerEnabled", out var autoPowerValue) && autoPowerValue is bool isEnabled)
                 {
                     AutoPowerToggle.IsChecked = isEnabled;
                 }
-
                 if (settings.TryGetValue("CMSTitle", out var nameValue) && nameValue is string name)
                 {
                     local_pc_name = name;
                     p_title.Text = local_pc_name;
                     Title = local_pc_name;
                 }
-
                 if (settings.TryGetValue("ContentsPath", out var local_pathValue) && local_pathValue is string local_path_value)
                 {
                     local_path = local_path_value;
                 }
-
                 if (settings.TryGetValue("Progress_duration", out var progressDurationValue) && progressDurationValue is double progressDuration)
                 {
                     Progress_duration = progressDuration;
                 }
-
                 if (settings.TryGetValue("useVNC", out var vnc_value) && vnc_value is bool vncvalue)
                 {
                     isvnc = vncvalue;
                 }
-
                 if (settings.TryGetValue("useFTP", out var ftp_value) && ftp_value is bool ftpvalue)
                 {
                     isftp = ftpvalue;
                 }
-
-
                 if (settings.TryGetValue("VNC_Password", out var vncpw) && vncpw is string vncpw2)
                 {
                     vnc_pw = vncpw2;
                 }
-
-
-                if (settings.TryGetValue("Status_Check_Interval", out var ping_timer) && ping_timer is int pingtimer)
+                if (settings.TryGetValue("Status_Check_Interval", out var ping_timer))
                 {
-                    pingtime = pingtimer;
+                    pingtime = int.Parse(ping_timer.ToString());
+                }
+                if (settings.TryGetValue("PowerInterval01", out var _powerInterval01))
+                {
+                    powerInterva01 = int.Parse(_powerInterval01.ToString());
+                }
+                if (settings.TryGetValue("PowerInterval02", out var _powerInterval02))
+                {
+                    powerInterva02 = int.Parse(_powerInterval02.ToString());
                 }
             }
         }
@@ -194,7 +194,9 @@ namespace WpfApp9
                 { "useVNC", isvnc },
                 { "useFTP", isftp},
                 { "VNC_Password", vnc_pw},
-                { "Status_Check_Interval", pingtime}
+                { "Status_Check_Interval", pingtime},
+                { "PowerInterval01", powerInterva01},
+                { "PowerInterval02", powerInterva02}
             };
 
             string json = JsonConvert.SerializeObject(settings, Formatting.Indented);
@@ -274,68 +276,122 @@ namespace WpfApp9
         }
         public async Task SortAndProcessDragItems(List<ItemConfiguration> drags, bool onOff, double startProgress, double endProgress)
         {
+            Debug.WriteLine($"Starting SortAndProcessDragItems. OnOff: {onOff}, StartProgress: {startProgress}, EndProgress: {endProgress}");
+
+            var deviceTypes = new[] { "프로젝터(pjlink)", "프로젝터(appotronics)", "relay", "pdu", "pc" };
+            var dummyItems = deviceTypes.Select(type => new ItemConfiguration { DeviceType = type, IsDummy = true, IsPower = true }).ToList();
+
+            Debug.WriteLine($"Created {dummyItems.Count} dummy items");
+
+            var allItems = drags.Concat(dummyItems).ToList();
+            Debug.WriteLine($"Total items (including dummies): {allItems.Count}");
+
             var sortedDragItems = onOff
-           ? drags.OrderBy(a => a.DeviceType.ToLower() == "relay" ? 1 :
-                                a.DeviceType.ToLower() == "pdu" ? 2 :
-                                a.DeviceType.ToLower() == "프로젝터(pjlink)" ? 3 :
-                                a.DeviceType.ToLower() == "프로젝터(appotronics)" ? 4 :
-                                a.DeviceType.ToLower() == "pc" ? 5 : 6)
-                  .ToList()
-           : drags.OrderBy(a => a.DeviceType.ToLower() == "pc" ? 1 :
-                                a.DeviceType.ToLower() == "프로젝터(appotronics)" ? 2 :
-                                a.DeviceType.ToLower() == "프로젝터(pjlink)" ? 3 :
-                                a.DeviceType.ToLower() == "pdu" ? 4 :
-                                a.DeviceType.ToLower() == "relay" ? 5 : 6)
-                  .ToList();
+                ? allItems.OrderBy(a => a.DeviceType.ToLower() == "프로젝터(pjlink)" ? 1 :
+                                        a.DeviceType.ToLower() == "프로젝터(appotronics)" ? 2 :
+                                        a.DeviceType.ToLower() == "relay" ? 3 :
+                                        a.DeviceType.ToLower() == "pdu" ? 4 :
+                                        a.DeviceType.ToLower() == "pc" ? 5 : 6)
+                       .ToList()
+                : allItems.OrderBy(a => a.DeviceType.ToLower() == "pc" ? 1 :
+                                        a.DeviceType.ToLower() == "pdu" ? 2 :
+                                        a.DeviceType.ToLower() == "relay" ? 3 :
+                                        a.DeviceType.ToLower() == "프로젝터(appotronics)" ? 4 :
+                                        a.DeviceType.ToLower() == "프로젝터(pjlink)" ? 5 : 6)
+                       .ToList();
 
-
-
+            Debug.WriteLine($"Items sorted. Order: {string.Join(", ", sortedDragItems.Select(i => i.DeviceType))}");
 
             foreach (var i in dragItems)
             {
                 i.StopPingCheck();
             }
+            Debug.WriteLine("Stopped ping checks for all items");
 
-            //전원 제어 대상
+            // 전원 제어 대상 (더미 아이템 포함)
             sortedDragItems = sortedDragItems.FindAll(a => a.IsPower == true).ToList();
-
             int totalItems = sortedDragItems.Count;
+            Debug.WriteLine($"Filtered power-controllable items. Total: {totalItems}");
+
+            string previousDeviceType = "";
+
             for (int i = 0; i < totalItems; i++)
             {
                 var item = sortedDragItems[i];
-                Debug.WriteLine($"{item.DeviceType}: {item.IpAddress}: onOff:{onOff}");
+                Debug.WriteLine($"Processing item {i + 1}/{totalItems}: {item.DeviceType} (IsDummy: {item.IsDummy})");
 
-                switch (item.DeviceType.ToLower())
+                // 특정 디바이스 타입 사이에 딜레이 추가 (더미 아이템도 고려)
+                if (onOff)
                 {
-                    case "프로젝터(pjlink)":
-                        await ProcessProjector(item, onOff);
-                        await Task.Delay(1000);
-                        break;
-                    case "프로젝터(appotronics)":
-                        await ProcessDLPProjector(item, onOff);
-                        await Task.Delay(1000);
-                        break;
-                    case "pc":
-                        ProcessPC(item, onOff);
-                        break;
-                    case "relay":
-                        ProcessRelay1(item, onOff);
-                        break;
-                    case "pdu":
-                        ProcessPDU(item, onOff);
-                        break;
+                    if (previousDeviceType.ToLower() == "프로젝터(appotronics)" && item.DeviceType.ToLower() == "relay")
+                    {
+                        Debug.WriteLine($"Adding delay of {powerInterva01}ms between 프로젝터(appotronics) and relay");
+                        await Task.Delay(powerInterva01);
+                    }
+                    else if (previousDeviceType.ToLower() == "pdu" && item.DeviceType.ToLower() == "pc")
+                    {
+                        Debug.WriteLine($"Adding delay of {powerInterva02}ms between pdu and pc");
+                        await Task.Delay(powerInterva02);
+                    }
+                }
+                else
+                {
+                    if (previousDeviceType.ToLower() == "pc" && item.DeviceType.ToLower() == "pdu")
+                    {
+                        Debug.WriteLine($"Adding delay of {powerInterva01}ms between pc and pdu");
+                        await Task.Delay(powerInterva01);
+                    }
+                    else if (previousDeviceType.ToLower() == "relay" && item.DeviceType.ToLower() == "프로젝터(appotronics)")
+                    {
+                        Debug.WriteLine($"Adding delay of {powerInterva02}ms between relay and 프로젝터(appotronics)");
+                        await Task.Delay(powerInterva02);
+                    }
+                }
+
+                if (!item.IsDummy)
+                {
+                    Debug.WriteLine($"Processing real item: {item.DeviceType}");
+                    switch (item.DeviceType.ToLower())
+                    {
+                        case "프로젝터(pjlink)":
+                            await ProcessProjector(item, onOff);
+                            await Task.Delay(500);
+                            break;
+                        case "프로젝터(appotronics)":
+                            await ProcessDLPProjector(item, onOff);
+                            await Task.Delay(500);
+                            break;
+                        case "pc":
+                            ProcessPC(item, onOff);
+                            break;
+                        case "relay":
+                            ProcessRelay1(item, onOff);
+                            break;
+                        case "pdu":
+                            ProcessPDU(item, onOff);
+                            break;
+                    }
+                }
+                else
+                {
+                    Debug.WriteLine($"Skipping dummy item: {item.DeviceType}");
                 }
 
                 double progress = startProgress + (endProgress - startProgress) * ((i + 1) / (double)totalItems);
                 Dispatcher.Invoke(() => PowerProgressBar.Value = progress);
-                
+                Debug.WriteLine($"Updated progress bar. Current progress: {progress:F2}%");
+
                 await Task.Delay(200);
+                previousDeviceType = item.DeviceType;
             }
 
             foreach (var i in dragItems)
             {
                 i.StartPingCheck();
             }
+            Debug.WriteLine("Started ping checks for all items");
+
+            Debug.WriteLine("SortAndProcessDragItems completed");
         }
 
         private async Task AddDelay(double startProgress, double endProgress)
@@ -1095,5 +1151,6 @@ namespace WpfApp9
         public int Column { get; set; }
         public int ZIndex { get; set; }
         public string VncPw { get; set; }
+        public bool IsDummy { get; set; }
     }
 }
