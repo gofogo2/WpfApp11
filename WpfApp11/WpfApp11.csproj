@@ -223,7 +223,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <None Include="sample\itemConfig.json" />
-    <None Include="sample\setting_updated.json" />
+    <None Include="sample\schedule.json" />
     <None Include="sample\settings.json" />
     <Resource Include="Images\icons\icon_bat.png" />
     <Resource Include="Images\icons\icon_etc.png" />
