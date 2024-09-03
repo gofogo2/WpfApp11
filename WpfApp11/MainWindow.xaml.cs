@@ -52,14 +52,6 @@ namespace WpfApp9
         private DispatcherTimer clickTimer;
         public WakeOnLan wol;
 
-        private static readonly Dictionary<string, int> deviceTypeSortOrder = new Dictionary<string, int>
-        {
-            {"projector", 1},
-            {"pc", 2},
-            {"RELAY #1", 3},
-            {"RELAY #2", 4},
-            {"pdu", 5}
-        };
 
         DispatcherTimer pow_timer = new DispatcherTimer();
 
@@ -74,9 +66,9 @@ namespace WpfApp9
         {
             InitializeComponent();
 
-
-            ProtocolHelper pl = new ProtocolHelper();
-            pl.Start();
+            //늘 주석
+            //ProtocolHelper pl = new ProtocolHelper();
+            //pl.Start();
 
             clickTimer = new DispatcherTimer();
             clickTimer.Interval = TimeSpan.FromMilliseconds(200); // 500 ms interval for double-click detection
@@ -109,11 +101,6 @@ namespace WpfApp9
           
         }
 
-
-        private void InitSeria()
-        {
- 
-        }
 
         private void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {

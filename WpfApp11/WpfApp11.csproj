@@ -65,6 +65,7 @@
     <Compile Include="Helpers\DlpProjectorHelper.cs" />
     <Compile Include="Helpers\GlobalMessageService.cs" />
     <Compile Include="Helpers\Logger.cs" />
+    <Compile Include="Helpers\OSCSenderHelper.cs" />
     <Compile Include="Helpers\PJLinkHelper.cs" />
     <Compile Include="Helpers\ProtocolHelper.cs" />
     <Compile Include="Helpers\ProtocolUdpHelper.cs" />
@@ -79,6 +80,17 @@
     <Compile Include="LogViewerWindow.xaml.cs">
       <DependentUpon>LogViewerWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Osc\Extensions.cs" />
+    <Compile Include="Osc\Midi.cs" />
+    <Compile Include="Osc\OscBundle.cs" />
+    <Compile Include="Osc\OscMessage.cs" />
+    <Compile Include="Osc\OscPacket.cs" />
+    <Compile Include="Osc\RGBA.cs" />
+    <Compile Include="Osc\Symbol.cs" />
+    <Compile Include="Osc\Timetag.cs" />
+    <Compile Include="Osc\UDPListener.cs" />
+    <Compile Include="Osc\UDPSender.cs" />
+    <Compile Include="Osc\Utils.cs" />
     <Compile Include="UserControls\AddDeviceControl.xaml.cs">
       <DependentUpon>AddDeviceControl.xaml</DependentUpon>
     </Compile>

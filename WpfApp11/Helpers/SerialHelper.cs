@@ -56,6 +56,7 @@ namespace WpfApp11.Helpers
 
             try
             {
+                Logger.Log2($"Serial: {data}");
                 _serialPort.Write(data);
                 return true;
             }

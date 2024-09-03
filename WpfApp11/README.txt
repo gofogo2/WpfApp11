@@ -128,6 +128,7 @@ ON/OFF/REBOOT 버튼 이미지 공통
 [ ] 프로젝터 (delay)> RELAY, PDU (delay)> PC
 [ ] PC (delay)> RELAY, PDU (delay)> 프로젝터
 [ ] 전원 제어 delay setting으로 빼기 앞딜레이 뒷딜레이
+[ ] 버튼은 손가락 커서로 변경
 
 #
 -릴레이는 상태체크 안한다
