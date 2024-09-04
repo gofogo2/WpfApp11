@@ -29,6 +29,7 @@ namespace WpfApp9
     public partial class MainWindow : Window
     {
         public LogViewerWindow logViewer;
+        public LogViewerWindow errorlogViewer;
         private List<DraggableItemControl> dragItems = new List<DraggableItemControl>();
         private const string SettingsFile = "settings.json";
         private Point offset;
@@ -131,11 +132,32 @@ namespace WpfApp9
                 if (logViewer == null || !logViewer.IsVisible)
                 {
                     logViewer = new LogViewerWindow(Logger.LogFilePath);
+                    logViewer.Title = "Logviewer";
                     logViewer.Show();
                 }
                 else
                 {
-                    logViewer.Activate();
+                    logViewer.Close();
+                    logViewer = new LogViewerWindow(Logger.LogFilePath);
+                    logViewer.Title = "Logviewer";
+                    logViewer.Show();
+                }
+            }
+            else if (e.Key == Key.F2)
+            {
+                if (logViewer == null || !logViewer.IsVisible)
+                {
+                    logViewer = new LogViewerWindow(Logger.LogErrorFilePath);
+                    logViewer.Title = "ErrorLogviewer";
+                    logViewer.Show();
+                }
+                else
+                {
+                    logViewer.Close();
+                    
+                    logViewer = new LogViewerWindow(Logger.LogErrorFilePath);
+                    logViewer.Title = "ErrorLogviewer";
+                    logViewer.Show();
                 }
             }
         }
