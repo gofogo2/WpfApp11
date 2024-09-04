@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp9" xmlns:usercontrols="clr-namespace:WpfApp11.UserControls"
-          FontFamily="/Wpf.FontTest;component/fonts/#Donoun"
+          
         mc:Ignorable="d"
         Title="CMS" Height="1080" Width="1920">
     <Window.Resources>
@@ -105,8 +105,8 @@
                         <StackPanel Orientation="Horizontal">
                                 <Image Source="Images/on_1.png"  Width="40" Height="40"/>
                                 <StackPanel Margin="7,0,0,0">
-                                    <TextBlock Text="자동 전원 설정" FontWeight="ExtraBold" FontSize="20" TextAlignment="Center"/>
-                                    <TextBlock Text="요일별 시간 설정" FontWeight="Black" FontSize="17" TextAlignment="Center"/>
+                                    <TextBlock Text="자동 전원 설정" FontWeight="ExtraBold" FontSize="17" TextAlignment="Center" Margin="0,0,0,5" FontFamily="{StaticResource NotoSansFontFamily}"/>
+                                    <TextBlock Text="요일별 시간 설정" FontWeight="Medium" FontSize="15" TextAlignment="Center" FontFamily="{StaticResource NotoSansFontFamily}"/>
                                 </StackPanel>
                             </StackPanel>
                          
@@ -148,7 +148,7 @@
                     </ToggleButton.Style>
                 </ToggleButton>
             </StackPanel>
-            <TextBlock Grid.Column="1" Text="PROJECT TITLE" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" x:Name="p_title" FontSize="50"/>
+            <TextBlock Grid.Column="1" Text="PROJECT TITLE" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" x:Name="p_title" FontSize="48" />
             <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
                 <!--<Image Source="Images/pow_on.png"   Width="150" Height="69"  MouseLeftButtonDown="TotalPowerBtnOn_Click" />-->
 
@@ -173,8 +173,8 @@
                         </ControlTemplate>
                     </Button.Template>
                     <StackPanel>
-                        <TextBlock Text="전체 전원" FontWeight="Bold" TextAlignment="Center" FontSize="14" Margin="0,10,0,0"/>
-                        <TextBlock Text="ON" FontWeight="Heavy" TextAlignment="Center" FontSize="35" Margin="0,2,0,0"/>
+                        <TextBlock Text="전체 전원" FontWeight="Bold" TextAlignment="Center" FontSize="14" Margin="0,10,0,0" FontFamily="{StaticResource NotoSansFontFamily}"/>
+                        <TextBlock Text="ON" FontWeight="Black" TextAlignment="Center" FontSize="32" Margin="0,2,0,0" FontFamily="{StaticResource NotoSansFontFamily}"/>
                     </StackPanel>
                 </Button>
 
@@ -203,8 +203,8 @@
                         </ControlTemplate>
                     </Button.Template>
                     <StackPanel>
-                        <TextBlock Text="전체 전원" FontWeight="Bold" TextAlignment="Center" FontSize="14" Margin="0,10,0,0"/>
-                        <TextBlock Text="OFF" FontWeight="Heavy" TextAlignment="Center" FontSize="35" Margin="0,2,0,0"/>
+                        <TextBlock Text="전체 전원" FontWeight="Bold" TextAlignment="Center" FontSize="14" Margin="0,10,0,0"  FontFamily="{StaticResource NotoSansFontFamily}"/>
+                        <TextBlock Text="OFF" FontWeight="Black" TextAlignment="Center" FontSize="32" Margin="0,2,0,0" FontFamily="{StaticResource NotoSansFontFamily}"/>
                     </StackPanel>
                 </Button>
 
@@ -324,7 +324,7 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>-->
                 <StackPanel VerticalAlignment="Center">
-                    <TextBlock x:Name="PowerStatusText" Text="전원 ON" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,20" FontSize="25" Foreground="White" FontWeight="Bold"/>
+                    <TextBlock x:Name="PowerStatusText" Text="전원 ON" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,20" FontSize="20" Foreground="White" FontWeight="Bold" FontFamily="{StaticResource NotoSansFontFamily}"/>
                     <ProgressBar Foreground="#FFC000" x:Name="PowerProgressBar"  Width="500" Height="50" Minimum="0" Maximum="100" Value="0">
                         <ProgressBar.Template>
                             <ControlTemplate TargetType="ProgressBar">
@@ -336,7 +336,7 @@
                                 BorderThickness="1"
                                 CornerRadius="5">
                                         <Border x:Name="PART_Indicator"  Background="#FFC000"  HorizontalAlignment="Left" Height="50" CornerRadius="5">
-                                            <TextBlock Text="{Binding ElementName=PowerProgressBar, Path=Value, StringFormat={}{0:0}%}"  VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="Black" FontWeight="Bold" Margin="0,00,30,0" FontSize="20" x:Name="pow_progress_value"/>
+                                            <TextBlock Text="{Binding ElementName=PowerProgressBar, Path=Value, StringFormat={}{0:0}%}"  VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="Black" FontWeight="Bold" Margin="0,00,30,0" FontSize="20" x:Name="pow_progress_value" FontFamily="{StaticResource NotoSansFontFamily}"/>
                                         </Border>
                                     </Border>
 

@@ -976,7 +976,7 @@ namespace WpfApp9
             add_device_ppanel.Visibility = Visibility.Visible;
             addDeviceWindow.addbtn.Visibility = Visibility.Visible;
             addDeviceWindow.editbtn.Visibility = Visibility.Collapsed;
-            addDeviceWindow.title.Content = "장비 등록";
+            addDeviceWindow.title.Text = "장비 등록";
             addDeviceWindow.DeviceTypeComboBox.IsEnabled = true;
         }
 
@@ -1000,7 +1000,7 @@ namespace WpfApp9
                 add_device_ppanel.Visibility = Visibility.Visible;
                 addDeviceWindow.addbtn.Visibility = Visibility.Visible;
                 addDeviceWindow.editbtn.Visibility = Visibility.Collapsed;
-                addDeviceWindow.title.Content = "장비 등록";
+                addDeviceWindow.title.Text = "장비 등록";
                 addDeviceWindow.DeviceTypeComboBox.IsEnabled = true;
 
 
@@ -1027,7 +1027,7 @@ namespace WpfApp9
             add_device_ppanel.Visibility = Visibility.Visible;
             addDeviceWindow.addbtn.Visibility = Visibility.Visible;
             addDeviceWindow.editbtn.Visibility = Visibility.Collapsed;
-            addDeviceWindow.title.Content = "장비 등록";
+            addDeviceWindow.title.Text = "장비 등록";
             addDeviceWindow.DeviceTypeComboBox.IsEnabled = true;
         }
 

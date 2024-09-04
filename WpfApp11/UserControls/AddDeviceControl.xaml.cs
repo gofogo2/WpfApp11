@@ -130,7 +130,7 @@ namespace WpfApp11.UserControls
         public void set_edit_value(ItemConfiguration config)
         {
             tempconfig = config;
-            title.Content = "기기 수정";
+            title.Text = "기기 수정";
             addbtn.Visibility = Visibility.Collapsed;
             editbtn.Visibility = Visibility.Visible;
 

@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             FontFamily="/Wpf.FontTest;component/fonts/#Donoun"
              mc:Ignorable="d" 
              d:DesignHeight="180" d:DesignWidth="180" Background="White">
    <UserControl.Resources>
@@ -49,7 +50,7 @@
         </Setter>
     </Style>
 </UserControl.Resources>
-    <Border BorderThickness="1" BorderBrush="Black" CornerRadius="10">
+    <Border BorderThickness="1" BorderBrush="Black" CornerRadius="5">
         <Grid>
             <Grid x:Name="MainGrid" Width="180" Height="180">
                     <Grid.RowDefinitions>
@@ -57,7 +58,7 @@
                         <RowDefinition Height="80"/>
                         <RowDefinition Height="50"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" x:Name="TitleTextBlock" Text="Title" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,5,0"/>
+                    <TextBlock Grid.Row="0" x:Name="TitleTextBlock" Text="Title" FontSize="15" HorizontalAlignment="Center" FontWeight="Medium" VerticalAlignment="Center" Margin="5,5,5,0"/>
 
                     <Border Grid.Row="1" BorderThickness="0.5" BorderBrush="Black">
                         <Rectangle Fill="#E0E0E0" x:Name="PowerState"/>
@@ -93,7 +94,7 @@
                             </ControlTemplate>
                         </Button.Template>
 
-                        <TextBlock Text="ON" FontWeight="Bold"/>
+                        <TextBlock Text="ON" FontWeight="Bold" FontSize="12"/>
                     </Button>
 
 
@@ -123,7 +124,7 @@
                             </ControlTemplate>
                         </Button.Template>
 
-                        <TextBlock Text="OFF" FontWeight="Bold"/>
+                        <TextBlock Text="OFF" FontWeight="Bold" FontSize="12"/>
                     </Button>
 
 

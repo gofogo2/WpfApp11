@@ -11,9 +11,43 @@
             <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center">
                 <TextBlock Text="파일 전송이 완료되었습니다." FontWeight="Bold" TextAlignment="Center" FontSize="20" Margin="0,50,0,0" x:Name="popup_msg"/>
                     <!--<Image Source="../Images/confirm.png" Margin="0,30,0,0" Width="150" Height="50" MouseLeftButtonDown="YesButton_Click" HorizontalAlignment="Center"/>-->
-                <Button Background="White" Margin="0,50,0,0" Width="150" Height="50" Click="YesButton_Click" >
+                <!--<Button Background="White" Margin="0,50,0,0" Width="150" Height="50" Click="YesButton_Click" >
                     <TextBlock Text="확인" FontWeight="Bold" FontSize="20"/>
+                </Button>-->
+
+
+
+
+
+
+
+
+                <Button  Width="150" Height="50"  Background="White" Click="YesButton_Click"  Margin="0,50,0,0" >
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}"  x:Name="confirm_btn"  BorderBrush="#888888" BorderThickness="1" CornerRadius="5">
+                                <!-- 둥근 모서리 설정 -->
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="confirm_btn" Property="Background" Value="SkyBlue"/>
+                                    <Setter TargetName="confirm_btn" Property="BorderBrush" Value="DodgerBlue"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                    <StackPanel>
+                        <TextBlock Text="확인" FontWeight="Bold" FontSize="20" FontFamily="{StaticResource NotoSansFontFamily}"/>
+                    </StackPanel>
                 </Button>
+
+
+
+
+
+
+
             </StackPanel>
         </Border>
     </Grid>

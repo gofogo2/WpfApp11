@@ -408,74 +408,7 @@ namespace WpfApp9
                         _leftItems.Add(item);
                     }
 
-                    //foreach (var file in di.GetFiles())
-                    //{
-                    //    _leftItems.Add(new FileSystemItem
-                    //    {
-                    //        Name = file.Name,
-                    //        Type = "File",
-                    //        FullPath = file.FullName,
-                    //        IconSource = GetIconForFileType(file.FullName)
-                    //    });
-
-
-
-                    //}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    //var listing = di.GetDirectories(path);
-                    ////var sortedListing = listing
-                    ////    .OrderByDescending(item => item.Type == di.Directory)
-                    ////    .ThenBy(item => item.Name);
-
-                    //foreach (var item in listing)
-                    //{
-
-                    //    FileSystemItem fs = new FileSystemItem();
-                    //    fs.Name = item.Name;
-                    //    fs.Type = "Folder";
-                    //    fs.FullPath = item.FullName;
-
-
-
-                    //    string extension = Path.GetExtension(fs.FullPath).ToLower();
-
-
-                    //    if (extension == "")
-                    //    {
-                    //        //fs.IconSource = GetIconForFileType(item.Type == FtpObjectType.Directory ? "folder" : item.Name);
-                    //        BitmapSource bitmapSource = new BitmapImage(new Uri("../Images/icons/icon_folder.png", UriKind.Relative));
-                    //        fs.IconSource = bitmapSource;
-                    //    }
-
-                    //    _leftItems.Add(fs);
-                    //}
-
-
-
-
-
-
-
-
-
-
-
-
-
+               
 
                     var listing2 = di.GetFiles();
                     //var sortedListing = listing
@@ -487,10 +420,12 @@ namespace WpfApp9
 
                         FileSystemItem fs = new FileSystemItem();
                         fs.Name = item.Name;
+                        
                         fs.Type = "File";
                         fs.FullPath = item.FullName;
 
 
+                        
 
                         string extension = Path.GetExtension(fs.FullPath).ToLower();
 
