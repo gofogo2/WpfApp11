@@ -472,8 +472,8 @@ namespace WpfApp9
             try
             {
                 bool result = onOff
-                    ? await DlpProjectorHelper.Instance.SendPowerOnCommandToDLPProjector(item.IpAddress)
-                    : await DlpProjectorHelper.Instance.SendPowerOffCommandToDLPProjector(item.IpAddress);
+                    ? await DlpProjectorHelper.Instance.SendPowerOnCommandAsync(item.IpAddress)
+                    : await DlpProjectorHelper.Instance.SendPowerOffCommandAsync(item.IpAddress);
 
                 if (!result)
                 {
@@ -1052,7 +1052,6 @@ namespace WpfApp9
                 {
                     if (dragItems[i].d_select.IsChecked == true)
                     {
-                        dragItems[i].StopReceiving();
                         ItemCanvas.Children.Remove(dragItems[i]);
                         dragItems.RemoveAt(i);
                     }

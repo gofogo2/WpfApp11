@@ -20,12 +20,13 @@ namespace WpfApp9
 {
     public partial class DraggableItemControl : UserControl
     {
-        private UdpReceiver _udpReceiver;
         public WakeOnLan wol;
-        private  int PingInterval = 5000; // 5초마다 핑 체크
+        private int PingInterval = 5000; // 5초마다 핑 체크
         private CancellationTokenSource pduStatusCancellationTokenSource;
-        private bool isPinging = false;
         private CancellationTokenSource pingCancellationTokenSource;
+        private CancellationTokenSource pjlinkStatusCancellationTokenSource;
+        private CancellationTokenSource appotronicsStatusCancellationTokenSource;
+        private bool isPinging = false;
         string vncViewerPath = @"C:\Program Files\TightVNC\tvnviewer.exe"; // TightVNC 뷰어 경로
         public ItemConfiguration Configuration { get; private set; }
         SolidColorBrush onColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#ACD7FE"));
@@ -40,7 +41,6 @@ namespace WpfApp9
             UpdateUI();
             wol = new WakeOnLan();
 
-
             var main = Application.Current.MainWindow as MainWindow;
 
             PingInterval = main.pingtime * 1000;
@@ -50,29 +50,27 @@ namespace WpfApp9
                 PingInterval = 5000;
             }
 
-
+            // 전체 상태체크
             if (Configuration.DeviceType.ToLower() == "pc")
             {
                 StartPingCheck();
             }
             else if (Configuration.DeviceType.ToLower() == "프로젝터(pjlink)")
             {
-                StartPingCheck();
+                StartPJLinkStatusCheck();
             }
             else if (Configuration.DeviceType.ToLower() == "프로젝터(appotronics)")
             {
-                StartPingCheck();
+                StartAppotronicsStatusCheck();
             }
             else if (Configuration.DeviceType == "PDU")
             {
                 StartPDUStatus();
-
             }
             else if (Configuration.DeviceType == "RELAY")
             {
-        
+                // RELAY 관련 코드
             }
-
 
             // ContextMenu 생성
             CreateContextMenu();
@@ -90,6 +88,14 @@ namespace WpfApp9
             pduStatusCancellationTokenSource?.Cancel();
             pduStatusCancellationTokenSource?.Dispose();
             pduStatusCancellationTokenSource = null;
+        }
+
+        public void StopStatusDevice()
+        {
+            StopPDUStatus();
+            StopPJLinkStatusCheck();
+            StopAppotronicsStatusCheck();
+            StartPingCheck();
         }
 
         private async Task PDUStatusCheckLoop(CancellationToken cancellationToken)
@@ -119,9 +125,86 @@ namespace WpfApp9
                 }
                 catch (Exception ex)
                 {
-                    // 오류 처리 (로깅 등)
                     Logger.Log2($"PDU 상태 체크 중 오류 발생: {ex.Message}");
                     Debug.WriteLine($"PDU 상태 체크 중 오류 발생: {ex.Message}");
+                }
+
+                await Task.Delay(PingInterval, cancellationToken);
+            }
+        }
+
+        public void StartPJLinkStatusCheck()
+        {
+            StopPJLinkStatusCheck(); // 기존 체크가 실행 중이면 중지
+            pjlinkStatusCancellationTokenSource = new CancellationTokenSource();
+            _ = PJLinkStatusCheckLoop(pjlinkStatusCancellationTokenSource.Token);
+        }
+
+        public void StopPJLinkStatusCheck()
+        {
+            pjlinkStatusCancellationTokenSource?.Cancel();
+            pjlinkStatusCancellationTokenSource?.Dispose();
+            pjlinkStatusCancellationTokenSource = null;
+        }
+
+        private async Task PJLinkStatusCheckLoop(CancellationToken cancellationToken)
+        {
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                try
+                {
+                    PowerStatus status = await PJLinkHelper.Instance.GetPowerStatusAsync(Configuration.IpAddress);
+                    await Dispatcher.InvokeAsync(() =>
+                    {
+                        if (!cancellationToken.IsCancellationRequested)
+                        {
+                            UpdatePowerState(status == PowerStatus.PoweredOn);
+                        }
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Logger.Log2($"PJLink 상태 체크 중 오류 발생: {ex.Message}");
+                    Debug.WriteLine($"PJLink 상태 체크 중 오류 발생: {ex.Message}");
+                }
+
+                await Task.Delay(PingInterval, cancellationToken);
+            }
+        }
+
+        public void StartAppotronicsStatusCheck()
+        {
+            StopAppotronicsStatusCheck(); // 기존 체크가 실행 중이면 중지
+            appotronicsStatusCancellationTokenSource = new CancellationTokenSource();
+            _ = AppotronicsStatusCheckLoop(appotronicsStatusCancellationTokenSource.Token);
+        }
+
+        public void StopAppotronicsStatusCheck()
+        {
+            appotronicsStatusCancellationTokenSource?.Cancel();
+            appotronicsStatusCancellationTokenSource?.Dispose();
+            appotronicsStatusCancellationTokenSource = null;
+        }
+
+        private async Task AppotronicsStatusCheckLoop(CancellationToken cancellationToken)
+        {
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                try
+                {
+                    string status = await DlpProjectorHelper.Instance.GetPowerStatusAsync(Configuration.IpAddress);
+                    await Dispatcher.InvokeAsync(() =>
+                    {
+                        if (!cancellationToken.IsCancellationRequested)
+                        {
+                            UpdatePowerState(status == "Powered On");
+                        }
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Logger.Log2($"APPOTRONICS 상태 체크 중 오류 발생: {ex.Message}");
+                    Debug.WriteLine($"APPOTRONICS 상태 체크 중 오류 발생: {ex.Message}");
                 }
 
                 await Task.Delay(PingInterval, cancellationToken);
@@ -136,18 +219,14 @@ namespace WpfApp9
 
             if (Configuration.DeviceType.ToLower() == "pc")
             {
-                        menu.Items.Add(CreateMenuItem("VNC", VNC_Button_Click));
-                        menu.Items.Add(CreateMenuItem("FTP", FTP_Button_Click));
-                 
+                menu.Items.Add(CreateMenuItem("VNC", VNC_Button_Click));
+                menu.Items.Add(CreateMenuItem("FTP", FTP_Button_Click));
             }
             menu.Items.Add(CreateMenuItem("EDIT", EditMenuItem_Click));
-            menu.Items.Add(CreateMenuItem("DELETE", DeleteMenuItem_Click));  //여기다
+            menu.Items.Add(CreateMenuItem("DELETE", DeleteMenuItem_Click));
 
             this.ContextMenu = menu;
         }
-
-
-    
 
         private MenuItem CreateMenuItem(string header, RoutedEventHandler clickHandler)
         {
@@ -164,7 +243,7 @@ namespace WpfApp9
         {
             if (sender is MenuItem button)
             {
-                button.Cursor = Cursors.Arrow; // 또는 Cursors.Default
+                button.Cursor = Cursors.Arrow;
             }
         }
 
@@ -174,14 +253,6 @@ namespace WpfApp9
             {
                 button.Cursor = Cursors.Hand;
             }
-           
-        }
-
-        private Separator CreateSeparator()
-        {
-            Separator separator = new Separator();
-            separator.Style = FindResource("CustomSeparatorStyle") as Style;
-            return separator;
         }
 
         public void UpdatePowerState(bool isOn)
@@ -189,39 +260,23 @@ namespace WpfApp9
             ispow = isOn;
             Configuration.IsOn = isOn;
             PowerState.Fill = isOn ? onColor : offColor;
-
-            //if (isOn)
-            //{
-            //    if (Configuration.DeviceType == "pc")
-            //    {
-            //        StatusIndicator.Visibility = Visibility.Visible;
-            //    }
-            //}
-            //else
-            //{
-            //    if (Configuration.DeviceType == "pc")
-            //    {
-            //        StatusIndicator.Visibility = Visibility.Collapsed;
-            //    }
-            //}
         }
 
         public void StartPingCheck()
         {
             try
             {
-                if (Configuration.DeviceType.ToLower() == "pc" || Configuration.DeviceType.ToLower() == "프로젝터(pjlink)" || Configuration.DeviceType.ToLower() == "프로젝터(appotronics)")
+                if (Configuration.DeviceType.ToLower() == "pc")
                 {
                     StopPingCheck();
                     pingCancellationTokenSource = new CancellationTokenSource();
                     _ = PingCheckLoop(pingCancellationTokenSource.Token);
                 }
-            }catch(Exception e)
-            {
-
             }
-
-
+            catch (Exception e)
+            {
+                Logger.Log2($"Ping 체크 시작 중 오류 발생: {e.Message}");
+            }
         }
 
         public void StopPingCheck()
@@ -265,7 +320,6 @@ namespace WpfApp9
 
         private void UpdateUI()
         {
-
             if (Configuration.Name.Length > 15)
             {
                 TitleTextBlock.Text = Configuration.Name.Substring(0, 13) + "..";
@@ -274,8 +328,6 @@ namespace WpfApp9
             {
                 TitleTextBlock.Text = Configuration.Name;
             }
-            
-
 
             if (Configuration.DeviceType.ToLower() == "프로젝터(pjlink)")
             {
@@ -290,7 +342,6 @@ namespace WpfApp9
                 IconImage.Source = new BitmapImage(new Uri($"pack://application:,,,/Images/PDU.png"));
                 IconImage.Width = 67;
                 IconImage.Height = 46;
-
             }
             else if (Configuration.DeviceType == "RELAY")
             {
@@ -376,30 +427,20 @@ namespace WpfApp9
 
         private void DeleteMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            //if (MessageBox.Show("이 기기를 삭제하시겠습니까?", "기기 삭제", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-            //{
-            //    var mainWindow = Window.GetWindow(this) as MainWindow;
-            //    mainWindow?.RemoveDevice(this);
-            //}
-
-
             delete_dialog dialog = new delete_dialog
             {
                 Owner = Application.Current.MainWindow,
-                
             };
 
             dialog.popup_msg.Text = "해당 장비를 삭제하시겠습니까?\n삭제 후 되돌릴 수 없습니다.";
 
-
-            bool? result = dialog.ShowDialog(); // 모달 다이얼로그로 표시됨
+            bool? result = dialog.ShowDialog();
 
             if (dialog.DialogResult == true)
             {
                 var mainWindow = Window.GetWindow(this) as MainWindow;
-                    mainWindow?.RemoveDevice(this);
+                mainWindow?.RemoveDevice(this);
             }
-          
         }
 
         private async void pow_on(object sender, RoutedEventArgs e)
@@ -413,11 +454,15 @@ namespace WpfApp9
                 }
                 else if (Configuration.DeviceType.ToLower() == "프로젝터(pjlink)")
                 {
-                  await  PJLinkHelper.Instance.PowerOnAsync(Configuration.IpAddress);
+                    StopPJLinkStatusCheck(); // 상태 체크 일시 중지
+                    await PJLinkHelper.Instance.PowerOnAsync(Configuration.IpAddress);
+                    StartPJLinkStatusCheck(); // 상태 체크 재개
                 }
                 else if (Configuration.DeviceType.ToLower() == "프로젝터(appotronics)")
                 {
-                    await DlpProjectorHelper.Instance.SendPowerOffCommandToDLPProjector(Configuration.IpAddress);
+                    StopAppotronicsStatusCheck(); // 상태 체크 일시 중지
+                    await DlpProjectorHelper.Instance.SendPowerOnCommandAsync(Configuration.IpAddress);
+                    StartAppotronicsStatusCheck(); // 상태 체크 재개
                 }
                 else if (Configuration.DeviceType == "PDU")
                 {
@@ -425,11 +470,8 @@ namespace WpfApp9
                 }
                 else if (Configuration.DeviceType == "RELAY")
                 {
-
-
                     string hexStr = Utils.Instance.IntToHex(Configuration.Channel);
                     Debug.WriteLine(hexStr);
-                    //16진수로 제어
                     string hex = $"525920{hexStr}20310D";
                     Logger.Log(Configuration.IpAddress, Configuration.port, "Power ON", hex);
                     await UdpHelper.Instance.SendHexAsync(hex, false, int.Parse(Configuration.port), Configuration.IpAddress);
@@ -445,10 +487,6 @@ namespace WpfApp9
             MessageBox.Show("전원이 켜졌습니다");
         }
 
-
-
-       
-
         private async void pow_off(object sender, RoutedEventArgs e)
         {
             string result = "Success";
@@ -460,23 +498,24 @@ namespace WpfApp9
                 }
                 else if (Configuration.DeviceType.ToLower() == "프로젝터(pjlink)")
                 {
+                    StopPJLinkStatusCheck(); // 상태 체크 일시 중지
                     await PJLinkHelper.Instance.PowerOffAsync(Configuration.IpAddress);
+                    StartPJLinkStatusCheck(); // 상태 체크 재개
                 }
                 else if (Configuration.DeviceType.ToLower() == "프로젝터(appotronics)")
                 {
-                    await DlpProjectorHelper.Instance.SendPowerOffCommandToDLPProjector(Configuration.IpAddress);
+                    StopAppotronicsStatusCheck(); // 상태 체크 일시 중지
+                    await DlpProjectorHelper.Instance.SendPowerOffCommandAsync(Configuration.IpAddress);
+                    StartAppotronicsStatusCheck(); // 상태 체크 재개
                 }
                 else if (Configuration.DeviceType == "PDU")
                 {
-                    await WebApiHelper.Instance.OffPDU(Configuration.IpAddress,Configuration.Channel);
+                    await WebApiHelper.Instance.OffPDU(Configuration.IpAddress, Configuration.Channel);
                 }
                 else if (Configuration.DeviceType == "RELAY")
                 {
-
                     string hexStr = Utils.Instance.IntToHex(Configuration.Channel);
                     Debug.WriteLine(hexStr);
-
-
                     string hex = $"525920{hexStr}20300D";
                     Logger.Log(Configuration.IpAddress, Configuration.port, "Power OFF", hex);
                     await UdpHelper.Instance.SendHexAsync(hex, false, int.Parse(Configuration.port), Configuration.IpAddress);
@@ -492,34 +531,6 @@ namespace WpfApp9
             MessageBox.Show("전원이 꺼졌습니다.");
         }
 
-        public static string ConvertStringToHex(string input)
-        {
-            try
-            {
-                // 문자열을 정수로 변환
-                if (!int.TryParse(input, out int number))
-                {
-                    throw new ArgumentException("입력 문자열을 정수로 변환할 수 없습니다.");
-                }
-
-                // 정수를 16진수 문자열로 변환
-                string hexString = number.ToString("X");
-
-                // 16진수 문자열의 길이가 홀수인 경우 앞에 0 추가
-                if (hexString.Length % 2 != 0)
-                {
-                    hexString = "0" + hexString;
-                }
-
-                return hexString;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"변환 중 오류 발생: {ex.Message}");
-                return string.Empty;
-            }
-        }
-
         private async void pow_re(object sender, RoutedEventArgs e)
         {
             string result = "Success";
@@ -531,11 +542,19 @@ namespace WpfApp9
                 }
                 else if (Configuration.DeviceType.ToLower() == "프로젝터(pjlink)")
                 {
-                    //PJLinkHelper.Instance.PowerOff(Configuration.IpAddress);
+                    StopPJLinkStatusCheck(); // 상태 체크 일시 중지
+                    await PJLinkHelper.Instance.PowerOffAsync(Configuration.IpAddress);
+                    await Task.Delay(5000); // Wait for 5 seconds
+                    await PJLinkHelper.Instance.PowerOnAsync(Configuration.IpAddress);
+                    StartPJLinkStatusCheck(); // 상태 체크 재개
                 }
                 else if (Configuration.DeviceType.ToLower() == "프로젝터(appotronics)")
                 {
-                    //await UdpHelper.Instance.SendPowerOffCommandToDLPProjector(Configuration.IpAddress);
+                    StopAppotronicsStatusCheck(); // 상태 체크 일시 중지
+                    await DlpProjectorHelper.Instance.SendPowerOffCommandAsync(Configuration.IpAddress);
+                    await Task.Delay(5000); // Wait for 5 seconds
+                    await DlpProjectorHelper.Instance.SendPowerOnCommandAsync(Configuration.IpAddress);
+                    StartAppotronicsStatusCheck(); // 상태 체크 재개
                 }
                 else if (Configuration.DeviceType == "PDU")
                 {
@@ -551,16 +570,10 @@ namespace WpfApp9
             MessageBox.Show("재시작");
         }
 
-        public void StopReceiving()
-        {
-            _udpReceiver?.Stop();
-        }
-
         private void OnMessageReceived(string message)
         {
             Dispatcher.Invoke(() =>
             {
-                // 유효한 IP에서 수신된 메시지를 처리합니다.
                 if (message == "00")
                 {
                     if (relay_onoff < 5)

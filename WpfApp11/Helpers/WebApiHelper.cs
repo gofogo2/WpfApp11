@@ -85,6 +85,7 @@ public class WebApiHelper
         return await response.Content.ReadAsStringAsync();
     }
 
+    // PDU 상태체크
     public async Task<Dictionary<string, string>> StatusPDU(string url, string index)
     {
         try
