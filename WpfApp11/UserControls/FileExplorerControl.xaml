@@ -80,12 +80,12 @@
                           ItemContainerStyle="{StaticResource FileItemStyle}">
                     <ListView.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <UniformGrid Columns="4" VerticalAlignment="Top"/>
+                            <UniformGrid Columns="5" VerticalAlignment="Top"/>
                         </ItemsPanelTemplate>
                     </ListView.ItemsPanel>
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <Grid Width="70" Height="90">
+                            <Grid Width="70" Height="90"  >
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="*"/>
@@ -107,9 +107,9 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>-->
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <Image Source="../Images/new.png" Width="40" Height="40" MouseLeftButtonDown="LocalCreateFolder_Click" x:Name="LocalCreateFolderButton"/>
-                            <Image x:Name="LocalDeleteButton" Source="../Images/del.png" Margin="30,0,0,0"  MouseLeftButtonDown="LocalDelete_Click"  Width="40" Height="40" Visibility="Collapsed"/>
-                            <Image x:Name="LocalEditButton"  Source="../Images/rename.png" Margin="30,0,0,0"  MouseLeftButtonDown="LocalEdit_Click" Width="40" Height="40" Visibility="Collapsed"/>
+                            <Image MouseEnter="StartHourComboBox_MouseEnter" MouseLeave="StartHourComboBox_MouseLeave"  Source="../Images/new.png" Width="40" Height="40" MouseLeftButtonDown="LocalCreateFolder_Click" x:Name="LocalCreateFolderButton"/>
+                            <Image MouseEnter="StartHourComboBox_MouseEnter" MouseLeave="StartHourComboBox_MouseLeave" x:Name="LocalDeleteButton" Source="../Images/del.png" Margin="30,0,0,0"  MouseLeftButtonDown="LocalDelete_Click"  Width="40" Height="40" Visibility="Collapsed"/>
+                            <Image MouseEnter="StartHourComboBox_MouseEnter" MouseLeave="StartHourComboBox_MouseLeave" x:Name="LocalEditButton"  Source="../Images/rename.png" Margin="30,0,0,0"  MouseLeftButtonDown="LocalEdit_Click" Width="40" Height="40" Visibility="Collapsed"/>
                             
                         </StackPanel>
                     
@@ -165,7 +165,7 @@
                           ItemContainerStyle="{StaticResource FileItemStyle}">
                     <ListView.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <UniformGrid Columns="4" VerticalAlignment="Top"/>
+                            <UniformGrid Columns="5" VerticalAlignment="Top"/>
                         </ItemsPanelTemplate>
                     </ListView.ItemsPanel>
                     <ListView.ItemTemplate>
@@ -197,9 +197,9 @@
                             <Button x:Name="FtpDeleteButton" Content="삭제" Margin="5" Padding="5,2"  Click="FtpDelete_Click" Width="100"/>-->
 
 
-                            <Image x:Name="FtpCreateFolderButton" Source="../Images/new.png" Width="40" Height="40" MouseLeftButtonDown="FtpCreateFolder_Click" />
-                            <Image x:Name="FtpDeleteButton" Source="../Images/del.png" Margin="30,0,0,0"  MouseLeftButtonDown="FtpDelete_Click"  Width="40" Height="40" Visibility="Collapsed"/>
-                            <Image x:Name="FtpEditButton"  Source="../Images/rename.png" Margin="30,0,0,0"  MouseLeftButtonDown="FtpEdit_Click" Width="40" Height="40" Visibility="Collapsed"/>
+                            <Image MouseEnter="StartHourComboBox_MouseEnter" MouseLeave="StartHourComboBox_MouseLeave"  x:Name="FtpCreateFolderButton" Source="../Images/new.png" Width="40" Height="40" MouseLeftButtonDown="FtpCreateFolder_Click" />
+                            <Image MouseEnter="StartHourComboBox_MouseEnter" MouseLeave="StartHourComboBox_MouseLeave" x:Name="FtpDeleteButton" Source="../Images/del.png" Margin="30,0,0,0"  MouseLeftButtonDown="FtpDelete_Click"  Width="40" Height="40" Visibility="Collapsed"/>
+                            <Image MouseEnter="StartHourComboBox_MouseEnter" MouseLeave="StartHourComboBox_MouseLeave" x:Name="FtpEditButton"  Source="../Images/rename.png" Margin="30,0,0,0"  MouseLeftButtonDown="FtpEdit_Click" Width="40" Height="40" Visibility="Collapsed"/>
 
                         </StackPanel>
                  

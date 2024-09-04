@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using Newtonsoft.Json;
 using System.IO;
 using System.Windows.Media;
+using System.Windows.Input;
 
 namespace WpfApp9
 {
@@ -378,7 +379,22 @@ namespace WpfApp9
         {
             CloseRequested?.Invoke(this, EventArgs.Empty);
         }
+
+        private void StartHourComboBox_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            var button = sender as FrameworkElement;
+            button.Cursor = Cursors.Hand;
+        }
+
+        private void StartHourComboBox_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            var button = sender as FrameworkElement;
+            button.Cursor = Cursors.Arrow;
+        }
+
     }
+
+
 
     public class DaySchedule
     {

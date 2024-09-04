@@ -11,20 +11,27 @@
         <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
         <BitmapImage x:Key="OnImage" UriSource="pack://application:,,,/Images/pc.png"/>
         <BitmapImage x:Key="OffImage" UriSource="pack://application:,,,/Images/re.png"/>
+        <Style TargetType="Button">
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Cursor" Value="Hand"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
 
 
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+      
+
+
+
+
+
+
 
 
         <Style x:Key="CustomContextMenuStyle" TargetType="ContextMenu">
@@ -108,12 +115,12 @@
                         </Button>
                     </StackPanel>
                 </Border>
-               
 
 
 
 
-                <ToggleButton x:Name="AutoPowerToggle" Grid.Column="0" Width="100" Height="50" HorizontalAlignment="Center" Margin="30,0,0,0" Checked="AutoPowerToggle_Checked" Unchecked="AutoPowerToggle_Unchecked">
+
+                <ToggleButton x:Name="AutoPowerToggle" Grid.Column="0" Width="100" Height="50" HorizontalAlignment="Center" Margin="30,0,0,0" Checked="AutoPowerToggle_Checked" Unchecked="AutoPowerToggle_Unchecked" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave">
                     <ToggleButton.Style>
                         <Style TargetType="ToggleButton">
                             <Setter Property="Template">
@@ -245,7 +252,7 @@
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="+" FontWeight="Bold" Margin="0,0,5,0"/>
-                            <TextBlock Text="기기 추가"/>
+                            <TextBlock Text="장비 추가"/>
                         </StackPanel>
                     </Button.Content>
                 </Button>
@@ -284,13 +291,13 @@
         </Grid>
         <!-- Grid and Draggable Items Canvas -->
         <Border Grid.Row="2" BorderThickness="1" BorderBrush="Black" Margin="20" >
-            <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="White">
+            <ScrollViewer  Style="{StaticResource FlatScrollViewerStyle}"  Grid.Row="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="White">
                 <Grid x:Name="GridContainer" Background="White" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,50,0,50">
                     <Canvas x:Name="GridCanvas" MouseRightButtonDown="tt" MouseLeftButtonDown="Canvas_MouseDown">
                         <Canvas.ContextMenu>
                             <ContextMenu Style="{StaticResource CustomContextMenuStyle}">
                             <!--<ContextMenu>-->
-                                <MenuItem Header="기기 추가" Click="add_devi"/>
+                                <MenuItem Header="장비 추가" Click="add_devi" MouseEnter="MenuButton_MouseEnter" MouseLeave="MenuButton_MouseLeave" />
                                 <!--<MenuItem Header="기기 삭제" Click="del_devi"/>-->
                                 
                             </ContextMenu>

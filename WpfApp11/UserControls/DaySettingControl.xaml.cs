@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace WpfApp9
@@ -185,5 +186,19 @@ namespace WpfApp9
             //    EndTime = new TimeSpan(int.Parse(EndHourComboBox.SelectedItem as string), int.Parse(EndMinuteComboBox.SelectedItem as string), 0)
             //};
         }
+
+        private void StartHourComboBox_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            var button = sender as FrameworkElement;
+            button.Cursor = Cursors.Hand;
+        }
+
+        private void StartHourComboBox_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            var button = sender as FrameworkElement;
+            button.Cursor = Cursors.Arrow;
+        }
+
+      
     }
 }

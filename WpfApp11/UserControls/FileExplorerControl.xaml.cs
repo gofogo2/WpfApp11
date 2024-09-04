@@ -381,20 +381,22 @@ namespace WpfApp9
                     {
                         if (di.Parent != null)
                         {
-                            _leftItems.Add(new FileSystemItem
+
+                            var item = new FileSystemItem
                             {
                                 Name = "..",
                                 Type = "Parent Directory",
                                 FullPath = di.Parent.FullName,
                                 IconSource = GetIconForFileType("folder")
-                            });
+                            };
+                            _leftItems.Add(item);
                         }
                     }
 
                     foreach (var directory in di.GetDirectories())
                     {
                         BitmapSource bitmapSource = new BitmapImage(new Uri("../Images/icons/icon_folder.png", UriKind.Relative));
-                        _leftItems.Add(new FileSystemItem
+                        var item = new FileSystemItem
                         {
                             Name = directory.Name,
                             Type = "Folder",
@@ -402,7 +404,8 @@ namespace WpfApp9
                             IconSource = bitmapSource,
 
 
-                        });
+                        };
+                        _leftItems.Add(item);
                     }
 
                     //foreach (var file in di.GetFiles())
@@ -1989,5 +1992,18 @@ namespace WpfApp9
 
         [DllImport("user32.dll", SetLastError = true)]
         private static extern bool DestroyIcon(IntPtr hIcon);
+
+
+        private void StartHourComboBox_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            var button = sender as FrameworkElement;
+            button.Cursor = Cursors.Hand;
+        }
+
+        private void StartHourComboBox_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            var button = sender as FrameworkElement;
+            button.Cursor = Cursors.Arrow;
+        }
     }
 }

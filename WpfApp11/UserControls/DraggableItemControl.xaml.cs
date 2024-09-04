@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -153,10 +154,28 @@ namespace WpfApp9
             MenuItem menuItem = new MenuItem();
             menuItem.Header = header;
             menuItem.Click += clickHandler;
+            menuItem.MouseEnter += MenuItem_MouseEnter;
+            menuItem.MouseLeave += MenuItem_MouseLeave;
             menuItem.Style = FindResource("CustomMenuItemStyle") as Style;
             return menuItem;
         }
 
+        private void MenuItem_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (sender is MenuItem button)
+            {
+                button.Cursor = Cursors.Arrow; // 또는 Cursors.Default
+            }
+        }
+
+        private void MenuItem_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (sender is MenuItem button)
+            {
+                button.Cursor = Cursors.Hand;
+            }
+           
+        }
 
         private Separator CreateSeparator()
         {

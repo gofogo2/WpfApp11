@@ -67,7 +67,7 @@ namespace WpfApp9
         public MainWindow()
         {
             InitializeComponent();
-
+            Loaded += MainWindow_Loaded;
             //늘 주석
             //ProtocolHelper pl = new ProtocolHelper();
             //pl.Start();
@@ -103,6 +103,14 @@ namespace WpfApp9
           
         }
 
+
+        // 윈도우 중앙에 뜨게
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            var workingArea = SystemParameters.WorkArea;
+            this.Left = (workingArea.Width - this.Width) / 2 + workingArea.Left;
+            this.Top = (workingArea.Height - this.Height) / 2 + workingArea.Top;
+        }
 
         private void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
@@ -1127,7 +1135,42 @@ namespace WpfApp9
         {
 
         }
+
+        private void Button_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (sender is ToggleButton button)
+            {
+                button.Cursor = Cursors.Hand;
+            }
+        }
+
+        private void Button_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (sender is ToggleButton button)
+            {
+                button.Cursor = Cursors.Arrow; // 또는 Cursors.Default
+            }
+        }
+
+        private void MenuButton_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (sender is MenuItem button)
+            {
+                button.Cursor = Cursors.Hand;
+            }
+        }
+
+        private void MenuButton_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (sender is MenuItem button)
+            {
+                button.Cursor = Cursors.Arrow; // 또는 Cursors.Default
+            }
+        }
     }
+
+  
+
 
     public class DraggableItem
     {
