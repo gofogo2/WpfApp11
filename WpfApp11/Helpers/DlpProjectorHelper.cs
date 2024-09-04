@@ -69,7 +69,7 @@ public class DlpProjectorHelper
             {
                 if (attempt == MaxRetries)
                 {
-                    Logger.Log2($"DLP Projector command failed after {MaxRetries + 1} attempts: {ex.Message}");
+                    //Logger.Log2($"DLP Projector command failed after {MaxRetries + 1} attempts: {ex.Message}");
                     throw; // Re-throw the exception after all retries have failed
                 }
                 await Task.Delay(500); // Wait before retrying

@@ -131,7 +131,7 @@ public class WebApiHelper
         });
         }catch(Exception e)
         {
-            Logger.Log2(e.Message);
+            //Logger.Log2(e.Message);
             return "Fail";
         }
     }
@@ -147,7 +147,7 @@ public class WebApiHelper
         });
         }catch(Exception e)
         {
-            Logger.Log2(e.Message);
+            //Logger.Log2(e.Message);
             return "Fail";
         }
     }
@@ -165,7 +165,7 @@ public class WebApiHelper
         }
         catch (Exception e)
         {
-            Logger.Log2(e.Message);
+            //Logger.Log2(e.Message);
             return "Fail";
         }
     }
@@ -184,7 +184,7 @@ public class WebApiHelper
         }
         catch (Exception e)
         {
-            Logger.Log2(e.Message);
+            //Logger.Log2(e.Message);
             return "Fail";
         }
     }
@@ -204,7 +204,7 @@ public class WebApiHelper
         }
         catch (Exception e)
         {
-            Logger.Log2(e.Message);
+            //Logger.Log2(e.Message);
             return "Fail";
         }
     }
@@ -221,7 +221,7 @@ public class WebApiHelper
         });
         }catch(Exception e)
         {
-            Logger.Log2(e.Message);
+            //Logger.Log2(e.Message);
             return "Fail";
         }
     }

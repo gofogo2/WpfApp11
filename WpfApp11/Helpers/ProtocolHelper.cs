@@ -180,11 +180,15 @@ namespace WpfApp11.Helpers
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
                     break;
                 case "EV_IDLE":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.48", 8020);
                     break;
                 case "EV_VIDEO":
                     SendSerial(Serial.EL.ToString(), EL.OPEN1.ToString());
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.48", 8020);
+                    break;
+
+                case "EV_VIDEO_END":
+                    SendSerial(Serial.EL.ToString(), EL.CLOSE1.ToString());
                     break;
 
                 case "OF_ON":

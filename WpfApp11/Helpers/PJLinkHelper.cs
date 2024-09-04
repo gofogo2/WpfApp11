@@ -74,7 +74,7 @@ public class PJLinkHelper
             {
                 if (attempt == MaxRetries)
                 {
-                    Logger.Log2($"PJLink command failed after {MaxRetries + 1} attempts: {ex.Message}");
+                    //Logger.Log2($"PJLink command failed after {MaxRetries + 1} attempts: {ex.Message}");
                     return string.Empty;
                 }
                 await Task.Delay(500); // Wait before retrying

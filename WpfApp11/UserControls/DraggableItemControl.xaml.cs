@@ -203,7 +203,7 @@ namespace WpfApp9
                 }
                 catch (Exception ex)
                 {
-                    Logger.Log2($"APPOTRONICS 상태 체크 중 오류 발생: {ex.Message}");
+                    //Logger.Log2($"APPOTRONICS 상태 체크 중 오류 발생: {ex.Message}");
                     Debug.WriteLine($"APPOTRONICS 상태 체크 중 오류 발생: {ex.Message}");
                 }
 
