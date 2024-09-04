@@ -50,13 +50,13 @@ namespace TcpHelperNamespace
                 }
                 catch (SocketException ex)
                 {
-                    Logger.Log2($"Error : {ex.Message}");
+                    Logger.LogError($"Error : {ex.Message}");
                     throw new Exception($"서버 연결 또는 통신 오류: {ex.Message}", ex);
                     
                 }
                 catch (Exception ex)
                 {
-                    Logger.Log2($"Error : {ex.Message}");
+                    Logger.LogError($"Error : {ex.Message}");
                     throw new Exception($"예기치 않은 오류 발생: {ex.Message}", ex);
                 }
             }

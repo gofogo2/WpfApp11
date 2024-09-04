@@ -31,7 +31,7 @@ namespace WpfApp11.Helpers
             }
             catch (Exception ex)
             {
-                Logger.Log2($"Error : {ex.Message}");
+                Logger.LogError($"Error : {ex.Message}");
                 Console.WriteLine($"Error opening serial port: {ex.Message}");
                 return false;
             }
@@ -49,7 +49,7 @@ namespace WpfApp11.Helpers
         {
             if (!_serialPort.IsOpen)
             {
-                Logger.Log2($"Serial port is not open.");
+                Logger.LogError($"Serial port is not open.");
                 Console.WriteLine("Serial port is not open.");
                 return false;
             }
@@ -62,7 +62,7 @@ namespace WpfApp11.Helpers
             }
             catch (Exception ex)
             {
-                Logger.Log2($"Error : {ex.Message}");
+                Logger.LogError($"Error : {ex.Message}");
                 Console.WriteLine($"Error sending data: {ex.Message}");
                 return false;
             }
@@ -72,7 +72,7 @@ namespace WpfApp11.Helpers
         {
             if (!_serialPort.IsOpen)
             {
-                Logger.Log2($"Error : Serial port is not open.");
+                Logger.LogError($"Error : Serial port is not open.");
                 Console.WriteLine("Serial port is not open.");
                 return false;
             }
@@ -84,7 +84,7 @@ namespace WpfApp11.Helpers
             }
             catch (Exception ex)
             {
-                Logger.Log2($"Error sending data : {ex.Message}");
+                Logger.LogError($"Error sending data : {ex.Message}");
                 Console.WriteLine($"Error sending data: {ex.Message}");
                 return false;
             }

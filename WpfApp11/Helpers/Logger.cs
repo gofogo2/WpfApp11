@@ -11,6 +11,7 @@ namespace WpfApp11.Helpers
     public static class Logger
     {
         public static readonly string LogFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "device_logs.txt");
+        public static readonly string LogErrorFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "error_logs.txt");
 
         public static void Log(string deviceName, string deviceType, string action, string result)
         {
@@ -33,6 +34,20 @@ namespace WpfApp11.Helpers
             try
             {
                 File.AppendAllText(LogFilePath, logMessage + Environment.NewLine);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error writing to log file: {ex.Message}");
+            }
+        }
+
+        public static void LogError(string result)
+        {
+            string logMessage = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - 내용: {result}";
+
+            try
+            {
+                File.AppendAllText(LogErrorFilePath, logMessage + Environment.NewLine);
             }
             catch (Exception ex)
             {
