@@ -101,8 +101,31 @@ namespace WpfApp9
 
             this.KeyDown += MainWindow_KeyDown;
 
-          
+        
         }
+
+      
+
+      
+        private void tt(object sender, EventArgs e)
+        {
+
+           
+            var canvas = sender as Canvas;
+            if (canvas != null)
+            {
+                // Get the ContextMenu associated with the Canvas
+                var contextMenu = canvas.ContextMenu;
+
+                // Show the ContextMenu at the position of the mouse click
+                if (contextMenu != null)
+                {
+                    contextMenu.IsOpen = true;
+                }
+            }
+        }
+
+
 
 
         // 윈도우 중앙에 뜨게
@@ -954,21 +977,7 @@ namespace WpfApp9
             OverlayGrid.Visibility = Visibility.Collapsed;
         }
 
-        private void tt(object sender, EventArgs e)
-        {
-            var canvas = sender as Canvas;
-            if (canvas != null)
-            {
-                // Get the ContextMenu associated with the Canvas
-                var contextMenu = canvas.ContextMenu;
-
-                // Show the ContextMenu at the position of the mouse click
-                if (contextMenu != null)
-                {
-                    contextMenu.IsOpen = true;
-                }
-            }
-        }
+      
 
         private void add_devi(object sender, RoutedEventArgs e)
         {

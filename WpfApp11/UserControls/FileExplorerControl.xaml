@@ -65,7 +65,7 @@
                     </ControlTemplate>
                 </Button.Template>
                 <StackPanel>
-                    <TextBlock Text="닫기" FontWeight="Bold" FontSize="20"/>
+                    <TextBlock Text="닫기" FontWeight="Bold" FontSize="20" FontFamily="{StaticResource NotoSansFontBoldFamily}" VerticalAlignment="Center" Height="20" />
                 </StackPanel>
             </Button>
 
@@ -79,7 +79,7 @@
 
 
             <Grid Grid.Row="0">
-                <TextBlock Text="파일 전송" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="40" FontWeight="Bold" Margin="0,90,0,0"/>
+                <TextBlock Text="파일 전송" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="40" FontWeight="Bold" Margin="0,90,0,0" FontFamily="{StaticResource NotoSansFontBoldFamily}"/>
             </Grid>
             <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -126,7 +126,7 @@
                    HorizontalAlignment="Center" Margin="0,5,0,0"/>
                                     <TextBlock Grid.Row="1" Text="{Binding Name}" TextWrapping="Wrap" TextAlignment="Center" 
                        HorizontalAlignment="Center" VerticalAlignment="Top"
-                       FontFamily="{StaticResource NotoSansFontMediumFamily}" FontSize="12" FontWeight="Normal"/>
+                       FontFamily="{StaticResource NotoSansFontMediumFamily}" FontSize="12" FontWeight="Medium"/>
                                 </Grid>
                             </DataTemplate>
                         </ListView.ItemTemplate>
@@ -309,7 +309,7 @@
             <TextBlock x:Name="TransferProgressText"  VerticalAlignment="Center" Margin="5,0"  HorizontalAlignment="Center" Visibility="Collapsed"/>
 
             <StackPanel VerticalAlignment="Center">
-                <TextBlock x:Name="PowerStatusText" Text="파일 전송 중" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,20" FontSize="20" Foreground="White" FontWeight="Bold"/>
+                <TextBlock x:Name="PowerStatusText" Text="파일 전송 중" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,20" FontSize="20" Foreground="White" FontWeight="Bold" FontFamily="{StaticResource NotoSansFontBoldFamily}" />
 
 
                 <ProgressBar Foreground="#FFC000" x:Name="TransferProgressBar"  Width="500" Height="50" Minimum="0" Maximum="100" Value="0">
@@ -322,8 +322,8 @@
                                 BorderBrush="Black"
                                 BorderThickness="1"
                                 CornerRadius="5">
-                                    <Border x:Name="PART_Indicator"  Background="#FFC000"  HorizontalAlignment="Left" Height="50" CornerRadius="5">
-                                        <TextBlock Text="{Binding ElementName=TransferProgressBar, Path=Value, StringFormat={}{0:0}%}"  VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="Black" FontWeight="Bold" Margin="0,00,30,0" FontSize="20" x:Name="pow_progress_value"/>
+                                    <Border x:Name="PART_Indicator"  Background="#FFC000"  HorizontalAlignment="Left"  CornerRadius="5">
+                                        <TextBlock Text="{Binding ElementName=TransferProgressBar, Path=Value, StringFormat={}{0:0}%}"  VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="Black" FontWeight="Bold" Margin="0,00,30,0" FontSize="20" x:Name="pow_progress_value" FontFamily="{StaticResource NotoSansFontBoldFamily}" />
                                     </Border>
                                 </Border>
 

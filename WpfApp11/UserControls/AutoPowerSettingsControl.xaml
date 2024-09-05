@@ -157,8 +157,11 @@
                                               ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
                                               Margin="3,3,23,3"
                                               TextBlock.TextAlignment="Center"
-                                              TextBlock.FontWeight="Bold"
+                                              
                                               TextBlock.FontSize="20"
+                                              
+                                              TextBlock.FontFamily="{StaticResource NotoSansFontBoldFamily}"
+                                              TextBlock.FontWeight="Bold"
                                               VerticalAlignment="Center"
                                               HorizontalAlignment="Left" />
                             <TextBox x:Name="PART_EditableTextBox"
@@ -167,6 +170,8 @@
                                      VerticalAlignment="Center" 
                                      Margin="3,3,23,3"
                                      Focusable="True" 
+                                   
+                                     FontFamily="{StaticResource NotoSansFontBoldFamily}"
                                      Background="Transparent"
                                      Visibility="Hidden"
                                      IsReadOnly="{TemplateBinding IsReadOnly}"/>
@@ -216,9 +221,9 @@
 
                 <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
                     <StackPanel x:Name="DaySettingsPanel" Margin="10" HorizontalAlignment="Center" >
-                        <TextBlock Text="자동 전원 시간 설정" FontSize="32" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,120,0,80" Foreground="White"/>
+                        <TextBlock Text="자동 전원 시간 설정" FontSize="32" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,120,0,80" Foreground="White" FontFamily="{StaticResource NotoSansFontBoldFamily}"/>
                         <!--<local:DaySettingControl x:Name="w" Margin="10" />-->
-                        <Border  BorderBrush="Black" BorderThickness="2" CornerRadius="5" Background="#8D8D8D" x:Name="allDay_bg" Width="740" Height="50">
+                        <Border  BorderBrush="#888888" BorderThickness="2" CornerRadius="5" Background="#8D8D8D" x:Name="allDay_bg" Width="720" Height="50">
                             <Grid >
 
                                 <StackPanel Orientation="Horizontal"  Margin="0,0,0,0"  HorizontalAlignment="Left">
@@ -233,19 +238,20 @@
                                             </Style>
                                         </CheckBox.Style>
                                     </CheckBox>
-                                    <TextBlock Text="전체" VerticalAlignment="Center" Margin="25,0,5,0" Foreground="White" FontSize="20"  FontWeight="Bold" TextAlignment="Center" FontFamily="{StaticResource NotoSansFontFamily}"/>
+                                    <TextBlock Text="전체" VerticalAlignment="Center" Margin="25,0,5,0" Foreground="White" FontSize="20"  FontWeight="Bold" TextAlignment="Center" FontFamily="{StaticResource NotoSansFontBoldFamily}"/>
 
                                     <!--<TextBlock Text="" VerticalAlignment="Center" Margin="5,0,5,0" Foreground="White" FontSize="20" x:Name="DayName"/>-->
-                                    <TextBlock Text="시작 시간" VerticalAlignment="Center" Margin="30.5,0,5,0" Foreground="White" FontSize="16" FontWeight="Bold" FontFamily="{StaticResource NotoSansFontFamily}"/>
-                                    <ComboBox Style="{StaticResource CustomComboBoxStyle}" MouseEnter="StartHourComboBox_MouseEnter" MouseLeave="StartHourComboBox_MouseLeave" x:Name="all_StartHourComboBox" Width="60" Height="40" Margin="10,0,5,0" VerticalAlignment="Center" FontSize="20" FontWeight="Bold" />
-                                    <TextBlock Text=" 시 " VerticalAlignment="Center" Margin="0,0,10,0" Foreground="White" FontSize="16" FontWeight="Bold" FontFamily="{StaticResource NotoSansFontFamily}"/>
+                                    <TextBlock Text="시작 시간" VerticalAlignment="Center" Margin="30.5,0,5,0" Foreground="White" FontSize="16" FontWeight="Bold" FontFamily="{StaticResource NotoSansFontBoldFamily}" />
+                                    <ComboBox Style="{StaticResource CustomComboBoxStyle}" MouseEnter="StartHourComboBox_MouseEnter" MouseLeave="StartHourComboBox_MouseLeave" x:Name="all_StartHourComboBox" Width="60" Height="40" Margin="10,0,5,0" VerticalAlignment="Center" TextBlock.FontSize="20" FontWeight="Bold" TextBlock.FontFamily="{StaticResource NotoSansFontBoldFamily}"  />
+                                    
+                                    <TextBlock Text=" 시 " VerticalAlignment="Center" Margin="0,0,10,0" Foreground="White" FontSize="16" FontWeight="Bold" FontFamily="{StaticResource NotoSansFontBoldFamily}"/>
                                     <ComboBox Style="{StaticResource CustomComboBoxStyle}" MouseEnter="StartHourComboBox_MouseEnter" MouseLeave="StartHourComboBox_MouseLeave" x:Name="all_StartMinuteComboBox" Width="60" Height="40" Margin="0,0,5,0" VerticalAlignment="Center" FontSize="20"  FontWeight="Bold"/>
-                                    <TextBlock Text=" 분" VerticalAlignment="Center" Margin="0,0,10,0" Foreground="White" FontSize="16" FontWeight="Bold" FontFamily="{StaticResource NotoSansFontFamily}"/>
-                                    <TextBlock Text="/  종료 시간" VerticalAlignment="Center" Margin="10,0,5,0" Foreground="White" FontSize="15" FontWeight="Bold" FontFamily="{StaticResource NotoSansFontFamily}"/>
-                                    <ComboBox Style="{StaticResource CustomComboBoxStyle}" MouseEnter="StartHourComboBox_MouseEnter" MouseLeave="StartHourComboBox_MouseLeave" x:Name="all_EndHourComboBox" Width="60" Height="40" Margin="10,0,5,0" VerticalAlignment="Center" FontSize="20" FontFamily="{StaticResource NotoSansFontFamily}" FontWeight="Bold"/>
-                                    <TextBlock Text=" 시 " VerticalAlignment="Center" Margin="0,0,10,0" Foreground="White" FontSize="16" FontWeight="Bold" FontFamily="{StaticResource NotoSansFontFamily}" />
-                                    <ComboBox Style="{StaticResource CustomComboBoxStyle}" MouseEnter="StartHourComboBox_MouseEnter" MouseLeave="StartHourComboBox_MouseLeave"  x:Name="all_EndMinuteComboBox" Width="60" Height="40" Margin="0,0,5,0" VerticalAlignment="Center" FontSize="20" FontFamily="{StaticResource NotoSansFontFamily}" FontWeight="Bold"/>
-                                    <TextBlock Text=" 분" VerticalAlignment="Center" Foreground="White" FontSize="15" FontWeight="Bold" FontFamily="{StaticResource NotoSansFontFamily}"/>
+                                    <TextBlock Text=" 분" VerticalAlignment="Center" Margin="0,0,10,0" Foreground="White" FontSize="16" FontWeight="Bold" FontFamily="{StaticResource NotoSansFontBoldFamily}"/>
+                                    <TextBlock Text="/  종료 시간" VerticalAlignment="Center" Margin="10,0,5,0" Foreground="White" FontSize="15" FontWeight="Bold" FontFamily="{StaticResource NotoSansFontBoldFamily}"/>
+                                    <ComboBox Style="{StaticResource CustomComboBoxStyle}" MouseEnter="StartHourComboBox_MouseEnter" MouseLeave="StartHourComboBox_MouseLeave" x:Name="all_EndHourComboBox" Width="60" Height="40" Margin="15,0,5,0" VerticalAlignment="Center" FontSize="20" FontFamily="{StaticResource NotoSansFontBoldFamily}" FontWeight="Bold"/>
+                                    <TextBlock Text=" 시 " VerticalAlignment="Center" Margin="0,0,10,0" Foreground="White" FontSize="16" FontWeight="Bold" FontFamily="{StaticResource NotoSansFontBoldFamily}" />
+                                    <ComboBox Style="{StaticResource CustomComboBoxStyle}" MouseEnter="StartHourComboBox_MouseEnter" MouseLeave="StartHourComboBox_MouseLeave"  x:Name="all_EndMinuteComboBox" Width="60" Height="40" Margin="0,0,5,0" VerticalAlignment="Center" FontSize="20" FontFamily="{StaticResource NotoSansFontBoldFamily}" FontWeight="Bold"/>
+                                    <TextBlock Text=" 분" VerticalAlignment="Center" Foreground="White" FontSize="15" FontWeight="Bold" FontFamily="{StaticResource NotoSansFontBoldFamily}"/>
                                     <!--<Button Width="120" Height="35" Margin="20,0,0,0" Click="allapply_click">
                                     <TextBlock Text="전체 적용" FontSize="20"/>
                                 </Button>-->
@@ -288,7 +294,7 @@
                             </ControlTemplate>
                         </Button.Template>
                         <StackPanel>
-                            <TextBlock Text="적용" FontWeight="Bold" FontSize="20"/>
+                            <TextBlock Text="적용" FontWeight="Bold" FontSize="20" FontFamily="{StaticResource NotoSansFontBoldFamily}" />
                         </StackPanel>
                     </Button>
 
@@ -311,7 +317,7 @@
                             </ControlTemplate>
                         </Button.Template>
                         <StackPanel>
-                            <TextBlock Text="취소" FontWeight="Bold" FontSize="20"/>
+                            <TextBlock Text="취소" FontWeight="Bold" FontSize="20" FontFamily="{StaticResource NotoSansFontBoldFamily}" />
 
                         </StackPanel>
                     </Button>
@@ -321,6 +327,6 @@
                 </StackPanel>
             </Grid>
         </Border>
-        <!--<Button Width="30" Margin="219,244,531,538"/>-->
+        <!--<Button Width="30" Margin="528,252,222,529.667"/>-->
     </Grid>
 </UserControl>

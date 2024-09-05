@@ -7,9 +7,9 @@
         mc:Ignorable="d"
         Title="Custom Dialog" Height="210" Width="390" WindowStartupLocation="CenterOwner" ResizeMode="NoResize" WindowStyle="None"  AllowsTransparency="True" Background="Transparent">
     <Grid>
-        <Border  BorderThickness="2" BorderBrush="Black" CornerRadius="15" Background="White">
+        <Border  BorderThickness="1" BorderBrush="#888888" CornerRadius="15" Background="White">
             <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center">
-                <TextBlock Text="파일 전송이 완료되었습니다." FontWeight="Bold" TextAlignment="Center" FontSize="20" Margin="0,50,0,0" x:Name="popup_msg"/>
+                <TextBlock Text="파일 전송이 완료되었습니다." FontWeight="Bold" TextAlignment="Center" FontSize="20" Margin="0,50,0,0" x:Name="popup_msg"  FontFamily="{StaticResource NotoSansFontBoldFamily}"/>
                     <!--<Image Source="../Images/confirm.png" Margin="0,30,0,0" Width="150" Height="50" MouseLeftButtonDown="YesButton_Click" HorizontalAlignment="Center"/>-->
                 <!--<Button Background="White" Margin="0,50,0,0" Width="150" Height="50" Click="YesButton_Click" >
                     <TextBlock Text="확인" FontWeight="Bold" FontSize="20"/>
@@ -38,7 +38,7 @@
                         </ControlTemplate>
                     </Button.Template>
                     <StackPanel>
-                        <TextBlock Text="확인" FontWeight="Bold" FontSize="20" FontFamily="{StaticResource NotoSansFontFamily}"/>
+                        <TextBlock Text="확인" FontWeight="Bold" FontSize="20" FontFamily="{StaticResource NotoSansFontBoldFamily}"/>
                     </StackPanel>
                 </Button>
 

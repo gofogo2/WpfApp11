@@ -236,7 +236,19 @@ namespace WpfApp9
         private MenuItem CreateMenuItem(string header, RoutedEventHandler clickHandler)
         {
             MenuItem menuItem = new MenuItem();
-            menuItem.Header = header;
+
+            TextBlock headerTextBlock = new TextBlock
+            {
+                Text = header,
+                FontSize = 16,
+                FontFamily = (FontFamily)FindResource("NotoSansFontBoldFamily"),
+                FontWeight = FontWeights.Bold,
+               
+            };
+
+
+            menuItem.Header = headerTextBlock;
+            
             menuItem.Click += clickHandler;
             menuItem.MouseEnter += MenuItem_MouseEnter;
             menuItem.MouseLeave += MenuItem_MouseLeave;
