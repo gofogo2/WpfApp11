@@ -58,7 +58,7 @@
                         <RowDefinition Height="80"/>
                         <RowDefinition Height="50"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" x:Name="TitleTextBlock" Text="Title" FontSize="15" HorizontalAlignment="Center" FontWeight="Medium" VerticalAlignment="Center" Margin="5,5,5,0"/>
+                <TextBlock Grid.Row="0" x:Name="TitleTextBlock" Text="두꺼비Title" FontSize="15" HorizontalAlignment="Center" FontWeight="Medium" VerticalAlignment="Center" Margin="5,5,5,0" FontFamily="/WpfApp11;component/fonts/#Noto Sans KR Medium"/>
 
                     <Border Grid.Row="1" BorderThickness="0.5" BorderBrush="Black">
                         <Rectangle Fill="#E0E0E0" x:Name="PowerState"/>

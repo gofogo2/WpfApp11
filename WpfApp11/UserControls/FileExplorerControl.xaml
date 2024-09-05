@@ -4,6 +4,7 @@
              
        >
     <UserControl.Resources>
+        <FontFamily x:Key="NotoSansFontBoldFamily">pack://application:,,,/fonts/NotoSans-Bold.ttf#Noto Sans</FontFamily>
         <Style x:Key="FileItemStyle" TargetType="ListViewItem">
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="VerticalContentAlignment" Value="Top"/>
@@ -114,21 +115,22 @@
                             <UniformGrid Columns="5" VerticalAlignment="Top"/>
                         </ItemsPanelTemplate>
                     </ListView.ItemsPanel>
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <Grid Width="70" Height="90"  >
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
-                                <Image Grid.Row="0" Width="32" Height="32" Source="{Binding IconSource}" 
-                                       HorizontalAlignment="Center" Margin="0,5,0,0"/>
-                                <TextBlock Grid.Row="1" Text="{Binding Name}" TextWrapping="Wrap" TextAlignment="Center" 
-                                           HorizontalAlignment="Center" VerticalAlignment="Top"/>
-                            </Grid>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Width="70" Height="90">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <Image Grid.Row="0" Width="32" Height="32" Source="{Binding IconSource}" 
+                   HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                                    <TextBlock Grid.Row="1" Text="{Binding Name}" TextWrapping="Wrap" TextAlignment="Center" 
+                       HorizontalAlignment="Center" VerticalAlignment="Top"
+                       FontFamily="{StaticResource NotoSansFontMediumFamily}" FontSize="12" FontWeight="Normal"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
 
                 <Grid Grid.Row="2" Background="#FFE0E0E0">
                     <!--<Grid.ColumnDefinitions>
@@ -268,7 +270,7 @@
                                 </Grid.RowDefinitions>
                                 <Image Grid.Row="0" Width="32" Height="32" Source="{Binding IconSource}" 
                                        HorizontalAlignment="Center" Margin="0,5,0,0"/>
-                                <TextBlock Grid.Row="1" Text="{Binding Name}" TextWrapping="Wrap" TextAlignment="Center" 
+                                    <TextBlock Grid.Row="1" Text="{Binding Name}"  FontFamily="{StaticResource NotoSansFontMediumFamily}" TextWrapping="Wrap" TextAlignment="Center" 
                                            HorizontalAlignment="Center" VerticalAlignment="Top"/>
                             </Grid>
                         </DataTemplate>
