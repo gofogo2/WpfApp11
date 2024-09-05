@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Xml.Linq;
 using WpfApp11.Helpers;
+using System.Text.RegularExpressions;
 
 public class WebApiHelper
 {
@@ -81,6 +82,7 @@ public class WebApiHelper
 
         var queryString = await new FormUrlEncodedContent(parameters).ReadAsStringAsync();
         HttpResponseMessage response = await _httpClient.GetAsync($"{_baseUrl}{endpoint}?{queryString}");
+        Logger.Log2($"{_baseUrl}{endpoint}?{queryString}");
         response.EnsureSuccessStatusCode();
         return await response.Content.ReadAsStringAsync();
     }
@@ -95,24 +97,33 @@ public class WebApiHelper
             {
                 {"index", index}
             });
+            Logger.Log2($"response : {response}");
 
-            XDocument doc = XDocument.Parse(response);
-            var outletRelay = doc.Element("OutletRelay");
-            var result = new Dictionary<string, string>();
+            //string response = "<OutletRelay>< 02 > ON < 02 ></ OutletRelay >".Trim();
+            response = Regex.Replace(response, @"\s+", "");
 
-            if (outletRelay != null)
+            // 값 추출
+            Match match = Regex.Match(response, @"<(\d+)>(\w+)<\1>");
+            if (match.Success)
             {
-                foreach (var element in outletRelay.Elements())
-                {
-                    result[element.Name.LocalName] = element.Value.Trim();
-                }
+                string outletNumber = match.Groups[1].Value;
+                string value = match.Groups[2].Value;
+                Console.WriteLine($"Outlet Number: {outletNumber}, Value: {value}");
+                
+                Logger.Log2($"result : {value}");
+                return new Dictionary<string, string> { { outletNumber, value } };
             }
-
-            return result;
+            else
+            {
+                Console.WriteLine("패턴이 일치하지 않습니다.");
+                Logger.LogError($"Error : 패턴이 일치하지 않습니다.");
+                return new Dictionary<string, string> { { "Error", "Fail" } };
+            }
+         
         }
         catch (Exception e)
         {
-            //Logger.Log2($"Error : {e.Message}");
+            Logger.LogError($"Error : {e.Message}");
             return new Dictionary<string, string> { { "Error", "Fail" } };
             
         }

@@ -109,15 +109,20 @@ namespace WpfApp9
                     {
                         if (!cancellationToken.IsCancellationRequested)
                         {
-                            if (p["Error"] == "Fail")
+                            
+                            if (p.ContainsKey("Error"))
                             {
+                                Logger.LogError("Fail");
                                 UpdatePowerState(false);
                             }
                             else
                             {
+                                Logger.Log2("Success:"+p);
+                                
                                 int channelNumber = Convert.ToInt32(Configuration.Channel);
                                 string formattedChannel = channelNumber.ToString("00");
                                 bool isOn = p[formattedChannel] == "ON";
+                                Logger.Log2("Success isON:" + p);
                                 UpdatePowerState(isOn);
                             }
                         }
@@ -125,7 +130,7 @@ namespace WpfApp9
                 }
                 catch (Exception ex)
                 {
-                    Logger.Log2($"PDU 상태 체크 중 오류 발생: {ex.Message}");
+                    Logger.LogError($"PDU 상태 체크 중 오류 발생: {ex.Message}");
                     Debug.WriteLine($"PDU 상태 체크 중 오류 발생: {ex.Message}");
                 }
 
@@ -257,6 +262,7 @@ namespace WpfApp9
 
         public void UpdatePowerState(bool isOn)
         {
+            Logger.Log2("PDU isOn:"+isOn);
             ispow = isOn;
             Configuration.IsOn = isOn;
             PowerState.Fill = isOn ? onColor : offColor;
