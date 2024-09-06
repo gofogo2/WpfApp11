@@ -98,7 +98,7 @@
                 </Grid.RowDefinitions>
 
                 <Border Grid.Row="0" Background="#FFE0E0E0" Padding="5">
-                    <TextBlock Text="CMS PC" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" x:Name="cms_pc_name"/>
+                        <TextBlock Text="CMS PC" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" x:Name="cms_pc_name" FontFamily="{StaticResource NotoSansFontBoldFamily}"/>
                 </Border>
                     <!--<Border Grid.Row="1" Background="#FFE0E0E0" Padding="5">
                         <StackPanel Orientation="Horizontal" x:Name="drivelist_panel">
@@ -247,7 +247,7 @@
                 
 
                 <Border Grid.Row="0" Background="#FFE0E0E0" Padding="5">
-                        <TextBlock Text="LED PC #1" FontWeight="Bold" HorizontalAlignment="Center" x:Name="targetname" VerticalAlignment="Center" FontSize="20"/>
+                        <TextBlock Text="LED PC #1" FontWeight="Bold" HorizontalAlignment="Center" x:Name="targetname" VerticalAlignment="Center" FontSize="20" FontFamily="{StaticResource NotoSansFontBoldFamily}"/>
                     
                 </Border>
             

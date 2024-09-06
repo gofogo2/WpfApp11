@@ -980,7 +980,6 @@ namespace WpfApp9
                     {
                         MessageBox.Show("이름을 넣어주세요");
                     }
-
                 }
 
 
@@ -1215,21 +1214,35 @@ namespace WpfApp9
             var selectedItem = RightFileListView.SelectedItem as FileSystemItem;
             if (selectedItem != null)
             {
-                InputDialog inputDialog = new InputDialog("새 이름을 입력하세요.", selectedItem.Name);
-                inputDialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-                if (inputDialog.ShowDialog() == true)
+
+
+
+
+
+
+                rename_dialog dialog = new rename_dialog
                 {
-                    string newName = inputDialog.Answer;
+                    Owner = Application.Current.MainWindow,
+                };
+
+                dialog.edit_name_inputbox.Text = selectedItem.Name;
+                dialog.edit_name_inputbox.GotFocus += Edit_name_inputbox_GotFocus;
+
+                dialog.edit_name_inputbox.Focus();
+
+                bool? result = dialog.ShowDialog();
+
+                if (dialog.DialogResult == true)
+                {
+                    string newName = dialog.edit_name_inputbox.Text;
                     if (!string.IsNullOrEmpty(newName))
                     {
-
-
                         if (selectedItem.Type == "Folder")
                         {
 
                             for (int i = 0; i < folder_name_list.Count; i++)
                             {
-                                if(folder_name_list[i] == newName)
+                                if (folder_name_list[i] == newName)
                                 {
                                     is_exit = true;
                                 }
@@ -1266,7 +1279,82 @@ namespace WpfApp9
                         MessageBox.Show("이름을 넣어주세요");
                     }
                 }
-            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    //InputDialog inputDialog = new InputDialog("새 이름을 입력하세요.", selectedItem.Name);
+                    //inputDialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                    //if (inputDialog.ShowDialog() == true)
+                    //{
+                    //    string newName = inputDialog.Answer;
+                    //    if (!string.IsNullOrEmpty(newName))
+                    //    {
+
+
+                    //        if (selectedItem.Type == "Folder")
+                    //        {
+
+                    //            for (int i = 0; i < folder_name_list.Count; i++)
+                    //            {
+                    //                if(folder_name_list[i] == newName)
+                    //                {
+                    //                    is_exit = true;
+                    //                }
+                    //            }
+
+                    //        }
+                    //        else if (selectedItem.Type == "File")
+                    //        {
+
+                    //            for (int i = 0; i < file_name_list.Count; i++)
+                    //            {
+                    //                if (file_name_list[i] == newName)
+                    //                {
+                    //                    is_exit = true;
+                    //                }
+                    //            }
+                    //        }
+
+
+                    //        if (is_exit)
+                    //        {
+                    //            MessageBox.Show("같은 이름이 있습니다");
+                    //        }
+                    //        else
+                    //        {
+                    //            string newPath = Path.Combine(Path.GetDirectoryName(selectedItem.FullPath), newName).Replace('\\', '/');
+                    //            _ftpClient.Rename(selectedItem.FullPath, newPath);
+                    //            LoadFtpDirectory(_currentFtpPath);
+                    //        }
+
+                    //    }
+                    //    else
+                    //    {
+                    //        MessageBox.Show("이름을 넣어주세요");
+                    //    }
+                    //}
+                }
         }
 
         private void FtpDelete_Click(object sender, RoutedEventArgs e)

@@ -37,9 +37,16 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type MenuItem}">
-                    <Border x:Name="Border" Background="Transparent" BorderThickness="0" Padding="5,3" Margin="20,5">
-                            <ContentPresenter Content="{TemplateBinding Header}" VerticalAlignment="Center" HorizontalAlignment="Center" TextBlock.FontSize="16"/>
-                    </Border>
+                        <!--<Border x:Name="Border" Background="Transparent" BorderThickness="0" Padding="5,3" Margin="20,5">-->
+                            <Border x:Name="Border" Background="Transparent" BorderThickness="0" Padding="5,3" Margin="20,5">
+                            <Grid>
+                                <ContentPresenter Content="{TemplateBinding Header}" VerticalAlignment="Center" HorizontalAlignment="Center"  Height="30"/>
+
+                                <!--<Border Background="Gray" Height="1"  VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Margin="0,0,0,0" Visibility="Visible"  x:Name="Underline"/>-->
+                                
+                            </Grid>
+                           
+                        </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="Border" Property="Background" Value="#E0E0E0"/>
@@ -58,7 +65,7 @@
                         <RowDefinition Height="80"/>
                         <RowDefinition Height="50"/>
                     </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0" x:Name="TitleTextBlock" Text="두꺼비Title" FontSize="15" HorizontalAlignment="Center"  VerticalAlignment="Center" Margin="5,5,5,0" FontFamily="{StaticResource NotoSansFontMediumFamily}" />
+                <TextBlock Grid.Row="0" x:Name="TitleTextBlock" Text="두꺼비Title" FontSize="15" HorizontalAlignment="Center"  VerticalAlignment="Center" Margin="5,5,5,0" FontFamily="{StaticResource NotoSansFontMediumFamily}" FontWeight="Medium"/>
 
                     <Border Grid.Row="1" BorderThickness="0.5" BorderBrush="Black">
                         <Rectangle Fill="#E0E0E0" x:Name="PowerState"/>
