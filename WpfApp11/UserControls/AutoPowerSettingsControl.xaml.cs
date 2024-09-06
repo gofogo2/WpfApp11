@@ -197,7 +197,7 @@ namespace WpfApp9
                 all_EndHourComboBox.Items.Add(i.ToString("D2"));
             }
 
-            for (int i = 0; i < 60; i += 30)
+            for (int i = 0; i < 60; i += 1)
             {
                 all_StartMinuteComboBox.Items.Add(i.ToString("D2"));
                 all_EndMinuteComboBox.Items.Add(i.ToString("D2"));

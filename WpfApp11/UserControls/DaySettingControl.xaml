@@ -114,7 +114,6 @@
 
         <Style x:Key="FlatVerticalScrollBarStyle" TargetType="{x:Type ScrollBar}">
             <Setter Property="Background" Value="#D9D9D9"/>
-            
             <Setter Property="BorderBrush" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Width" Value="4"/>
@@ -148,25 +147,60 @@
                             <ToggleButton x:Name="ToggleButton" 
                                           ClickMode="Press" 
                                           Focusable="false" 
-                                          IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                          Template="{StaticResource ComboBoxToggleButton}"/>
+                                          IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
+                                <ToggleButton.Template>
+                                    <ControlTemplate TargetType="ToggleButton">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition />
+                                                <ColumnDefinition Width="20" />
+                                            </Grid.ColumnDefinitions>
+                                            <Border x:Name="Border" Grid.ColumnSpan="2" BorderBrush="Gray" BorderThickness="1" Background="White" />
+                                            <Border Grid.Column="0" Margin="1" Background="White" BorderBrush="Gray" BorderThickness="0" />
+                                            <Path x:Name="Arrow" Grid.Column="1" Fill="Black" HorizontalAlignment="Center" VerticalAlignment="Center" 
+                  Data="M0,0 L0,2 L4,6 L8,2 L8,0 L4,4 z"
+                  Width="8" Height="8" RenderTransformOrigin="0.5,0.5">
+                                            </Path>
+                                        </Grid>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsChecked" Value="True">
+                                                <Setter TargetName="Arrow" Property="RenderTransform">
+                                                    <Setter.Value>
+                                                        <RotateTransform Angle="180"/>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </ToggleButton.Template>
+                            </ToggleButton>
                             <ContentPresenter x:Name="ContentSite" 
                                               IsHitTestVisible="False" 
                                               Content="{TemplateBinding SelectionBoxItem}"
                                               ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
                                               ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
                                               Margin="3,3,23,3"
-                                              TextBlock.TextAlignment="Center"
-                                              TextBlock.FontWeight="Bold"
-                                              TextBlock.FontSize="20"
                                               VerticalAlignment="Center"
-                                              HorizontalAlignment="Left" />
+                                              HorizontalAlignment="Center">
+                                <ContentPresenter.Resources>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="FontFamily" Value="{StaticResource NotoSansFontBoldFamily}" />
+                                        <Setter Property="FontWeight" Value="Bold" />
+                                        <Setter Property="FontSize" Value="20" />
+                                        <Setter Property="HorizontalAlignment" Value="Center" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                    </Style>
+                                </ContentPresenter.Resources>
+                            </ContentPresenter>
                             <TextBox x:Name="PART_EditableTextBox"
                                      Style="{x:Null}" 
                                      HorizontalAlignment="Left" 
                                      VerticalAlignment="Center" 
                                      Margin="3,3,23,3"
                                      Focusable="True" 
+                                     FontFamily="{StaticResource NotoSansFontFamily}"
+                                     FontSize="20"
+                                     FontWeight="Bold"  
                                      Background="Transparent"
                                      Visibility="Hidden"
                                      IsReadOnly="{TemplateBinding IsReadOnly}"/>
@@ -190,19 +224,18 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style TargetType="{x:Type ComboBoxItem}">
+                        <Setter Property="FontFamily" Value="{StaticResource NotoSansFontBoldFamily}" />
+                        <Setter Property="FontWeight" Value="Bold" />
+                        <Setter Property="FontSize" Value="20" />
+                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        <Setter Property="VerticalContentAlignment" Value="Center" />
+                    </Style>
+                </Setter.Value>
+            </Setter>
         </Style>
-
-        <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="20" />
-                </Grid.ColumnDefinitions>
-                <Border x:Name="Border" Grid.ColumnSpan="2" BorderBrush="Gray" BorderThickness="1" Background="White" />
-                <Border Grid.Column="0" Margin="1" Background="White" BorderBrush="Gray" BorderThickness="0" />
-                <Path x:Name="Arrow" Grid.Column="1" Fill="Black" HorizontalAlignment="Center" VerticalAlignment="Center" Data="M0,0 L0,2 L4,6 L8,2 L8,0 L4,4 z"/>
-            </Grid>
-        </ControlTemplate>
     </UserControl.Resources>
 
     <Border BorderBrush="#888888" BorderThickness="2" CornerRadius="5" Background="#8D8D8D" x:Name="Day_bg">
@@ -221,14 +254,54 @@
                 </CheckBox>
                 <TextBlock Text="월요일" VerticalAlignment="Center" Margin="5,0,5,0" Foreground="White" FontSize="20" x:Name="DayName" FontWeight="Bold" FontFamily="{StaticResource NotoSansFontBoldFamily}"/>
                 <TextBlock Text="시작 시간" VerticalAlignment="Center" Margin="20,0,5,0" Foreground="White" FontSize="16" FontWeight="Bold" FontFamily="{StaticResource NotoSansFontBoldFamily}"/>
-                <ComboBox Style="{StaticResource CustomComboBoxStyle}" MouseEnter="StartHourComboBox_MouseEnter" MouseLeave="StartHourComboBox_MouseLeave" VerticalContentAlignment="Center" x:Name="StartHourComboBox" Width="60" Height="40" Margin="10,0,5,0" VerticalAlignment="Center" FontSize="20" FontWeight="Bold"/>
+                <ComboBox HorizontalAlignment="Center" HorizontalContentAlignment="Center" 
+                          Style="{StaticResource CustomComboBoxStyle}" 
+                          FontFamily="{StaticResource NotoSansFontBoldFamily}" 
+                          MouseEnter="StartHourComboBox_MouseEnter"  
+                          MouseLeave="StartHourComboBox_MouseLeave" 
+                          VerticalContentAlignment="Center" 
+                          x:Name="StartHourComboBox" 
+                          Width="60" Height="40" 
+                          Margin="10,0,5,0" 
+                          VerticalAlignment="Center" 
+                          FontSize="20" 
+                          FontWeight="Bold"/>
                 <TextBlock Text=" 시 " VerticalAlignment="Center" Margin="0,0,10,0" Foreground="White" FontSize="16" FontWeight="Bold" FontFamily="{StaticResource NotoSansFontBoldFamily}"/>
-                <ComboBox Style="{StaticResource CustomComboBoxStyle}" MouseEnter="StartHourComboBox_MouseEnter" MouseLeave="StartHourComboBox_MouseLeave" VerticalContentAlignment="Center" x:Name="StartMinuteComboBox" Width="60" Height="40" Margin="0,0,5,0" VerticalAlignment="Center" FontSize="20" FontWeight="Bold"/>
+                <ComboBox HorizontalAlignment="Center" 
+                          Style="{StaticResource CustomComboBoxStyle}" 
+                          MouseEnter="StartHourComboBox_MouseEnter" 
+                          MouseLeave="StartHourComboBox_MouseLeave" 
+                          VerticalContentAlignment="Center" 
+                          x:Name="StartMinuteComboBox" 
+                          Width="60" Height="40" 
+                          Margin="0,0,5,0" 
+                          VerticalAlignment="Center" 
+                          FontSize="20" 
+                          FontWeight="Bold"/>
                 <TextBlock Text=" 분" VerticalAlignment="Center" Margin="0,0,10,0" Foreground="White" FontSize="16" FontWeight="Bold" FontFamily="{StaticResource NotoSansFontBoldFamily}"/>
                 <TextBlock Text="/  종료 시간" VerticalAlignment="Center" Margin="10,0,5,0" Foreground="White" FontSize="16" FontWeight="Bold" FontFamily="{StaticResource NotoSansFontBoldFamily}"/>
-                <ComboBox Style="{StaticResource CustomComboBoxStyle}" MouseEnter="StartHourComboBox_MouseEnter" MouseLeave="StartHourComboBox_MouseLeave" VerticalContentAlignment="Center" x:Name="EndHourComboBox" Width="60" Height="40" Margin="10,0,5,0" VerticalAlignment="Center" FontSize="20" FontWeight="Bold"/>
+                <ComboBox HorizontalAlignment="Center" 
+                          Style="{StaticResource CustomComboBoxStyle}" 
+                          MouseEnter="StartHourComboBox_MouseEnter" 
+                          MouseLeave="StartHourComboBox_MouseLeave" 
+                          VerticalContentAlignment="Center" 
+                          x:Name="EndHourComboBox" 
+                          Width="60" Height="40" 
+                          Margin="10,0,5,0" 
+                          VerticalAlignment="Center" 
+                          FontSize="20" 
+                          FontWeight="Bold"/>
                 <TextBlock Text=" 시 " VerticalAlignment="Center" Margin="0,0,10,0" Foreground="White" FontSize="16" FontWeight="Bold" FontFamily="{StaticResource NotoSansFontBoldFamily}"/>
-                <ComboBox Style="{StaticResource CustomComboBoxStyle}" MouseEnter="StartHourComboBox_MouseEnter" MouseLeave="StartHourComboBox_MouseLeave" VerticalContentAlignment="Center" x:Name="EndMinuteComboBox" Width="60" Margin="0,0,5,0" VerticalAlignment="Center" FontSize="20" Height="40" FontWeight="Bold"/>
+                <ComboBox HorizontalAlignment="Center" 
+                          Style="{StaticResource CustomComboBoxStyle}" 
+                          MouseEnter="StartHourComboBox_MouseEnter" 
+                          MouseLeave="StartHourComboBox_MouseLeave" 
+                          VerticalContentAlignment="Center" 
+                          x:Name="EndMinuteComboBox" 
+                          Width="60" Margin="0,0,5,0" 
+                          VerticalAlignment="Center" 
+                          FontSize="20" Height="40" 
+                          FontWeight="Bold"/>
                 <TextBlock Text=" 분" VerticalAlignment="Center" Foreground="White" FontSize="16" FontWeight="Bold" FontFamily="{StaticResource NotoSansFontBoldFamily}"/>
             </StackPanel>
         </Grid>
