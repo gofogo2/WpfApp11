@@ -57,7 +57,7 @@
         </Setter>
     </Style>
 </UserControl.Resources>
-    <Border BorderThickness="1" BorderBrush="Black" CornerRadius="5">
+    <Border BorderThickness="1" BorderBrush="#888888" CornerRadius="5">
         <Grid>
             <Grid x:Name="MainGrid" Width="180" Height="180">
                     <Grid.RowDefinitions>
@@ -67,7 +67,7 @@
                     </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0" x:Name="TitleTextBlock" Text="두꺼비Title" FontSize="15" HorizontalAlignment="Center"  VerticalAlignment="Center" Margin="5,5,5,0" FontFamily="{StaticResource NotoSansFontMediumFamily}" FontWeight="Medium"/>
 
-                    <Border Grid.Row="1" BorderThickness="0.5" BorderBrush="Black">
+                    <Border Grid.Row="1" BorderThickness="1" BorderBrush="#888888" Width="180" Margin="-2,0,0,0">
                         <Rectangle Fill="#E0E0E0" x:Name="PowerState"/>
                     </Border>
 
@@ -86,7 +86,7 @@
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
                                 <Border Background="{TemplateBinding Background}"  x:Name="BorderElement"
-                            BorderBrush="Black"
+                            BorderBrush="#999999"
                             BorderThickness="1"
                             CornerRadius="5">
                                     <!-- 둥근 모서리 설정 -->
@@ -94,8 +94,7 @@
                                 </Border>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter TargetName="BorderElement" Property="Background" Value="SkyBlue"/>
-                                        <Setter TargetName="BorderElement" Property="BorderBrush" Value="DodgerBlue"/>
+                                        <Setter TargetName="BorderElement" Property="BorderThickness" Value="2"/>
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
@@ -116,7 +115,7 @@
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
                                 <Border Background="{TemplateBinding Background}"  x:Name="BorderElement2"
-                            BorderBrush="Black"
+                            BorderBrush="#999999"
                             BorderThickness="1"
                             CornerRadius="5">
                                     <!-- 둥근 모서리 설정 -->
@@ -124,8 +123,7 @@
                                 </Border>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter TargetName="BorderElement2" Property="Background" Value="SkyBlue"/>
-                                        <Setter TargetName="BorderElement2" Property="BorderBrush" Value="DodgerBlue"/>
+                                        <Setter TargetName="BorderElement2" Property="BorderThickness" Value="2"/>
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>

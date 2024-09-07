@@ -33,8 +33,7 @@
                                 </Border>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter TargetName="confirm_btn" Property="Background" Value="SkyBlue"/>
-                                        <Setter TargetName="confirm_btn" Property="BorderBrush" Value="DodgerBlue"/>
+                                        <Setter TargetName="confirm_btn" Property="BorderThickness" Value="2"/>
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
@@ -77,8 +76,7 @@
                                 </Border>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter TargetName="confirm_btn" Property="Background" Value="SkyBlue"/>
-                                        <Setter TargetName="confirm_btn" Property="BorderBrush" Value="DodgerBlue"/>
+                                        <Setter TargetName="confirm_btn" Property="BorderThickness" Value="2"/>
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>

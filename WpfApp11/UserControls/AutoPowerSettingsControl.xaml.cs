@@ -193,14 +193,50 @@ namespace WpfApp9
         {
             for (int i = 1; i < 25; i++)
             {
-                all_StartHourComboBox.Items.Add(i.ToString("D2"));
-                all_EndHourComboBox.Items.Add(i.ToString("D2"));
+                TextBlock tb = new TextBlock();
+                tb.Text = i.ToString("00");
+                tb.FontFamily = (FontFamily)FindResource("NotoSansFontBoldFamily");
+                tb.FontWeight = FontWeights.Bold;
+                all_StartHourComboBox.Items.Add(tb);
+
+                //all_StartHourComboBox.Items.Add(i.ToString("D2"));
+                //all_EndHourComboBox.Items.Add(i.ToString("D2"));
+            }
+            for (int i = 1; i < 25; i++)
+            {
+                TextBlock tb = new TextBlock();
+                tb.Text = i.ToString("00");
+                tb.FontFamily = (FontFamily)FindResource("NotoSansFontBoldFamily");
+                tb.FontWeight = FontWeights.Bold;
+                all_EndHourComboBox.Items.Add(tb);
+
+                //all_StartHourComboBox.Items.Add(i.ToString("D2"));
+                //all_EndHourComboBox.Items.Add(i.ToString("D2"));
             }
 
             for (int i = 0; i < 60; i += 1)
             {
-                all_StartMinuteComboBox.Items.Add(i.ToString("D2"));
-                all_EndMinuteComboBox.Items.Add(i.ToString("D2"));
+                TextBlock tb = new TextBlock();
+                tb.Text = i.ToString("00");
+                tb.FontFamily = (FontFamily)FindResource("NotoSansFontBoldFamily");
+                tb.FontWeight = FontWeights.Bold;
+                all_StartMinuteComboBox.Items.Add(tb);
+                
+
+               // all_StartMinuteComboBox.Items.Add(i.ToString("D2"));
+               //all_EndMinuteComboBox.Items.Add(i.ToString("D2"));
+            }
+            for (int i = 0; i < 60; i += 1)
+            {
+                TextBlock tb = new TextBlock();
+                tb.Text = i.ToString("00");
+                tb.FontFamily = (FontFamily)FindResource("NotoSansFontBoldFamily");
+                tb.FontWeight = FontWeights.Bold;
+                all_EndMinuteComboBox.Items.Add(tb);
+
+
+                // all_StartMinuteComboBox.Items.Add(i.ToString("D2"));
+                //all_EndMinuteComboBox.Items.Add(i.ToString("D2"));
             }
         }
 

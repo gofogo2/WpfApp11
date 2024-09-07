@@ -136,26 +136,110 @@ namespace WpfApp9
 
         private void PopulateComboBoxes()
         {
+            //for (int i = 1; i < 25; i++)
+            //{
+            //    StartHourComboBox.Items.Add(i.ToString("D2"));
+            //    EndHourComboBox.Items.Add(i.ToString("D2"));
+            //}
+
+            //for (int i = 0; i < 60; i += 1)
+            //{
+            //    StartMinuteComboBox.Items.Add(i.ToString("D2"));
+            //    EndMinuteComboBox.Items.Add(i.ToString("D2"));
+            //}
+
+
+
+
             for (int i = 1; i < 25; i++)
             {
-                StartHourComboBox.Items.Add(i.ToString("D2"));
-                EndHourComboBox.Items.Add(i.ToString("D2"));
+                TextBlock tb = new TextBlock();
+                tb.Text = i.ToString("00");
+                tb.FontFamily = (FontFamily)FindResource("NotoSansFontBoldFamily");
+                tb.FontWeight = FontWeights.Bold;
+                StartHourComboBox.Items.Add(tb);
+            }
+            for (int i = 1; i < 25; i++)
+            {
+                TextBlock tb = new TextBlock();
+                tb.Text = i.ToString("00");
+                tb.FontFamily = (FontFamily)FindResource("NotoSansFontBoldFamily");
+                tb.FontWeight = FontWeights.Bold;
+                EndHourComboBox.Items.Add(tb);
             }
 
             for (int i = 0; i < 60; i += 1)
             {
-                StartMinuteComboBox.Items.Add(i.ToString("D2"));
-                EndMinuteComboBox.Items.Add(i.ToString("D2"));
+                TextBlock tb = new TextBlock();
+                tb.Text = i.ToString("00");
+                tb.FontFamily = (FontFamily)FindResource("NotoSansFontBoldFamily");
+                tb.FontWeight = FontWeights.Bold;
+                StartMinuteComboBox.Items.Add(tb);
             }
+            for (int i = 0; i < 60; i += 1)
+            {
+                TextBlock tb = new TextBlock();
+                tb.Text = i.ToString("00");
+                tb.FontFamily = (FontFamily)FindResource("NotoSansFontBoldFamily");
+                tb.FontWeight = FontWeights.Bold;
+                EndMinuteComboBox.Items.Add(tb);
+            }
+
+
+
+
+
+
+
+
         }
 
         public void SetSchedule(DaySchedule schedule)
         {
             DayCheckBox.IsChecked = schedule.IsEnabled;
-            StartHourComboBox.SelectedItem = schedule.StartTime.Hours.ToString("D2");
-            StartMinuteComboBox.SelectedItem = schedule.StartTime.Minutes.ToString("D2");
-            EndHourComboBox.SelectedItem = schedule.EndTime.Hours.ToString("D2");
-            EndMinuteComboBox.SelectedItem = schedule.EndTime.Minutes.ToString("D2");
+
+            foreach (var item in StartHourComboBox.Items)
+            {
+                if (item is TextBlock textBlock && textBlock.Text == schedule.StartTime.Hours.ToString("D2"))
+                {
+                    StartHourComboBox.SelectedItem = textBlock;
+                    break;
+                }
+            }
+
+
+            foreach (var item in StartMinuteComboBox.Items)
+            {
+                if (item is TextBlock textBlock && textBlock.Text == schedule.StartTime.Minutes.ToString("D2"))
+                {
+                    StartMinuteComboBox.SelectedItem = textBlock;
+                    break;
+                }
+            }
+
+            foreach (var item in EndHourComboBox.Items)
+            {
+                if (item is TextBlock textBlock && textBlock.Text == schedule.EndTime.Hours.ToString("D2"))
+                {
+                    EndHourComboBox.SelectedItem = textBlock;
+                    break;
+                }
+            }
+
+            foreach (var item in EndMinuteComboBox.Items)
+            {
+                if (item is TextBlock textBlock && textBlock.Text == schedule.EndTime.Minutes.ToString("D2"))
+                {
+                    EndMinuteComboBox.SelectedItem = textBlock;
+                    break;
+                }
+            }
+
+
+            //StartHourComboBox.SelectedItem = schedule.StartTime.Hours.ToString("D2");
+            //StartMinuteComboBox.SelectedItem = schedule.StartTime.Minutes.ToString("D2");
+            //EndHourComboBox.SelectedItem = schedule.EndTime.Hours.ToString("D2");
+            //EndMinuteComboBox.SelectedItem = schedule.EndTime.Minutes.ToString("D2");
 
 
 
@@ -170,8 +254,14 @@ namespace WpfApp9
 
             if (StartHourComboBox.SelectedItem != null && StartMinuteComboBox.SelectedItem != null && EndHourComboBox.SelectedItem != null && EndMinuteComboBox.SelectedItem != null)
             {
-                ds.StartTime = new TimeSpan(int.Parse(StartHourComboBox.SelectedItem as string), int.Parse(StartMinuteComboBox.SelectedItem as string), 0);
-                ds.EndTime = new TimeSpan(int.Parse(EndHourComboBox.SelectedItem as string), int.Parse(EndMinuteComboBox.SelectedItem as string), 0);
+                TextBlock selectedTextBlock = StartHourComboBox.SelectedItem as TextBlock;
+                TextBlock selectedTextBlock2 = StartMinuteComboBox.SelectedItem as TextBlock;
+
+                TextBlock selectedTextBlock3 = EndHourComboBox.SelectedItem as TextBlock;
+                TextBlock selectedTextBlock4 = EndMinuteComboBox.SelectedItem as TextBlock;
+
+                ds.StartTime = new TimeSpan(int.Parse(selectedTextBlock.Text), int.Parse(selectedTextBlock2.Text), 0);
+                ds.EndTime = new TimeSpan(int.Parse(selectedTextBlock3.Text), int.Parse(selectedTextBlock4.Text), 0);
             }
             else
             {

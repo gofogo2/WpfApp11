@@ -81,7 +81,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <!-- Top Controls -->
-        <Grid Grid.Row="0" Margin="50,20,50,0" >
+        <Grid Grid.Row="0" Margin="15,20,20,0" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
@@ -106,8 +106,7 @@
                                     </Border>
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="BorderElement" Property="Background" Value="SkyBlue"/>
-                                            <Setter TargetName="BorderElement" Property="BorderBrush" Value="DodgerBlue"/>
+                                            <Setter TargetName="BorderElement" Property="BorderThickness" Value="2"/>
                                         </Trigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>
@@ -180,19 +179,25 @@
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="all_on_btn" Property="Background" Value="SkyBlue"/>
-                                    <Setter TargetName="all_on_btn" Property="BorderBrush" Value="DodgerBlue"/>
+                                    
+                                    <Setter TargetName="all_on_btn" Property="BorderThickness" Value="2"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Button.Template>
                     <StackPanel>
-                        <TextBlock Text="전체 전원"  TextAlignment="Center" FontSize="14" Margin="0,7,0,0" FontFamily="{StaticResource NotoSansFontMediumFamily}"/>
-                        <TextBlock Text="ON" TextAlignment="Center" FontSize="32" Margin="0,-5,0,0" FontFamily="{StaticResource NotoSansFontBlackFamily}"/>
+                        <!--<TextBlock Text="전체 전원"  TextAlignment="Center" FontSize="14" Margin="0,7,0,0" FontFamily="{StaticResource NotoSansFontMediumFamily}"/>
+                        <TextBlock Text="ON" TextAlignment="Center" FontSize="32" Margin="0,-5,0,0" FontFamily="{StaticResource NotoSansFontBlackFamily}"/>-->
+                        
+                        
+                        <TextBlock Text="전체 전원"  TextAlignment="Center" FontSize="14" Margin="0,0,0,0" FontFamily="{StaticResource NotoSansFontMediumFamily}"/>
+                        <TextBlock Text="ON" TextAlignment="Center" FontSize="32" Margin="0,0,0,0" FontFamily="{StaticResource NotoSansFontBlackFamily}"/>
                     </StackPanel>
                 </Button>
 
 
+
+              
 
 
 
@@ -210,8 +215,7 @@
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="all_off_btn" Property="Background" Value="SkyBlue"/>
-                                    <Setter TargetName="all_off_btn" Property="BorderBrush" Value="DodgerBlue"/>
+                                    <Setter TargetName="all_off_btn" Property="BorderThickness" Value="2"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -304,8 +308,8 @@
 
         </Grid>
         <!-- Grid and Draggable Items Canvas -->
-        <Border Grid.Row="2" BorderThickness="1" BorderBrush="Black" Margin="20" >
-            <ScrollViewer  Style="{StaticResource FlatScrollViewerStyle}"  Grid.Row="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="White">
+        <Border Grid.Row="2" BorderThickness="1" BorderBrush="#999999" Margin="20" CornerRadius="5" Background="White">
+            <ScrollViewer  Style="{StaticResource FlatScrollViewerStyle}"  Grid.Row="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="Transparent">
                 <Grid x:Name="GridContainer" Background="White" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,50,0,50">
                     <Canvas x:Name="GridCanvas" MouseRightButtonDown="tt" MouseLeftButtonDown="Canvas_MouseDown">
                         <Canvas.ContextMenu>

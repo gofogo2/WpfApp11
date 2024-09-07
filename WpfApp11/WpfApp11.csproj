@@ -298,6 +298,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\icons\icon_folder.png" />
+    <Resource Include="Images\Arrow_left_basic.png" />
+    <Resource Include="Images\Arrow_right_basic.png" />
     <Content Include="Settings\Setup-IIS-FTP.ps1">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
