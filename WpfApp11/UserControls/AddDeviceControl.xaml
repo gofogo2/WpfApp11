@@ -390,8 +390,7 @@
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="cancel_btn" Property="Background" Value="SkyBlue"/>
-                                    <Setter TargetName="cancel_btn" Property="BorderBrush" Value="DodgerBlue"/>
+                                    <Setter TargetName="cancel_btn" Property="BorderThickness" Value="2"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
