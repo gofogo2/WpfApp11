@@ -3,14 +3,13 @@ using System.Net.Sockets;
 using System.Text;
 using System.IO;
 using System.Threading.Tasks;
-using WpfApp11.Helpers;
+using System.Diagnostics;
 
 public class PJLinkHelper
 {
     private static PJLinkHelper _instance = null;
     private static readonly object _padlock = new object();
-    private const int DefaultTimeout = 500;
-    private const int MaxRetries = 1;
+    private const int DefaultTimeout = 3000; // 3000ms 타임아웃
 
     private PJLinkHelper() { }
 
@@ -34,22 +33,32 @@ public class PJLinkHelper
 
     public async Task<bool> PowerOnAsync(string ipAddress, int port = 4352, int timeout = DefaultTimeout)
     {
-        string response = await SendCommandWithRetryAsync(ipAddress, port, "%1POWR 1", timeout);
-        return response.Contains("OK");
+        var result = await GetPowerStatusAsync(ipAddress, port, timeout);
+        Debug.WriteLine(result);
+        bool firstAttempt = await SendCommandAsync(ipAddress, port, "%1POWR 1", timeout) == "OK";
+        if (firstAttempt) return true;
+
+        bool secondAttempt = await SendCommandAsync(ipAddress, port, "%1POWR 1", timeout) == "OK";
+        return firstAttempt || secondAttempt;
     }
 
     public async Task<bool> PowerOffAsync(string ipAddress, int port = 4352, int timeout = DefaultTimeout)
     {
-        string response = await SendCommandWithRetryAsync(ipAddress, port, "%1POWR 0", timeout);
-        return response.Contains("OK");
+        var result = await GetPowerStatusAsync(ipAddress, port, timeout);
+        Debug.WriteLine(result);
+        bool firstAttempt = await SendCommandAsync(ipAddress, port, "%1POWR 0", timeout) == "OK";
+        if (firstAttempt) return true;
+
+        bool secondAttempt = await SendCommandAsync(ipAddress, port, "%1POWR 0", timeout) == "OK";
+        return firstAttempt || secondAttempt;
     }
 
     public async Task<PowerStatus> GetPowerStatusAsync(string ipAddress, int port = 4352, int timeout = DefaultTimeout)
     {
-        string response = await SendCommandWithRetryAsync(ipAddress, port, "%1POWR ?", timeout);
-        if (response.Contains("OK"))
+        string response = await SendCommandAsync(ipAddress, port, "%1POWR ?", timeout);
+        if (response.Contains("="))
         {
-            string status = response.Substring(response.Length - 1);
+            string status = response.Substring(response.IndexOf("=") + 1).Trim();
             switch (status)
             {
                 case "0": return PowerStatus.StandBy;
@@ -62,49 +71,47 @@ public class PJLinkHelper
         return PowerStatus.Unknown;
     }
 
-    private async Task<string> SendCommandWithRetryAsync(string ipAddress, int port, string command, int timeout)
-    {
-        for (int attempt = 0; attempt <= MaxRetries; attempt++)
-        {
-            try
-            {
-                return await SendCommandAsync(ipAddress, port, command, timeout);
-            }
-            catch (Exception ex)
-            {
-                if (attempt == MaxRetries)
-                {
-                    //Logger.Log2($"PJLink command failed after {MaxRetries + 1} attempts: {ex.Message}");
-                    return string.Empty;
-                }
-                await Task.Delay(500); // Wait before retrying
-            }
-        }
-        return string.Empty;
-    }
-
     private async Task<string> SendCommandAsync(string ipAddress, int port, string command, int timeout)
     {
         using (var client = new TcpClient())
         {
-            await client.ConnectAsync(ipAddress, port);
-            client.ReceiveTimeout = timeout;
-            client.SendTimeout = timeout;
-            using (var stream = client.GetStream())
+            try
             {
-                byte[] data = Encoding.ASCII.GetBytes(command + "\r");
-                await stream.WriteAsync(data, 0, data.Length);
-                using (var ms = new MemoryStream())
+                await client.ConnectAsync(ipAddress, port);
+                client.ReceiveTimeout = timeout;
+                client.SendTimeout = timeout;
+
+                using (var stream = client.GetStream())
                 {
+                    // 초기 PJLink 응답 읽기
                     byte[] buffer = new byte[1024];
-                    int bytesRead;
-                    do
+                    int bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
+                    string initialResponse = Encoding.ASCII.GetString(buffer, 0, bytesRead).Trim();
+                    if (!initialResponse.StartsWith("PJLINK 0"))
                     {
-                        bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
-                        ms.Write(buffer, 0, bytesRead);
-                    } while (stream.DataAvailable);
-                    return Encoding.ASCII.GetString(ms.ToArray());
+                        throw new Exception($"Unexpected initial PJLink response: {initialResponse}");
+                    }
+
+                    // 명령 전송
+                    byte[] data = Encoding.ASCII.GetBytes(command + "\r");
+                    await stream.WriteAsync(data, 0, data.Length);
+
+                    // 응답 읽기
+                    using (var ms = new MemoryStream())
+                    {
+                        do
+                        {
+                            bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
+                            ms.Write(buffer, 0, bytesRead);
+                        } while (stream.DataAvailable);
+
+                        return Encoding.ASCII.GetString(ms.ToArray()).Trim();
+                    }
                 }
+            }
+            finally
+            {
+                client.Close();
             }
         }
     }

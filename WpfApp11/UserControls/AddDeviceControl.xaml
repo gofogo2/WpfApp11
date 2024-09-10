@@ -164,7 +164,7 @@
                             <ComboBox x:Name="DeviceTypeComboBox" 
                                       BorderThickness="0"
                                       BorderBrush="Transparent"
-                                      Style="{StaticResource CustomComboBoxStyle}"
+                                      
                                       Width="350" 
                                       Height="35" 
                                       FontSize="16" 
@@ -366,7 +366,7 @@
                         </ControlTemplate>
                     </Button.Template>
                     <StackPanel>
-                        <TextBlock Text="수정" FontWeight="Bold" FontSize="20" FontFamily="{StaticResource NotoSansFontFamily}"/>
+                        <TextBlock Text="수정" FontWeight="Bold" FontSize="20" FontFamily="{StaticResource NotoSansFontBoldFamily}"/>
                     </StackPanel>
                 </Button>
 

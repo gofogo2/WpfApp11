@@ -3,12 +3,12 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using System.Text;
 using WpfApp11.Helpers;
+using System.Diagnostics;
 
 public class DlpProjectorHelper
 {
     private const int ProjectorPort = 4352;
-    private const int MaxRetries = 1;
-    private const int TimeoutMilliseconds = 5000; // 5 seconds timeout
+    private const int TimeoutMilliseconds = 500;
     private static DlpProjectorHelper _instance;
     private static readonly object _lock = new object();
 
@@ -41,101 +41,125 @@ public class DlpProjectorHelper
 
     public async Task<bool> SendPowerOnCommandAsync(string projectorIp)
     {
-        string response = await SendCommandWithRetryAsync(projectorIp, Commands.PowerOn);
+        string response = await SendCommandAsync(projectorIp, Commands.PowerOn);
+        Debug.WriteLine("PowerOn Response: " + response);
         return ParsePowerCommandResponse(response);
     }
 
     public async Task<bool> SendPowerOffCommandAsync(string projectorIp)
     {
-        string response = await SendCommandWithRetryAsync(projectorIp, Commands.PowerOff);
+        string response = await SendCommandAsyncOff(projectorIp, Commands.PowerOff);
+        Debug.WriteLine("PowerOff Response: " + response);
         return ParsePowerCommandResponse(response);
     }
 
     public async Task<string> GetPowerStatusAsync(string projectorIp)
     {
-        string response = await SendCommandWithRetryAsync(projectorIp, Commands.PowerStatus);
+        string response = await SendCommandAsync(projectorIp, Commands.PowerStatus);
+        Debug.WriteLine("PowerStatus Response: " + response);
         return ParsePowerStatus(response);
-    }
-
-    private async Task<string> SendCommandWithRetryAsync(string projectorIp, string hexCommand)
-    {
-        for (int attempt = 0; attempt <= MaxRetries; attempt++)
-        {
-            try
-            {
-                return await SendCommandAsync(projectorIp, hexCommand);
-            }
-            catch (Exception ex)
-            {
-                if (attempt == MaxRetries)
-                {
-                    //Logger.Log2($"DLP Projector command failed after {MaxRetries + 1} attempts: {ex.Message}");
-                    throw; // Re-throw the exception after all retries have failed
-                }
-                await Task.Delay(500); // Wait before retrying
-            }
-        }
-        return string.Empty; // This line should never be reached due to the throw above
     }
 
     private async Task<string> SendCommandAsync(string projectorIp, string hexCommand)
     {
         using (var client = new TcpClient())
         {
-            using (var cts = new System.Threading.CancellationTokenSource(TimeoutMilliseconds))
+            try
             {
-                try
+                await client.ConnectAsync(projectorIp, ProjectorPort);
+                using (var stream = client.GetStream())
                 {
-                    var connectTask = client.ConnectAsync(projectorIp, ProjectorPort);
-                    var timeoutTask = Task.Delay(TimeoutMilliseconds, cts.Token);
+                    stream.WriteTimeout = TimeoutMilliseconds;
 
-                    if (await Task.WhenAny(connectTask, timeoutTask) == timeoutTask)
+                    byte[] commandBytes = StringToByteArray(hexCommand);
+                    await stream.WriteAsync(commandBytes, 0, commandBytes.Length);
+
+                    byte[] buffer = new byte[1024];
+                    using (var cts = new System.Threading.CancellationTokenSource(TimeoutMilliseconds))
                     {
-                        throw new TimeoutException("Connection attempt timed out");
-                    }
+                        Task<int> readTask = stream.ReadAsync(buffer, 0, buffer.Length, cts.Token);
+                        Task timeoutTask = Task.Delay(TimeoutMilliseconds, cts.Token);
 
-                    using (var stream = client.GetStream())
-                    {
-                        byte[] commandBytes = StringToByteArray(hexCommand);
-                        await stream.WriteAsync(commandBytes, 0, commandBytes.Length, cts.Token);
-
-                        // Read the response
-                        byte[] buffer = new byte[1024];
-                        var readTask = stream.ReadAsync(buffer, 0, buffer.Length, cts.Token);
-                        timeoutTask = Task.Delay(TimeoutMilliseconds, cts.Token);
-
-                        if (await Task.WhenAny(readTask, timeoutTask) == timeoutTask)
+                        Task completedTask = await Task.WhenAny(readTask, timeoutTask);
+                        if (completedTask == timeoutTask)
                         {
-                            throw new TimeoutException("Reading response timed out");
+                            throw new TimeoutException("Read operation timed out.");
                         }
 
                         int bytesRead = await readTask;
                         return Encoding.ASCII.GetString(buffer, 0, bytesRead);
                     }
                 }
-                catch (OperationCanceledException)
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error in SendCommandAsync: {ex.Message}");
+                throw;
+            }
+            finally
+            {
+                client.Close();
+            }
+        }
+    }
+
+
+    private async Task<string> SendCommandAsyncOff(string projectorIp, string hexCommand)
+    {
+        using (var client = new TcpClient())
+        {
+            try
+            {
+                await client.ConnectAsync(projectorIp, ProjectorPort);
+                using (var stream = client.GetStream())
                 {
-                    throw new TimeoutException("Operation timed out");
+                    stream.WriteTimeout = TimeoutMilliseconds;
+
+                    byte[] commandBytes = StringToByteArray(hexCommand);
+                    await stream.WriteAsync(commandBytes, 0, commandBytes.Length);
+
+                    byte[] buffer = new byte[1024];
+                    using (var cts = new System.Threading.CancellationTokenSource(TimeoutMilliseconds))
+                    {
+                        Task<int> readTask = stream.ReadAsync(buffer, 0, buffer.Length, cts.Token);
+                        Task timeoutTask = Task.Delay(TimeoutMilliseconds, cts.Token);
+
+                        Task completedTask = await Task.WhenAny(readTask, timeoutTask);
+                        if (completedTask == timeoutTask)
+                        {
+                            //throw new TimeoutException("Read operation timed out.");
+                            return "OK";
+                        }
+
+                        int bytesRead = await readTask;
+                        return Encoding.ASCII.GetString(buffer, 0, bytesRead);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error in SendCommandAsync: {ex.Message}");
+                throw;
+            }
+            finally
+            {
+                client.Close();
             }
         }
     }
 
     private bool ParsePowerCommandResponse(string response)
     {
-        // 프로젝터의 실제 응답 형식에 따라 이 부분을 구현해야 합니다.
-        // 예를 들어, 성공적인 응답이 "OK"를 포함한다고 가정합니다.
-        return response.Contains("OK");
+        return response.ToUpper().Contains("OK");
     }
 
     private string ParsePowerStatus(string response)
     {
-        // 프로젝터의 실제 응답 형식에 따라 이 부분을 구현해야 합니다.
-        if (response.Contains("ON"))
+        if (response.ToUpper().Contains("ON"))
         {
             return "Powered On";
         }
-        else if (response.Contains("OFF"))
+        else if (response.ToUpper().Contains("OFF"))
         {
             return "Powered Off";
         }

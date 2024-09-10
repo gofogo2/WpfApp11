@@ -57,7 +57,7 @@ namespace WpfApp9
         DispatcherTimer pow_timer = new DispatcherTimer();
 
         public string local_pc_name = "pc";
-        public string vnc_pw = "1111";
+        public string vnc_pw = "0909";
         public string local_path = @"C:\GL-MEDIA";
 
         public int pingtime = 5;
@@ -292,7 +292,7 @@ namespace WpfApp9
 
             //string currentDay = days[(int)now.DayOfWeek];
 
-            if (AutoPowerSettingsControl.pow_schedule[currentDay].IsEnabled)
+                if (AutoPowerSettingsControl.pow_schedule[currentDay].IsEnabled)
             {
                 string currentTime = now.ToString("HH:mm");
                 if (currentTime == AutoPowerSettingsControl.pow_schedule[currentDay].StartTime.ToString().Substring(0, 5))
@@ -321,7 +321,7 @@ namespace WpfApp9
         public async Task OffDevice()
         {
             PowerOverlay.Visibility = Visibility.Visible;
-            PowerProgressBar.Value = 0;
+            PowerProgressBar.Value = 0; 
             var items = dragItems.Select(a => a.Configuration).ToList();
             await SortAndProcessDragItems(items, false, 0, 25); //장치 처리
             await AddDelay(25, 100); // 10초 딜레이
@@ -355,10 +355,10 @@ namespace WpfApp9
 
             Debug.WriteLine($"Items sorted. Order: {string.Join(", ", sortedDragItems.Select(i => i.DeviceType))}");
 
-            foreach (var i in dragItems)
-            {
-                i.StopPingCheck();
-            }
+            //foreach (var i in dragItems)
+            //{
+            //    i.StopPingCheck();
+            //}
             Debug.WriteLine("Stopped ping checks for all items");
 
             // 전원 제어 대상 (더미 아이템 포함)

@@ -100,7 +100,7 @@ namespace WpfApp11.UserControls
             {
                 id = uniqueIdString,
                 Name = NameTextBox.Text,
-                DeviceType = ((ComboBoxItem)DeviceTypeComboBox.SelectedItem).Content.ToString(),
+                DeviceType = ((TextBlock)((ComboBoxItem)DeviceTypeComboBox.SelectedItem).Content).Text.ToString(),
                 
                 MacAddress = MacAddressTextBox.Text,
                 IpAddress = IpAddressTextBox.Text,
@@ -146,7 +146,7 @@ namespace WpfApp11.UserControls
             {
                 DeviceTypeComboBox.SelectedIndex = 1;
             }
-            else if (config.DeviceType.ToLower() == "프로젝터(APPOTRONICS)")
+            else if (config.DeviceType.ToLower() == "프로젝터(appotronics)")
             {
                 DeviceTypeComboBox.SelectedIndex = 2;
             }
@@ -187,7 +187,7 @@ namespace WpfApp11.UserControls
 
 
             tempconfig.Name = NameTextBox.Text.ToUpper();
-            tempconfig.DeviceType = ((ComboBoxItem)DeviceTypeComboBox.SelectedItem).Content.ToString();
+            tempconfig.DeviceType = ((TextBlock)((ComboBoxItem)DeviceTypeComboBox.SelectedItem).Content).Text.ToString();
             tempconfig.MacAddress = MacAddressTextBox.Text;
             tempconfig.IpAddress = IpAddressTextBox.Text;
             tempconfig.port = DescriptionTextBox.Text;
