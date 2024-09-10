@@ -25,9 +25,6 @@ namespace WpfApp9
         private int PingInterval = 5000; // 5초마다 핑 체크
         private CancellationTokenSource pduStatusCancellationTokenSource;
         private CancellationTokenSource pingCancellationTokenSource;
-        private CancellationTokenSource pjlinkStatusCancellationTokenSource;
-        private CancellationTokenSource appotronicsStatusCancellationTokenSource;
-        private bool isPinging = false;
         string vncViewerPath = @"C:\Program Files\TightVNC\tvnviewer.exe"; // TightVNC 뷰어 경로
         public ItemConfiguration Configuration { get; private set; }
         SolidColorBrush onColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#ACD7FE"));
@@ -199,26 +196,26 @@ namespace WpfApp9
 
         private async Task AppotronicsStatus()
         {
-            //while (true)
-            //{
-            //    if (!isControllingAPPOProjectors && dlpProjectorHelper != null)
-            //    {
-            //        try
-            //        {
-            //            string status = await dlpProjectorHelper.GetPowerStatusAsync();
-            //            Debug.WriteLine($"APPO {Configuration.IpAddress} - {status}");
-            //            UpdatePowerState(status == "Powered On");
-            //        }
-            //        catch (Exception ex)
-            //        {
-            //            Debug.WriteLine($"Error checking status for {Configuration.IpAddress}: {ex.Message}");
-            //            // 연결 문제가 발생했을 때 dlpProjectorHelper를 재생성
-            //            dlpProjectorHelper.Dispose();
-            //            dlpProjectorHelper = new DlpProjectorHelper(Configuration.IpAddress);
-            //        }
-            //    }
-            //    await Task.Delay(5000); // 5초 대기
-            //}
+            while (true)
+            {
+                if (!isControllingAPPOProjectors && dlpProjectorHelper != null)
+                {
+                    try
+                    {
+                        string status = await dlpProjectorHelper.GetPowerStatusAsync();
+                        Debug.WriteLine($"APPO {Configuration.IpAddress} - {status}");
+                        UpdatePowerState(status == "Powered On");
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"Error checking status for {Configuration.IpAddress}: {ex.Message}");
+                        // 연결 문제가 발생했을 때 dlpProjectorHelper를 재생성
+                        dlpProjectorHelper.Dispose();
+                        dlpProjectorHelper = new DlpProjectorHelper(Configuration.IpAddress);
+                    }
+                }
+                await Task.Delay(5000); // 5초 대기
+            }
         }
 
 
@@ -584,10 +581,10 @@ namespace WpfApp9
 pow_on_pjlink()
         {
             isControllingProjectors = true;
-            await Task.Delay(3000);
+            await Task.Delay(2000);
             await ControlProjector(Configuration.IpAddress, true);
             isControllingProjectors = false;
-            await Task.Delay(3000);
+            await Task.Delay(2000);
         }
 
         public async 
@@ -595,10 +592,10 @@ pow_on_pjlink()
 pow_off_pjlink()
         {
             isControllingProjectors = true;
-            await Task.Delay(3000);
+            await Task.Delay(2000);
             await ControlProjector(Configuration.IpAddress, false);
             isControllingProjectors = false;
-            await Task.Delay(3000);
+            await Task.Delay(2000);
         }
 
 
@@ -608,10 +605,10 @@ pow_off_pjlink()
 pow_on_appo()
         {
             isControllingAPPOProjectors = true;
-            await Task.Delay(3000);
+            await Task.Delay(2000);
             bool success = await APPOControlProjector(true);
             isControllingAPPOProjectors = false;
-            await Task.Delay(3000);
+            await Task.Delay(2000);
         }
 
         public async
@@ -619,10 +616,10 @@ pow_on_appo()
 pow_off_appo()
         {
             isControllingAPPOProjectors = true;
-            await Task.Delay(3000);
+            await Task.Delay(2000);
             bool success = await APPOControlProjector(false);
             isControllingAPPOProjectors = false;
-            await Task.Delay(3000);
+            await Task.Delay(2000);
         }
 
 
@@ -640,19 +637,19 @@ pow_off_appo()
                 {
 
                     isControllingProjectors = true;
-                    await Task.Delay(3000);
+                    await Task.Delay(2000);
                     await ControlProjector(Configuration.IpAddress, false);
                     isControllingProjectors = false;
-                    await Task.Delay(3000);
+                    await Task.Delay(2000);
                 }
                 else if (Configuration.DeviceType.ToLower() == "프로젝터(appotronics)")
                 {
                     isControllingAPPOProjectors = true;
-                    await Task.Delay(3000);
+                    await Task.Delay(2000);
                     bool success = await APPOControlProjector(false);
                     result = success ? "Success" : "Failed";
                     isControllingAPPOProjectors = false;
-                    await Task.Delay(3000);
+                    await Task.Delay(2000);
                 }
                 else if (Configuration.DeviceType == "PDU")
                 {

@@ -178,6 +178,11 @@ namespace WpfApp9
                     logViewer.Show();
                 }
             }
+
+            else if (e.Key == Key.F3)
+            {
+                //GlobalMessageService.ShowMessage("helloworld");
+            }
         }
 
         private void LoadSettings()
@@ -688,8 +693,7 @@ namespace WpfApp9
             itemControl.MouseLeftButtonUp += Item_MouseLeftButtonUp;
             itemControl.MouseMove += Item_MouseMove;
 
-            //itemControl.StatusIndicator.Visibility = config.DeviceType == "pc" ? Visibility.Visible : Visibility.Collapsed;
-
+            
             double left = (config.Column * GridCellWidth) + ItemMargin;
             double top = (config.Row * GridCellHeight) + ItemMargin;
 
@@ -1183,7 +1187,6 @@ namespace WpfApp9
             {
                 AutoPowerSettingsControl.Visibility = Visibility.Collapsed;
             };
-            //auto_wol_btn.Click += Auto_wol_btn_Click;
         }
 
         private void Auto_wol_btn_Click(object sender, RoutedEventArgs e)
