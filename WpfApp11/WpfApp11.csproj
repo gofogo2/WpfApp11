@@ -224,29 +224,11 @@
     <Resource Include="fonts\NotoSansKR-Bold.ttf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="fonts\NotoSansKR-ExtraBold.ttf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="fonts\NotoSansKR-ExtraLight.ttf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="fonts\NotoSansKR-Light.ttf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
     <Resource Include="fonts\NotoSansKR-Medium.ttf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="fonts\NotoSansKR-Regular.ttf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="fonts\NotoSansKR-SemiBold.ttf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="fonts\NotoSansKR-Thin.ttf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="fonts\HS두꺼비체.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

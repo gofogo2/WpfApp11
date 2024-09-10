@@ -20,6 +20,7 @@ namespace WpfApp9
 {
     public partial class DraggableItemControl : UserControl
     {
+        private DlpProjectorHelper dlpProjectorHelper;
         public WakeOnLan wol;
         private int PingInterval = 5000; // 5초마다 핑 체크
         private CancellationTokenSource pduStatusCancellationTokenSource;
@@ -31,7 +32,7 @@ namespace WpfApp9
         public ItemConfiguration Configuration { get; private set; }
         SolidColorBrush onColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#ACD7FE"));
         SolidColorBrush offColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E0E0E0"));
-
+        private int relay_onoff = 0;
         public bool ispow = false;
 
         public DraggableItemControl(ItemConfiguration config)
@@ -50,18 +51,24 @@ namespace WpfApp9
                 PingInterval = 5000;
             }
 
+
+
             // 전체 상태체크
             if (Configuration.DeviceType.ToLower() == "pc")
             {
-                //StartPingCheck();
+                StartPingCheck();
             }
             else if (Configuration.DeviceType.ToLower() == "프로젝터(pjlink)")
             {
-                //StartPJLinkStatusCheck();
+                isControllingProjectors = false;
+                _ = Status();
+
             }
-            else if (Configuration.DeviceType.ToLower() == "프로젝터(appotronics)")
+           else if (Configuration.DeviceType.ToLower() == "프로젝터(appotronics)")
             {
-                //StartAppotronicsStatusCheck();
+                dlpProjectorHelper = new DlpProjectorHelper(Configuration.IpAddress);
+                isControllingAPPOProjectors = false;
+                _ = AppotronicsStatus();
             }
             else if (Configuration.DeviceType == "PDU")
             {
@@ -94,7 +101,6 @@ namespace WpfApp9
         {
             StopPDUStatus();
             StopPJLinkStatusCheck();
-            StopAppotronicsStatusCheck();
             StartPingCheck();
         }
 
@@ -143,87 +149,115 @@ namespace WpfApp9
             }
             }
 
+
+        private async Task Status()
+        {
+            while (true)
+            {
+                if (!isControllingProjectors)
+                {
+                    //foreach (var item in dragItems)
+                    //{
+                        if (Configuration.DeviceType.Contains("PJLINK"))
+                        {
+                        try
+                        {
+                            using (var pjLink = new PJLinkHelper(Configuration.IpAddress))
+                            {
+                                await pjLink.ConnectAsync();
+                                PowerStatus result = await pjLink.GetPowerStatusAsync();
+                                //Debug.WriteLine($"{Configuration.IpAddress} - {result}");
+                                UpdatePowerState(result == PowerStatus.PoweredOn);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            //Debug.WriteLine($"Error checking status for {Configuration.IpAddress}: {ex.Message}");
+                        }
+                        //}
+                    }
+                }
+                await Task.Delay(5000); // 5초 대기
+            }
+        }
+        bool isControllingProjectors = false;
         public void StartPJLinkStatusCheck()
         {
-            StopPJLinkStatusCheck(); // 기존 체크가 실행 중이면 중지
-            pjlinkStatusCancellationTokenSource = new CancellationTokenSource();
-            _ = PJLinkStatusCheckLoop(pjlinkStatusCancellationTokenSource.Token);
+            isControllingProjectors = false;
         }
 
         public void StopPJLinkStatusCheck()
         {
-            pjlinkStatusCancellationTokenSource?.Cancel();
-            pjlinkStatusCancellationTokenSource?.Dispose();
-            pjlinkStatusCancellationTokenSource = null;
+            isControllingProjectors = true;
         }
 
-        private async Task PJLinkStatusCheckLoop(CancellationToken cancellationToken)
+        bool isControllingAPPOProjectors = false;
+      
+        
+        
+        
+
+        private async Task AppotronicsStatus()
         {
-            if (!isDoing)
+            //while (true)
+            //{
+            //    if (!isControllingAPPOProjectors && dlpProjectorHelper != null)
+            //    {
+            //        try
+            //        {
+            //            string status = await dlpProjectorHelper.GetPowerStatusAsync();
+            //            Debug.WriteLine($"APPO {Configuration.IpAddress} - {status}");
+            //            UpdatePowerState(status == "Powered On");
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            Debug.WriteLine($"Error checking status for {Configuration.IpAddress}: {ex.Message}");
+            //            // 연결 문제가 발생했을 때 dlpProjectorHelper를 재생성
+            //            dlpProjectorHelper.Dispose();
+            //            dlpProjectorHelper = new DlpProjectorHelper(Configuration.IpAddress);
+            //        }
+            //    }
+            //    await Task.Delay(5000); // 5초 대기
+            //}
+        }
+
+
+        public async Task APPOControlProjector(string ipAddress, bool powerOn)
+        {
+            using (var projectorHelper = new DlpProjectorHelper(ipAddress))
             {
-                while (!cancellationToken.IsCancellationRequested)
+                try
                 {
-                    try
+                    bool result = powerOn
+                        ? await projectorHelper.SendPowerOnCommandAsync()
+                        : await projectorHelper.SendPowerOffCommandAsync();
+
+                    if (result)
                     {
-                        PowerStatus status = await PJLinkHelper.Instance.GetPowerStatusAsync(Configuration.IpAddress);
-                        await Dispatcher.InvokeAsync(() =>
-                        {
-                            if (!cancellationToken.IsCancellationRequested)
-                            {
-                                UpdatePowerState(status == PowerStatus.PoweredOn);
-                            }
-                        });
+                        Debug.WriteLine($"프로젝터 {ipAddress} 전원이 {(powerOn ? "켜졌" : "꺼졌")}습니다.");
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        Logger.Log2($"PJLink 상태 체크 중 오류 발생: {ex.Message}");
-                        Debug.WriteLine($"PJLink 상태 체크 중 오류 발생: {ex.Message}");
+                        Debug.WriteLine($"프로젝터 {ipAddress} 전원 {(powerOn ? "켜기" : "끄기")}에 실패했습니다.");
                     }
 
-                    await Task.Delay(PingInterval, cancellationToken);
+                    string status = await projectorHelper.GetPowerStatusAsync();
+                    Debug.WriteLine($"프로젝터 {ipAddress} 상태: {status}");
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"프로젝터 {ipAddress} 제어 중 오류 발생: {ex.Message}");
                 }
             }
         }
-
-        public void StartAppotronicsStatusCheck()
+        public void StartAPPOStatusCheck()
         {
-            StopAppotronicsStatusCheck(); // 기존 체크가 실행 중이면 중지
-            appotronicsStatusCancellationTokenSource = new CancellationTokenSource();
-            _ = AppotronicsStatusCheckLoop(appotronicsStatusCancellationTokenSource.Token);
+            isControllingAPPOProjectors = false;
         }
 
-        public void StopAppotronicsStatusCheck()
+        public void StopAPPOStatusCheck()
         {
-            appotronicsStatusCancellationTokenSource?.Cancel();
-            appotronicsStatusCancellationTokenSource?.Dispose();
-            appotronicsStatusCancellationTokenSource = null;
-        }
-
-        private async Task AppotronicsStatusCheckLoop(CancellationToken cancellationToken)
-        {
-            if (!isDoing)
-            {
-                while (!cancellationToken.IsCancellationRequested)
-                {
-                    try
-                    {
-                        string status = await DlpProjectorHelper.Instance.GetPowerStatusAsync(Configuration.IpAddress);
-                        await Dispatcher.InvokeAsync(() =>
-                        {
-                            if (!cancellationToken.IsCancellationRequested)
-                            {
-                                UpdatePowerState(status == "Powered On");
-                            }
-                        });
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine($"APPOTRONICS 상태 체크 중 오류 발생: {ex.Message}");
-                    }
-
-                    await Task.Delay(PingInterval, cancellationToken);
-                }
-            }
+            isControllingAPPOProjectors = true;
         }
 
         private void CreateContextMenu()
@@ -480,48 +514,22 @@ namespace WpfApp9
                 }
                 else if (Configuration.DeviceType.ToLower() == "프로젝터(pjlink)")
                 {
-                    //StopPJLinkStatusCheck(); // 상태 체크 중지
-                    await PJLinkHelper.Instance.PowerOnAsync(Configuration.IpAddress);
-                    //await Task.Delay(10000); // 10초 대기
-                    //StartPJLinkStatusCheck(); // 상태 체크 재개
+
+                    isControllingProjectors = true;
+                    await Task.Delay(5000);
+                   await APPOControlProjector(Configuration.IpAddress, true);
+                    isControllingProjectors = false;
+                    await Task.Delay(5000);
                 }
                 else if (Configuration.DeviceType.ToLower() == "프로젝터(appotronics)")
                 {
-                    try
-                    {
-                        const int maxAttempts = 3;
-                        const int delayBetweenAttempts = 5000; // 5 seconds
 
-                        for (int attempt = 0; attempt < maxAttempts; attempt++)
-                        {
-                            string status = await DlpProjectorHelper.Instance.GetPowerStatusAsync(Configuration.IpAddress);
-                            Debug.WriteLine($"Attempt {attempt + 1}: Current status: {status}");
-
-                            if (status.ToLower().Contains("off"))
-                            {
-                                var rt = await DlpProjectorHelper.Instance.SendPowerOnCommandAsync(Configuration.IpAddress);
-                                Debug.WriteLine($"Power on command sent. Result: {rt}");
-                                break; // Exit the loop if we successfully sent the power on command
-                            }
-                            else if (attempt < maxAttempts - 1) // Don't wait after the last attempt
-                            {
-                                Debug.WriteLine($"Status is not 'off'. Waiting {delayBetweenAttempts / 1000} seconds before next attempt...");
-                                await Task.Delay(delayBetweenAttempts);
-                            }
-                        }
-
-                        // Optional: Check final status after attempts
-                        // string finalStatus = await DlpProjectorHelper.Instance.GetPowerStatusAsync(Configuration.IpAddress);
-                        // await Dispatcher.InvokeAsync(() =>
-                        // {
-                        //     UpdatePowerState(finalStatus.ToLower().Contains("on"));
-                        // });
-                    }
-                    catch (Exception ea)
-                    {
-                        Debug.WriteLine($"Error in pow_on for Appotronics projector: {ea.Message}");
-                        result = $"Error: {ea.Message}";
-                    }
+                    isControllingAPPOProjectors = true;
+                    await Task.Delay(5000);
+                    bool success = await APPOControlProjector(true);
+                    result = success ? "Success" : "Failed";
+                    isControllingAPPOProjectors = false;
+                    await Task.Delay(5000);
                 }
 
                 else if (Configuration.DeviceType == "PDU")
@@ -548,6 +556,77 @@ namespace WpfApp9
             MessageBox.Show("전원이 켜졌습니다");
         }
 
+        private async Task ControlProjector(string ipAddress, bool powerOn)
+        {
+            isControllingProjectors = true;
+            try
+            {
+                //Debug.WriteLine($"{ipAddress} {(powerOn ? "켜기" : "끄기")}시작");
+                using (var pjLink = new PJLinkHelper(ipAddress))
+                {
+                    await pjLink.ConnectAsync();
+                    bool result = powerOn ? await pjLink.PowerOnAsync() : await pjLink.PowerOffAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                //Debug.WriteLine($"Error controlling projector {ipAddress}: {ex.Message}");
+            }
+            finally
+            {
+                isControllingProjectors = false;
+            }
+            await Task.Delay(2000); // 각 프로젝터 제어 후 2초 대기
+        }
+
+        public async
+        Task
+pow_on_pjlink()
+        {
+            isControllingProjectors = true;
+            await Task.Delay(3000);
+            await ControlProjector(Configuration.IpAddress, true);
+            isControllingProjectors = false;
+            await Task.Delay(3000);
+        }
+
+        public async 
+        Task
+pow_off_pjlink()
+        {
+            isControllingProjectors = true;
+            await Task.Delay(3000);
+            await ControlProjector(Configuration.IpAddress, false);
+            isControllingProjectors = false;
+            await Task.Delay(3000);
+        }
+
+
+
+        public async
+        Task
+pow_on_appo()
+        {
+            isControllingAPPOProjectors = true;
+            await Task.Delay(3000);
+            bool success = await APPOControlProjector(true);
+            isControllingAPPOProjectors = false;
+            await Task.Delay(3000);
+        }
+
+        public async
+        Task
+pow_off_appo()
+        {
+            isControllingAPPOProjectors = true;
+            await Task.Delay(3000);
+            bool success = await APPOControlProjector(false);
+            isControllingAPPOProjectors = false;
+            await Task.Delay(3000);
+        }
+
+
+
         private async void pow_off(object sender, RoutedEventArgs e)
         {
             string result = "Success";
@@ -559,41 +638,21 @@ namespace WpfApp9
                 }
                 else if (Configuration.DeviceType.ToLower() == "프로젝터(pjlink)")
                 {
-                    //StopPJLinkStatusCheck(); // 상태 체크 중지
-                    await PJLinkHelper.Instance.PowerOffAsync(Configuration.IpAddress);
-                    //await Task.Delay(10000); // 10초 대기
-                    //StartPJLinkStatusCheck(); // 상태 체크 재개
+
+                    isControllingProjectors = true;
+                    await Task.Delay(3000);
+                    await ControlProjector(Configuration.IpAddress, false);
+                    isControllingProjectors = false;
+                    await Task.Delay(3000);
                 }
                 else if (Configuration.DeviceType.ToLower() == "프로젝터(appotronics)")
                 {
-                    try
-                    {
-                        const int maxAttempts = 3;
-                        const int delayBetweenAttempts = 5000; // 5 seconds
-
-                        for (int attempt = 0; attempt < maxAttempts; attempt++)
-                        {
-                            string status = await DlpProjectorHelper.Instance.GetPowerStatusAsync(Configuration.IpAddress);
-                            Debug.WriteLine($"Attempt {attempt + 1}: Current status: {status}");
-
-                            if (status.ToLower().Contains("on"))
-                            {
-                                var rt = await DlpProjectorHelper.Instance.SendPowerOffCommandAsync(Configuration.IpAddress);
-                                Debug.WriteLine($"Power off command sent. Result: {rt}");
-                                break; // Exit the loop if we successfully sent the power off command
-                            }
-                            else if (attempt < maxAttempts - 1) // Don't wait after the last attempt
-                            {
-                                Debug.WriteLine($"Status is not 'on'. Waiting {delayBetweenAttempts / 1000} seconds before next attempt...");
-                                await Task.Delay(delayBetweenAttempts);
-                            }
-                        }
-                    }
-                    catch (Exception ea)
-                    {
-                        Debug.WriteLine($"Error in pow_off for Appotronics projector: {ea.Message}");
-                        result = $"Error: {ea.Message}";
-                    }
+                    isControllingAPPOProjectors = true;
+                    await Task.Delay(3000);
+                    bool success = await APPOControlProjector(false);
+                    result = success ? "Success" : "Failed";
+                    isControllingAPPOProjectors = false;
+                    await Task.Delay(3000);
                 }
                 else if (Configuration.DeviceType == "PDU")
                 {
@@ -618,44 +677,33 @@ namespace WpfApp9
             MessageBox.Show("전원이 꺼졌습니다.");
         }
 
-        private async void pow_re(object sender, RoutedEventArgs e)
+
+        public async Task<bool> APPOControlProjector(bool powerOn)
         {
-            string result = "Success";
+            if (dlpProjectorHelper == null)
+            {
+                Debug.WriteLine($"DlpProjectorHelper is not initialized for {Configuration.IpAddress}");
+                return false;
+            }
+
             try
             {
-                if (Configuration.DeviceType.ToLower() == "pc")
-                {
-                    await UdpHelper.Instance.SendWithIpAsync("power|1", Configuration.IpAddress, 8889);
-                }
-                else if (Configuration.DeviceType.ToLower() == "프로젝터(pjlink)")
-                {
-                    StopPJLinkStatusCheck(); // 상태 체크 중지
-                    await PJLinkHelper.Instance.PowerOffAsync(Configuration.IpAddress);
-                    await Task.Delay(5000); // 5초 대기
-                    await PJLinkHelper.Instance.PowerOnAsync(Configuration.IpAddress);
-                    await Task.Delay(10000); // 10초 대기
-                    StartPJLinkStatusCheck(); // 상태 체크 재개
-                }
-                else if (Configuration.DeviceType.ToLower() == "프로젝터(appotronics)")
-                {
-                    //StopAppotronicsStatusCheck(); // 상태 체크 일시 중지
-                    //await DlpProjectorHelper.Instance.SendPowerOffCommandAsync(Configuration.IpAddress);
-                    //await Task.Delay(5000); // 5초 대기
-                    //await DlpProjectorHelper.Instance.SendPowerOnCommandAsync(Configuration.IpAddress);
-                    //StartAppotronicsStatusCheck(); // 상태 체크 재개
-                }
-                else if (Configuration.DeviceType == "PDU")
-                {
-                    await WebApiHelper.Instance.RebootPDU(Configuration.IpAddress, Configuration.Channel);
-                }
+                bool result = powerOn
+                    ? await dlpProjectorHelper.SendPowerOnCommandAsync()
+                    : await dlpProjectorHelper.SendPowerOffCommandAsync();
+
+                Debug.WriteLine($"프로젝터 {Configuration.IpAddress} 전원 {(powerOn ? "켜기" : "끄기")} 결과: {result}");
+
+                string status = await dlpProjectorHelper.GetPowerStatusAsync();
+                Debug.WriteLine($"프로젝터 {Configuration.IpAddress} 상태: {status}");
+
+                return result;
             }
             catch (Exception ex)
             {
-                result = $"Error: {ex.Message}";
-                Logger.Log2($"Error: {ex.Message}");
+                Debug.WriteLine($"프로젝터 {Configuration.IpAddress} 제어 중 오류 발생: {ex.Message}");
+                return false;
             }
-
-            MessageBox.Show("재시작");
         }
 
         private void OnMessageReceived(string message)
@@ -681,11 +729,6 @@ namespace WpfApp9
             });
         }
 
-        private void OnInvalidIpReceived(string message)
-        {
-            // 유효하지 않은 IP에서 수신된 메시지 처리 (필요한 경우)
-        }
-
-        private int relay_onoff = 0;
+    
     }
 }

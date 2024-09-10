@@ -74,7 +74,7 @@ namespace WpfApp9
             //pl.Start();
 
             clickTimer = new DispatcherTimer();
-            clickTimer.Interval = TimeSpan.FromMilliseconds(200); // 500 ms interval for double-click detection
+            clickTimer.Interval = TimeSpan.FromMilliseconds(200);
             clickTimer.Tick += ClickTimer_Tick;
             AutoPowerSettingsControl.init();
             wol = new WakeOnLan();
@@ -100,13 +100,8 @@ namespace WpfApp9
 
 
             this.KeyDown += MainWindow_KeyDown;
-
-        
         }
 
-      
-
-      
         private void tt(object sender, EventArgs e)
         {
 
@@ -278,7 +273,6 @@ namespace WpfApp9
         {
             DateTime now = DateTime.Now;
             string[] days = { "월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일" };
-            //string currentDay = days[(int)now.DayOfWeek - 1];
             string currentDay;
             if ((int)now.DayOfWeek == 0)
             {
@@ -288,10 +282,6 @@ namespace WpfApp9
             {
                 currentDay = days[(int)now.DayOfWeek - 1];
             }
-
-
-            //string currentDay = days[(int)now.DayOfWeek];
-
                 if (AutoPowerSettingsControl.pow_schedule[currentDay].IsEnabled)
             {
                 string currentTime = now.ToString("HH:mm");
@@ -355,12 +345,7 @@ namespace WpfApp9
 
             Debug.WriteLine($"Items sorted. Order: {string.Join(", ", sortedDragItems.Select(i => i.DeviceType))}");
 
-            //foreach (var i in dragItems)
-            //{
-            //    i.StopPingCheck();
-            //}
-            Debug.WriteLine("Stopped ping checks for all items");
-
+           
             // 전원 제어 대상 (더미 아이템 포함)
             sortedDragItems = sortedDragItems.FindAll(a => a.IsPower == true).ToList();
             int totalItems = sortedDragItems.Count;
@@ -495,15 +480,22 @@ namespace WpfApp9
         {
             try
             {
-                bool result = onOff
-                    ? await PJLinkHelper.Instance.PowerOnAsync(item.IpAddress)
-                    : await PJLinkHelper.Instance.PowerOffAsync(item.IpAddress);
-
-                if (!result)
+                foreach(var ditem in dragItems)
                 {
-                    Debug.WriteLine($"Failed to {(onOff ? "power on" : "power off")} projector at {item.IpAddress}");
-                    Logger.Log2($"Failed to {(onOff ? "power on" : "power off")} PJLINK projector at {item.IpAddress}");
+                    if(ditem.Configuration.IpAddress == item.IpAddress)
+                    {
+                        if (onOff)
+                        {
+                            await ditem.pow_on_pjlink();
+                        }
+                        else
+                        {
+                            await ditem.pow_off_pjlink();
+                        }
+                        
+                    }
                 }
+             
             }
             catch (Exception ex)
             {
@@ -516,21 +508,26 @@ namespace WpfApp9
         {
             try
             {
-                bool result = onOff
-                    ? await DlpProjectorHelper.Instance.SendPowerOnCommandAsync(item.IpAddress)
-                    : await DlpProjectorHelper.Instance.SendPowerOffCommandAsync(item.IpAddress);
-
-                if (!result)
+                foreach (var ditem in dragItems)
                 {
-                    Debug.WriteLine($"Failed to {(onOff ? "power on" : "power off")} projector at {item.IpAddress}");
-                    Logger.Log2($"Failed to {(onOff ? "power on" : "power off")} projector at {item.IpAddress}");
+                    if (ditem.Configuration.IpAddress == item.IpAddress)
+                    {
+                        if (onOff)
+                        {
+                            await ditem.pow_on_pjlink();
+                        }
+                        else
+                        {
+                            await ditem.pow_off_pjlink();
+                        }
+
+                    }
                 }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error processing projector: {ex.Message}");
                 Logger.Log2($"Error processing projector: {ex.Message}");
-
             }
         }
 
@@ -708,35 +705,94 @@ namespace WpfApp9
             SnapToGrid(itemControl);
         }
 
+        bool test = true;
 
-        //protected override void OnKeyUp(KeyEventArgs e)
-        //{
-        //    if(e.Key == Key.Escape)
-        //    {
+        private bool isControllingProjectors = false;
 
-        //    }
+        protected override async void OnKeyUp(KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                this.Close();
+                return;
+            }
+        }
 
+        private async Task ControlProjector(string ipAddress, bool powerOn)
+        {
+            isControllingProjectors = true;
+            try
+            {
+                Debug.WriteLine($"{ipAddress} {(powerOn ? "켜기" : "끄기")}시작");
+                using (var pjLink = new PJLinkHelper(ipAddress))
+                {
+                    await pjLink.ConnectAsync();
+                    bool result = powerOn ? await pjLink.PowerOnAsync() : await pjLink.PowerOffAsync();
+                    Debug.WriteLine(result
+                        ? $"{ipAddress} 프로젝터 전원이 {(powerOn ? "켜졌" : "꺼졌")}습니다."
+                        : $"{ipAddress} 프로젝터 전원을 {(powerOn ? "켜는" : "끄는")}데 실패했습니다.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error controlling projector {ipAddress}: {ex.Message}");
+            }
+            finally
+            {
+                isControllingProjectors = false;
+            }
+            await Task.Delay(2000); // 각 프로젝터 제어 후 2초 대기
+        }
 
-        //    if(e.Key == Key.D1)
-        //    {
-        //        SerialHelper serial1 = new SerialHelper("COM6");
-        //        serial1.OpenConnection();
-        //        serial1.SendData("1");
-        //        serial1.CloseConnection();
-        //        Logger.Log2("send serial");
-        //    }
-        //    else if (e.Key == Key.D2)
-        //    {
-        //        SerialHelper serial1 = new SerialHelper("COM6");
-        //        serial1.OpenConnection();
-        //        serial1.SendData("2");
-        //        serial1.CloseConnection();
-        //        Logger.Log2("send serial");
-        //    }
+        private async Task ControlAllProjectors(bool powerOn)
+        {
+            isControllingProjectors = true;
+            await Task.Delay(10000);
+            try
+            {
+                string[] ipAddresses = { "192.168.0.11", "192.168.0.12", "192.168.0.13" };
+                foreach (string ip in ipAddresses)
+                {
+                    await ControlProjector(ip, powerOn);
+                    await Task.Delay(1000);
+                }
+            }
+            finally
+            {
+                isControllingProjectors = false;
+                await Task.Delay(10000);
+            }
+        }
 
-        //    base.OnKeyUp(e);
-        //}
-
+        private async Task Status()
+        {
+            while (true)
+            {
+                if (!isControllingProjectors)
+                {
+                    foreach (var item in dragItems)
+                    {
+                        if (item.Configuration.DeviceType.Contains("PJLINK"))
+                        {
+                            try
+                            {
+                                using (var pjLink = new PJLinkHelper(item.Configuration.IpAddress))
+                                {
+                                    await pjLink.ConnectAsync();
+                                    PowerStatus result = await pjLink.GetPowerStatusAsync();
+                                    Debug.WriteLine($"{item.Configuration.IpAddress} - {result}");
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Debug.WriteLine($"Error checking status for {item.Configuration.IpAddress}: {ex.Message}");
+                            }
+                        }
+                    }
+                }
+                await Task.Delay(5000); // 5초 대기
+            }
+        }
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
             base.OnClosing(e);
@@ -1198,8 +1254,6 @@ namespace WpfApp9
             }
         }
     }
-
-  
 
 
     public class DraggableItem

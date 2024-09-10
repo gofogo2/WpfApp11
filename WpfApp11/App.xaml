@@ -12,9 +12,6 @@
         <FontFamily x:Key="NotoSansFontMediumFamily">/WpfApp11;component/fonts/#Noto Sans KR Medium</FontFamily>
         <FontFamily x:Key="NotoSansFontBlackFamily">/WpfApp11;component/fonts/#Noto Sans KR Black</FontFamily>
         <FontFamily x:Key="NotoSansFontBoldFamily">/WpfApp11;component/fonts/#Noto Sans KR Bold</FontFamily>
-        <FontFamily x:Key="NotoSansFontLightFamily">/WpfApp11;component/fonts/#Noto Sans KR Light</FontFamily>
-        <FontFamily x:Key="NotoSansFontThinFamily">/WpfApp11;component/fonts/#Noto Sans KR Thin</FontFamily>
-        <FontFamily x:Key="CustomFontFamily">/WpfApp11;component/fonts/#HSDuggobi</FontFamily>
         <Style TargetType="TextBlock">
             <Setter Property="FontFamily" Value="{StaticResource NotoSansFontFamily}"/>
         </Style>

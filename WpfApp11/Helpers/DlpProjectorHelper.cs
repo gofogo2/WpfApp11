@@ -2,15 +2,15 @@
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using System.Text;
-using WpfApp11.Helpers;
 using System.Diagnostics;
 
-public class DlpProjectorHelper
+public class DlpProjectorHelper : IDisposable
 {
     private const int ProjectorPort = 4352;
-    private const int TimeoutMilliseconds = 500;
-    private static DlpProjectorHelper _instance;
-    private static readonly object _lock = new object();
+    private const int TimeoutMilliseconds = 5000;
+    private readonly string projectorIp;
+    private TcpClient client;
+    private bool isDisposed = false;
 
     private static class Commands
     {
@@ -19,131 +19,100 @@ public class DlpProjectorHelper
         public const string PowerStatus = "41542B53797374656D3F41542B53797374656D3F0D";
     }
 
-    private DlpProjectorHelper() { }
-
-    public static DlpProjectorHelper Instance
+    public DlpProjectorHelper(string projectorIp)
     {
-        get
+        this.projectorIp = projectorIp;
+    }
+
+    private async Task EnsureConnectedAsync()
+    {
+        if (client == null || !client.Connected)
         {
-            if (_instance == null)
+            if (client != null)
             {
-                lock (_lock)
-                {
-                    if (_instance == null)
-                    {
-                        _instance = new DlpProjectorHelper();
-                    }
-                }
+                client.Dispose();
             }
-            return _instance;
+            client = new TcpClient();
+            await client.ConnectAsync(projectorIp, ProjectorPort);
         }
     }
 
-    public async Task<bool> SendPowerOnCommandAsync(string projectorIp)
+    public async Task<bool> SendPowerOnCommandAsync()
     {
-        string response = await SendCommandAsync(projectorIp, Commands.PowerOn);
-        Debug.WriteLine("PowerOn Response: " + response);
-        return ParsePowerCommandResponse(response);
+        return await SendPowerCommandAsync(Commands.PowerOn, "PowerOn");
     }
 
-    public async Task<bool> SendPowerOffCommandAsync(string projectorIp)
+    public async Task<bool> SendPowerOffCommandAsync()
     {
-        string response = await SendCommandAsyncOff(projectorIp, Commands.PowerOff);
-        Debug.WriteLine("PowerOff Response: " + response);
-        return ParsePowerCommandResponse(response);
+        return await SendPowerCommandAsync(Commands.PowerOff, "PowerOff");
     }
 
-    public async Task<string> GetPowerStatusAsync(string projectorIp)
+    public async Task<string> GetPowerStatusAsync()
     {
-        string response = await SendCommandAsync(projectorIp, Commands.PowerStatus);
-        Debug.WriteLine("PowerStatus Response: " + response);
-        return ParsePowerStatus(response);
+        return await SendStatusCommandAsync(Commands.PowerStatus, "PowerStatus");
     }
 
-    private async Task<string> SendCommandAsync(string projectorIp, string hexCommand)
+    private async Task<bool> SendPowerCommandAsync(string command, string operationType)
     {
-        using (var client = new TcpClient())
+        if (isDisposed)
         {
-            try
-            {
-                await client.ConnectAsync(projectorIp, ProjectorPort);
-                using (var stream = client.GetStream())
-                {
-                    stream.WriteTimeout = TimeoutMilliseconds;
+            throw new ObjectDisposedException(nameof(DlpProjectorHelper));
+        }
 
-                    byte[] commandBytes = StringToByteArray(hexCommand);
-                    await stream.WriteAsync(commandBytes, 0, commandBytes.Length);
-
-                    byte[] buffer = new byte[1024];
-                    using (var cts = new System.Threading.CancellationTokenSource(TimeoutMilliseconds))
-                    {
-                        Task<int> readTask = stream.ReadAsync(buffer, 0, buffer.Length, cts.Token);
-                        Task timeoutTask = Task.Delay(TimeoutMilliseconds, cts.Token);
-
-                        Task completedTask = await Task.WhenAny(readTask, timeoutTask);
-                        if (completedTask == timeoutTask)
-                        {
-                            throw new TimeoutException("Read operation timed out.");
-                        }
-
-                        int bytesRead = await readTask;
-                        return Encoding.ASCII.GetString(buffer, 0, bytesRead);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Error in SendCommandAsync: {ex.Message}");
-                throw;
-            }
-            finally
-            {
-                client.Close();
-            }
+        try
+        {
+            await EnsureConnectedAsync();
+            string response = await SendCommandAsync(command);
+            Debug.WriteLine($"{operationType} Response: {response}");
+            return ParsePowerCommandResponse(response);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error in {operationType}: {ex.Message}");
+            return false;
         }
     }
 
-
-    private async Task<string> SendCommandAsyncOff(string projectorIp, string hexCommand)
+    private async Task<string> SendStatusCommandAsync(string command, string operationType)
     {
-        using (var client = new TcpClient())
+        if (isDisposed)
         {
-            try
+            throw new ObjectDisposedException(nameof(DlpProjectorHelper));
+        }
+
+        try
+        {
+            await EnsureConnectedAsync();
+            string response = await SendCommandAsync(command);
+            Debug.WriteLine($"{operationType} Response: {response}");
+            return ParsePowerStatus(response);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error in {operationType}: {ex.Message}");
+            return "Error";
+        }
+    }
+
+    private async Task<string> SendCommandAsync(string hexCommand)
+    {
+        using (var stream = client.GetStream())
+        {
+            stream.WriteTimeout = TimeoutMilliseconds;
+            byte[] commandBytes = StringToByteArray(hexCommand);
+            await stream.WriteAsync(commandBytes, 0, commandBytes.Length);
+
+            byte[] buffer = new byte[1024];
+            using (var cts = new System.Threading.CancellationTokenSource(TimeoutMilliseconds))
             {
-                await client.ConnectAsync(projectorIp, ProjectorPort);
-                using (var stream = client.GetStream())
+                Task<int> readTask = stream.ReadAsync(buffer, 0, buffer.Length, cts.Token);
+                if (await Task.WhenAny(readTask, Task.Delay(TimeoutMilliseconds, cts.Token)) != readTask)
                 {
-                    stream.WriteTimeout = TimeoutMilliseconds;
-
-                    byte[] commandBytes = StringToByteArray(hexCommand);
-                    await stream.WriteAsync(commandBytes, 0, commandBytes.Length);
-
-                    byte[] buffer = new byte[1024];
-                    using (var cts = new System.Threading.CancellationTokenSource(TimeoutMilliseconds))
-                    {
-                        Task<int> readTask = stream.ReadAsync(buffer, 0, buffer.Length, cts.Token);
-                        Task timeoutTask = Task.Delay(TimeoutMilliseconds, cts.Token);
-
-                        Task completedTask = await Task.WhenAny(readTask, timeoutTask);
-                        if (completedTask == timeoutTask)
-                        {
-                            //throw new TimeoutException("Read operation timed out.");
-                            return "OK";
-                        }
-
-                        int bytesRead = await readTask;
-                        return Encoding.ASCII.GetString(buffer, 0, bytesRead);
-                    }
+                    throw new TimeoutException("Read operation timed out.");
                 }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Error in SendCommandAsync: {ex.Message}");
-                throw;
-            }
-            finally
-            {
-                client.Close();
+
+                int bytesRead = await readTask;
+                return Encoding.ASCII.GetString(buffer, 0, bytesRead);
             }
         }
     }
@@ -178,5 +147,14 @@ public class DlpProjectorHelper
             bytes[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
         }
         return bytes;
+    }
+
+    public void Dispose()
+    {
+        if (!isDisposed)
+        {
+            client?.Dispose();
+            isDisposed = true;
+        }
     }
 }
