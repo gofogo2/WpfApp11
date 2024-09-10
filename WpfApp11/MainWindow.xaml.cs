@@ -956,7 +956,7 @@ namespace WpfApp9
 
             LoadItemConfigurations();
         }
-
+      
         private void LoadItemConfigurations()
         {
             if (File.Exists(ConfigFile))
@@ -1218,6 +1218,9 @@ namespace WpfApp9
             ItemCanvas.Children.Remove(deviceControl);
             dragItems.Remove(deviceControl);
             SaveItemConfigurations();
+
+            //여기
+            LoadItemConfigurations();
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
