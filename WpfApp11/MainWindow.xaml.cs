@@ -60,7 +60,7 @@ namespace WpfApp9
         public string vnc_pw = "0909";
         public string local_path = @"C:\GL-MEDIA";
 
-        public int pingtime = 5;
+        public int pingtime = 30;
         public int powerInterva01;
         public int powerInterva02;
         bool first_init = false;
@@ -397,11 +397,11 @@ namespace WpfApp9
                     switch (item.DeviceType.ToLower())
                     {
                         case "프로젝터(pjlink)":
-                            await ProcessProjector(item, onOff);
+                            //await ProcessProjector(item, onOff);
                             await Task.Delay(500);
                             break;
                         case "프로젝터(appotronics)":
-                            await ProcessDLPProjector(item, onOff);
+                            //await ProcessDLPProjector(item, onOff);
                             await Task.Delay(500);
                             break;
                         case "pc":
@@ -768,43 +768,7 @@ namespace WpfApp9
             }
         }
 
-        private async Task Status()
-        {
-            while (true)
-            {
-                if (!isControllingProjectors)
-                {
-                    foreach (var item in dragItems)
-                    {
-                        if (item.Configuration.DeviceType.Contains("PJLINK"))
-                        {
-                            try
-                            {
-                                using (var pjLink = new PJLinkHelper(item.Configuration.IpAddress))
-                                {
-                                    await pjLink.ConnectAsync();
-                                    PowerStatus result = await pjLink.GetPowerStatusAsync();
-                                    Debug.WriteLine($"{item.Configuration.IpAddress} - {result}");
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                Debug.WriteLine($"Error checking status for {item.Configuration.IpAddress}: {ex.Message}");
-                            }
-                        }
-                    }
-                }
-                await Task.Delay(5000); // 5초 대기
-            }
-        }
-        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
-        {
-            base.OnClosing(e);
-            foreach (var item in dragItems)
-            {
-                item.StopPingCheck();
-            }
-        }
+      
 
         public void ShowFileExplorer(string ftpAddress, string name)
         {

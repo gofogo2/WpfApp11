@@ -53,26 +53,31 @@ namespace WpfApp9
             // 전체 상태체크
             if (Configuration.DeviceType.ToLower() == "pc")
             {
-                StartPingCheck();
+                UpdatePowerState(false);
+                //StartPingCheck();
             }
             else if (Configuration.DeviceType.ToLower() == "프로젝터(pjlink)")
             {
-                isControllingProjectors = false;
-                _ = Status();
+                UpdatePowerState(false);
+                //isControllingProjectors = false;
+                //_ = Status();
 
             }
            else if (Configuration.DeviceType.ToLower() == "프로젝터(appotronics)")
             {
-                dlpProjectorHelper = new DlpProjectorHelper(Configuration.IpAddress);
-                isControllingAPPOProjectors = false;
-                _ = AppotronicsStatus();
+                UpdatePowerState(false);
+                //dlpProjectorHelper = new DlpProjectorHelper(Configuration.IpAddress);
+                //isControllingAPPOProjectors = false;
+                //_ = AppotronicsStatus();
             }
             else if (Configuration.DeviceType == "PDU")
             {
                 //StartPDUStatus();
+                UpdatePowerState(false);
             }
             else if (Configuration.DeviceType == "RELAY")
             {
+                UpdatePowerState(false);
                 // RELAY 관련 코드
             }
 

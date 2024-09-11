@@ -123,12 +123,6 @@ namespace WpfApp11.Helpers
                 return SendByteAsync(ByteConverter.StringToByte(msg), false, port, ip);
             }
 
-            public Task SendWithIpDLPProjectorAsync(string msg, string ip, int port)
-            {
-                return SendByteAsync(ByteConverter.StringToByte(msg), false, port, ip);
-            }
-
-
             public Task SendByteAsync(byte[] msg, bool isBroadcast = false, int port = SenderPort, string ip = null)
             {
                 return Task.Run(async () =>

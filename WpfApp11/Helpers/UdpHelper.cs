@@ -123,30 +123,30 @@ namespace Launcher_SE.Helpers
             return SendByteAsync(ByteConverter.StringToByte(msg), false, port, ip);
         }
 
-        public Task SendWithIpDLPProjectorAsync(string msg, string ip, int port)
-        {
-            return SendByteAsync(ByteConverter.StringToByte(msg), false, port, ip);
-        }
+        //public Task SendWithIpDLPProjectorAsync(string msg, string ip, int port)
+        //{
+        //    return SendByteAsync(ByteConverter.StringToByte(msg), false, port, ip);
+        //}
 
-        public async Task<bool> SendPowerOnCommandToDLPProjector(string projectorIp)
-        {
-            string hexCommand = "41542B53797374656D3D4F6E41542B53797374656D3D4F6E0D";
-            byte[] commandBytes = StringToByteArray(hexCommand);
-            string commandString = Encoding.ASCII.GetString(commandBytes);
+        //public async Task<bool> SendPowerOnCommandToDLPProjector(string projectorIp)
+        //{
+        //    string hexCommand = "41542B53797374656D3D4F6E41542B53797374656D3D4F6E0D";
+        //    byte[] commandBytes = StringToByteArray(hexCommand);
+        //    string commandString = Encoding.ASCII.GetString(commandBytes);
 
-            await UdpHelper.Instance.SendWithIpDLPProjectorAsync(commandString, projectorIp, 4352);
-            return true;
-        }
+        //    await UdpHelper.Instance.SendWithIpDLPProjectorAsync(commandString, projectorIp, 4352);
+        //    return true;
+        //}
 
-        public async Task<bool> SendPowerOffCommandToDLPProjector(string projectorIp)
-        {
-            string hexCommand = "41542B53797374656D3D4F66660D";
-            byte[] commandBytes = StringToByteArray(hexCommand);
-            string commandString = Encoding.ASCII.GetString(commandBytes);
+        //public async Task<bool> SendPowerOffCommandToDLPProjector(string projectorIp)
+        //{
+        //    string hexCommand = "41542B53797374656D3D4F66660D";
+        //    byte[] commandBytes = StringToByteArray(hexCommand);
+        //    string commandString = Encoding.ASCII.GetString(commandBytes);
 
-            await UdpHelper.Instance.SendWithIpDLPProjectorAsync(commandString, projectorIp, 4352);
-            return true;
-        }
+        //    await UdpHelper.Instance.SendWithIpDLPProjectorAsync(commandString, projectorIp, 4352);
+        //    return true;
+        //}
 
         private byte[] StringToByteArray(string hex)
         {
