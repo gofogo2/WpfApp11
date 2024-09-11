@@ -31,6 +31,8 @@ namespace WpfApp9
         SolidColorBrush offColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E0E0E0"));
         private int relay_onoff = 0;
         public bool ispow = false;
+        private int commonDelay = 1000;
+
 
         public DraggableItemControl(ItemConfiguration config)
         {
@@ -179,7 +181,7 @@ namespace WpfApp9
                         //}
                     }
                 }
-                await Task.Delay(5000); // 5초 대기
+                await Task.Delay(10000); // 5초 대기
             }
         }
         bool isControllingProjectors = false;
@@ -219,7 +221,7 @@ namespace WpfApp9
                         dlpProjectorHelper = new DlpProjectorHelper(Configuration.IpAddress);
                     }
                 }
-                await Task.Delay(5000); // 5초 대기
+                await Task.Delay(10000); // 5초 대기
             }
         }
 
@@ -524,20 +526,20 @@ namespace WpfApp9
                 {
 
                     isControllingProjectors = true;
-                    await Task.Delay(2000);
+                    await Task.Delay(commonDelay);
                    await APPOControlProjector(Configuration.IpAddress, true);
                     isControllingProjectors = false;
-                    await Task.Delay(2000);
+                    await Task.Delay(commonDelay);
                 }
                 else if (Configuration.DeviceType.ToLower() == "프로젝터(appotronics)")
                 {
 
                     isControllingAPPOProjectors = true;
-                    await Task.Delay(2000);
+                    await Task.Delay(commonDelay);
                     bool success = await APPOControlProjector(true);
                     result = success ? "Success" : "Failed";
                     isControllingAPPOProjectors = false;
-                    await Task.Delay(2000);
+                    await Task.Delay(commonDelay);
                 }
 
                 else if (Configuration.DeviceType == "PDU")
@@ -584,7 +586,7 @@ namespace WpfApp9
             {
                 isControllingProjectors = false;
             }
-            await Task.Delay(2000); // 각 프로젝터 제어 후 2초 대기
+            await Task.Delay(200); // 각 프로젝터 제어 후 2초 대기
         }
 
         public async
@@ -592,10 +594,10 @@ namespace WpfApp9
 pow_on_pjlink()
         {
             isControllingProjectors = true;
-            await Task.Delay(3000);
+            await Task.Delay(commonDelay);
             await ControlProjector(Configuration.IpAddress, true);
             isControllingProjectors = false;
-            await Task.Delay(3000);
+            await Task.Delay(commonDelay);
         }
 
         public async 
@@ -603,10 +605,10 @@ pow_on_pjlink()
 pow_off_pjlink()
         {
             isControllingProjectors = true;
-            await Task.Delay(3000);
+            await Task.Delay(commonDelay);
             await ControlProjector(Configuration.IpAddress, false);
             isControllingProjectors = false;
-            await Task.Delay(3000);
+            await Task.Delay(commonDelay);
         }
 
 
@@ -616,10 +618,10 @@ pow_off_pjlink()
 pow_on_appo()
         {
             isControllingAPPOProjectors = true;
-            await Task.Delay(3000);
+            await Task.Delay(commonDelay);
             bool success = await APPOControlProjector(true);
             isControllingAPPOProjectors = false;
-            await Task.Delay(3000);
+            await Task.Delay(commonDelay);
         }
 
         public async
@@ -627,10 +629,10 @@ pow_on_appo()
 pow_off_appo()
         {
             isControllingAPPOProjectors = true;
-            await Task.Delay(3000);
+            await Task.Delay(commonDelay);
             bool success = await APPOControlProjector(false);
             isControllingAPPOProjectors = false;
-            await Task.Delay(3000);
+            await Task.Delay(commonDelay);
         }
 
 
@@ -649,19 +651,19 @@ pow_off_appo()
                 {
 
                     isControllingProjectors = true;
-                    await Task.Delay(3000);
+                    await Task.Delay(commonDelay);
                     await ControlProjector(Configuration.IpAddress, false);
                     isControllingProjectors = false;
-                    await Task.Delay(3000);
+                    await Task.Delay(commonDelay);
                 }
                 else if (Configuration.DeviceType.ToLower() == "프로젝터(appotronics)")
                 {
                     isControllingAPPOProjectors = true;
-                    await Task.Delay(3000);
+                    await Task.Delay(commonDelay);
                     bool success = await APPOControlProjector(false);
                     result = success ? "Success" : "Failed";
                     isControllingAPPOProjectors = false;
-                    await Task.Delay(3000);
+                    await Task.Delay(commonDelay);
                 }
                 else if (Configuration.DeviceType == "PDU")
                 {

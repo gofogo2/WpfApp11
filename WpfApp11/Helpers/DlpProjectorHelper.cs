@@ -8,6 +8,7 @@ public class DlpProjectorHelper : IDisposable
 {
     private const int ProjectorPort = 4352;
     private const int TimeoutMilliseconds = 5000;
+    private const int MaxRetries = 3;
     private readonly string projectorIp;
     private TcpClient client;
     private bool isDisposed = false;
@@ -28,12 +29,32 @@ public class DlpProjectorHelper : IDisposable
     {
         if (client == null || !client.Connected)
         {
-            if (client != null)
+            for (int retry = 0; retry < MaxRetries; retry++)
             {
-                client.Dispose();
+                try
+                {
+                    if (client != null)
+                    {
+                        client.Close();
+                        client.Dispose();
+                    }
+                    client = new TcpClient();
+                    await client.ConnectAsync(projectorIp, ProjectorPort);
+                    if (client.Connected)
+                    {
+                        break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Connection attempt {retry + 1} failed: {ex.Message}");
+                    if (retry == MaxRetries - 1)
+                    {
+                        throw new Exception("Failed to connect after multiple attempts", ex);
+                    }
+                    await Task.Delay(1000 * (retry + 1)); // Exponential backoff
+                }
             }
-            client = new TcpClient();
-            await client.ConnectAsync(projectorIp, ProjectorPort);
         }
     }
 
@@ -59,18 +80,26 @@ public class DlpProjectorHelper : IDisposable
             throw new ObjectDisposedException(nameof(DlpProjectorHelper));
         }
 
-        try
+        for (int retry = 0; retry < MaxRetries; retry++)
         {
-            await EnsureConnectedAsync();
-            string response = await SendCommandAsync(command);
-            Debug.WriteLine($"{operationType} Response: {response}");
-            return ParsePowerCommandResponse(response);
+            try
+            {
+                await EnsureConnectedAsync();
+                string response = await SendCommandAsync(command);
+                Debug.WriteLine($"{operationType} Response: {response}");
+                return ParsePowerCommandResponse(response);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error in {operationType} (Attempt {retry + 1}): {ex.Message}");
+                if (retry == MaxRetries - 1)
+                {
+                    return false;
+                }
+                await Task.Delay(1000 * (retry + 1)); // Exponential backoff
+            }
         }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Error in {operationType}: {ex.Message}");
-            return false;
-        }
+        return false;
     }
 
     private async Task<string> SendStatusCommandAsync(string command, string operationType)
@@ -80,18 +109,26 @@ public class DlpProjectorHelper : IDisposable
             throw new ObjectDisposedException(nameof(DlpProjectorHelper));
         }
 
-        try
+        for (int retry = 0; retry < MaxRetries; retry++)
         {
-            await EnsureConnectedAsync();
-            string response = await SendCommandAsync(command);
-            Debug.WriteLine($"{operationType} Response: {response}");
-            return ParsePowerStatus(response);
+            try
+            {
+                await EnsureConnectedAsync();
+                string response = await SendCommandAsync(command);
+                Debug.WriteLine($"{operationType} Response: {response}");
+                return ParsePowerStatus(response);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error in {operationType} (Attempt {retry + 1}): {ex.Message}");
+                if (retry == MaxRetries - 1)
+                {
+                    return "Error";
+                }
+                await Task.Delay(1000 * (retry + 1)); // Exponential backoff
+            }
         }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Error in {operationType}: {ex.Message}");
-            return "Error";
-        }
+        return "Error";
     }
 
     private async Task<string> SendCommandAsync(string hexCommand)
@@ -153,6 +190,7 @@ public class DlpProjectorHelper : IDisposable
     {
         if (!isDisposed)
         {
+            client?.Close();
             client?.Dispose();
             isDisposed = true;
         }

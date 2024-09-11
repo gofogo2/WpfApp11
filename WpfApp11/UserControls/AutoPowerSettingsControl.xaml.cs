@@ -191,7 +191,7 @@ namespace WpfApp9
 
         private void PopulateComboBoxes()
         {
-            for (int i = 1; i < 25; i++)
+            for (int i = 0; i < 24; i++)
             {
                 TextBlock tb = new TextBlock();
                 tb.Text = i.ToString("00");
@@ -202,7 +202,7 @@ namespace WpfApp9
                 //all_StartHourComboBox.Items.Add(i.ToString("D2"));
                 //all_EndHourComboBox.Items.Add(i.ToString("D2"));
             }
-            for (int i = 1; i < 25; i++)
+            for (int i = 0; i < 24; i++)
             {
                 TextBlock tb = new TextBlock();
                 tb.Text = i.ToString("00");

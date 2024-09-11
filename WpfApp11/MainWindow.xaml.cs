@@ -20,6 +20,7 @@ using TcpHelperNamespace;
 using System.Diagnostics;
 using Launcher_SE.Helpers;
 using WpfApp11;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace WpfApp9
 {
@@ -307,6 +308,7 @@ namespace WpfApp9
         {
             PowerOverlay.Visibility = Visibility.Visible;
             PowerProgressBar.Value = 0;
+            PowerStatusText.Text = "전원 ON";
             var items = dragItems.Select(a => a.Configuration).ToList();
             await SortAndProcessDragItems(items, true, 0, 25); // 장치 처리
             await AddDelay(25, 100); //10초 딜레이
@@ -316,7 +318,8 @@ namespace WpfApp9
         public async Task OffDevice()
         {
             PowerOverlay.Visibility = Visibility.Visible;
-            PowerProgressBar.Value = 0; 
+            PowerProgressBar.Value = 0;
+            PowerStatusText.Text = "전원 OFF";
             var items = dragItems.Select(a => a.Configuration).ToList();
             await SortAndProcessDragItems(items, false, 0, 25); //장치 처리
             await AddDelay(25, 100); // 10초 딜레이
@@ -456,12 +459,12 @@ namespace WpfApp9
         {
             PowerOverlay.Visibility = Visibility.Collapsed;
 
-            foreach (var item in dragItems)
-            {
-                item.Configuration.IsOn = isOn;
-                UpdateItemPowerState(item, isOn);
-            }
-            SaveItemConfigurations();
+            //foreach (var item in dragItems)
+            //{
+            //    item.Configuration.IsOn = isOn;
+            //    UpdateItemPowerState(item, isOn);
+            //}
+            //SaveItemConfigurations();
             return Task.CompletedTask;
         }
 
@@ -519,11 +522,11 @@ namespace WpfApp9
                     {
                         if (onOff)
                         {
-                            await ditem.pow_on_pjlink();
+                            await ditem.pow_on_appo();
                         }
                         else
                         {
-                            await ditem.pow_off_pjlink();
+                            await ditem.pow_off_appo();
                         }
 
                     }
@@ -542,17 +545,19 @@ namespace WpfApp9
             {
                 if (onOff)
                 {
-                    
+                    for(int i=0;i<5;i++)
                     wol.TurnOnPC(item.MacAddress);
                 }
                 else
                 {
-                    UdpHelper.Instance.SendWithIpAsync("power|0", item.IpAddress, 8889);
+                    for (int i = 0; i < 5; i++)
+                        UdpHelper.Instance.SendWithIpAsync("power|0", item.IpAddress, 8889);
                 }
             }catch(Exception e)
             {
                 Logger.Log2($"Error processing PC: {e.Message}");
             }
+            Task.Delay(200);
         }
 
         private void ProcessRelay1(ItemConfiguration item, bool onOff)

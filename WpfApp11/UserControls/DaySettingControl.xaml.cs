@@ -151,7 +151,7 @@ namespace WpfApp9
 
 
 
-            for (int i = 1; i < 25; i++)
+            for (int i = 0; i < 24; i++)
             {
                 TextBlock tb = new TextBlock();
                 tb.Text = i.ToString("00");
@@ -159,7 +159,7 @@ namespace WpfApp9
                 tb.FontWeight = FontWeights.Bold;
                 StartHourComboBox.Items.Add(tb);
             }
-            for (int i = 1; i < 25; i++)
+            for (int i = 0; i < 24; i++)
             {
                 TextBlock tb = new TextBlock();
                 tb.Text = i.ToString("00");
