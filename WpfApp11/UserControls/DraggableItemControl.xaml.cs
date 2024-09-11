@@ -22,7 +22,7 @@ namespace WpfApp9
     {
         private DlpProjectorHelper dlpProjectorHelper;
         public WakeOnLan wol;
-        private int PingInterval = 5000; // 5초마다 핑 체크
+        private int PingInterval =6000; // 5초마다 핑 체크
         private CancellationTokenSource pduStatusCancellationTokenSource;
         private CancellationTokenSource pingCancellationTokenSource;
         string vncViewerPath = @"C:\Program Files\TightVNC\tvnviewer.exe"; // TightVNC 뷰어 경로
@@ -43,9 +43,9 @@ namespace WpfApp9
 
             PingInterval = main.pingtime * 1000;
 
-            if (PingInterval < 5000)
+            if (PingInterval < 10000)
             {
-                PingInterval = 5000;
+                PingInterval = 10000;
             }
 
 
@@ -53,22 +53,22 @@ namespace WpfApp9
             // 전체 상태체크
             if (Configuration.DeviceType.ToLower() == "pc")
             {
-                UpdatePowerState(false);
-                //StartPingCheck();
+                //UpdatePowerState(false);
+                StartPingCheck();
             }
             else if (Configuration.DeviceType.ToLower() == "프로젝터(pjlink)")
             {
-                UpdatePowerState(false);
-                //isControllingProjectors = false;
-                //_ = Status();
+                //UpdatePowerState(false);
+                isControllingProjectors = false;
+                _ = Status();
 
             }
            else if (Configuration.DeviceType.ToLower() == "프로젝터(appotronics)")
             {
-                UpdatePowerState(false);
-                //dlpProjectorHelper = new DlpProjectorHelper(Configuration.IpAddress);
-                //isControllingAPPOProjectors = false;
-                //_ = AppotronicsStatus();
+                //UpdatePowerState(false);
+                dlpProjectorHelper = new DlpProjectorHelper(Configuration.IpAddress);
+                isControllingAPPOProjectors = false;
+                _ = AppotronicsStatus();
             }
             else if (Configuration.DeviceType == "PDU")
             {
@@ -168,7 +168,7 @@ namespace WpfApp9
                             {
                                 await pjLink.ConnectAsync();
                                 PowerStatus result = await pjLink.GetPowerStatusAsync();
-                                //Debug.WriteLine($"{Configuration.IpAddress} - {result}");
+                                Debug.WriteLine($"{Configuration.IpAddress} - {result}");
                                 UpdatePowerState(result == PowerStatus.PoweredOn);
                             }
                         }
@@ -349,22 +349,27 @@ namespace WpfApp9
 
         private async Task PingCheckLoop(CancellationToken cancellationToken)
         {
+            
             while (!cancellationToken.IsCancellationRequested)
             {
-                bool isReachable = await PingHostAsync(Configuration.IpAddress);
-                await Dispatcher.InvokeAsync(() =>
+                if (!isDoing)
                 {
-                    if (!cancellationToken.IsCancellationRequested)
+                    bool isReachable = await PingHostAsync(Configuration.IpAddress);
+                    await Dispatcher.InvokeAsync(() =>
                     {
-                        UpdatePowerState(isReachable);
-                    }
-                });
-                await Task.Delay(PingInterval, cancellationToken);
+                        if (!cancellationToken.IsCancellationRequested)
+                        {
+                            UpdatePowerState(isReachable);
+                        }
+                    });
+                    await Task.Delay(PingInterval, cancellationToken);
+                }
             }
         }
 
         private async Task<bool> PingHostAsync(string ipAddress)
         {
+
             try
             {
                 using (var ping = new Ping())
@@ -512,26 +517,27 @@ namespace WpfApp9
             {
                 if (Configuration.DeviceType.ToLower() == "pc")
                 {
+                    for(int i=0;i<5;i++)
                     wol.TurnOnPC(Configuration.MacAddress);
                 }
                 else if (Configuration.DeviceType.ToLower() == "프로젝터(pjlink)")
                 {
 
                     isControllingProjectors = true;
-                    await Task.Delay(5000);
+                    await Task.Delay(2000);
                    await APPOControlProjector(Configuration.IpAddress, true);
                     isControllingProjectors = false;
-                    await Task.Delay(5000);
+                    await Task.Delay(2000);
                 }
                 else if (Configuration.DeviceType.ToLower() == "프로젝터(appotronics)")
                 {
 
                     isControllingAPPOProjectors = true;
-                    await Task.Delay(5000);
+                    await Task.Delay(2000);
                     bool success = await APPOControlProjector(true);
                     result = success ? "Success" : "Failed";
                     isControllingAPPOProjectors = false;
-                    await Task.Delay(5000);
+                    await Task.Delay(2000);
                 }
 
                 else if (Configuration.DeviceType == "PDU")
@@ -586,10 +592,10 @@ namespace WpfApp9
 pow_on_pjlink()
         {
             isControllingProjectors = true;
-            await Task.Delay(2000);
+            await Task.Delay(3000);
             await ControlProjector(Configuration.IpAddress, true);
             isControllingProjectors = false;
-            await Task.Delay(2000);
+            await Task.Delay(3000);
         }
 
         public async 
@@ -597,10 +603,10 @@ pow_on_pjlink()
 pow_off_pjlink()
         {
             isControllingProjectors = true;
-            await Task.Delay(2000);
+            await Task.Delay(3000);
             await ControlProjector(Configuration.IpAddress, false);
             isControllingProjectors = false;
-            await Task.Delay(2000);
+            await Task.Delay(3000);
         }
 
 
@@ -610,10 +616,10 @@ pow_off_pjlink()
 pow_on_appo()
         {
             isControllingAPPOProjectors = true;
-            await Task.Delay(2000);
+            await Task.Delay(3000);
             bool success = await APPOControlProjector(true);
             isControllingAPPOProjectors = false;
-            await Task.Delay(2000);
+            await Task.Delay(3000);
         }
 
         public async
@@ -621,10 +627,10 @@ pow_on_appo()
 pow_off_appo()
         {
             isControllingAPPOProjectors = true;
-            await Task.Delay(2000);
+            await Task.Delay(3000);
             bool success = await APPOControlProjector(false);
             isControllingAPPOProjectors = false;
-            await Task.Delay(2000);
+            await Task.Delay(3000);
         }
 
 
@@ -636,25 +642,26 @@ pow_off_appo()
             {
                 if (Configuration.DeviceType.ToLower() == "pc")
                 {
-                    await UdpHelper.Instance.SendWithIpAsync("power|0", Configuration.IpAddress, 8889);
+                    for (int i = 0; i < 5; i++)
+                        await UdpHelper.Instance.SendWithIpAsync("power|0", Configuration.IpAddress, 8889);
                 }
                 else if (Configuration.DeviceType.ToLower() == "프로젝터(pjlink)")
                 {
 
                     isControllingProjectors = true;
-                    await Task.Delay(2000);
+                    await Task.Delay(3000);
                     await ControlProjector(Configuration.IpAddress, false);
                     isControllingProjectors = false;
-                    await Task.Delay(2000);
+                    await Task.Delay(3000);
                 }
                 else if (Configuration.DeviceType.ToLower() == "프로젝터(appotronics)")
                 {
                     isControllingAPPOProjectors = true;
-                    await Task.Delay(2000);
+                    await Task.Delay(3000);
                     bool success = await APPOControlProjector(false);
                     result = success ? "Success" : "Failed";
                     isControllingAPPOProjectors = false;
-                    await Task.Delay(2000);
+                    await Task.Delay(3000);
                 }
                 else if (Configuration.DeviceType == "PDU")
                 {

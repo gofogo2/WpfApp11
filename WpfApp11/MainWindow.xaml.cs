@@ -397,11 +397,11 @@ namespace WpfApp9
                     switch (item.DeviceType.ToLower())
                     {
                         case "프로젝터(pjlink)":
-                            //await ProcessProjector(item, onOff);
+                            await ProcessProjector(item, onOff);
                             await Task.Delay(500);
                             break;
                         case "프로젝터(appotronics)":
-                            //await ProcessDLPProjector(item, onOff);
+                            await ProcessDLPProjector(item, onOff);
                             await Task.Delay(500);
                             break;
                         case "pc":
