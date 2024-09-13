@@ -304,27 +304,26 @@ namespace WpfApp9
             }
         }
 
+        private void UpdateAllDevicesCurrentState(bool state)
+        {
+            foreach (var item in dragItems)
+            {
+                if(item.Configuration.IsPower == true)
+                item.Configuration.IsCurrentState = state;
+            }
+            SaveItemConfigurations();
+        }
+
         public async Task OnDevice()
         {
-            PowerOverlay.Visibility = Visibility.Visible;
-            PowerProgressBar.Value = 0;
-            PowerStatusText.Text = "전원 ON";
-            var items = dragItems.Select(a => a.Configuration).ToList();
-            await SortAndProcessDragItems(items, true, 0, 25); // 장치 처리
-            await AddDelay(25, 100); //10초 딜레이
-            await FinalizeDeviceOperation(true);
+            await ControlAllDevices(true);
         }
 
         public async Task OffDevice()
         {
-            PowerOverlay.Visibility = Visibility.Visible;
-            PowerProgressBar.Value = 0;
-            PowerStatusText.Text = "전원 OFF";
-            var items = dragItems.Select(a => a.Configuration).ToList();
-            await SortAndProcessDragItems(items, false, 0, 25); //장치 처리
-            await AddDelay(25, 100); // 10초 딜레이
-            await FinalizeDeviceOperation(false);
+            await ControlAllDevices(false);
         }
+
         public async Task SortAndProcessDragItems(List<ItemConfiguration> drags, bool onOff, double startProgress, double endProgress)
         {
             Debug.WriteLine($"Starting SortAndProcessDragItems. OnOff: {onOff}, StartProgress: {startProgress}, EndProgress: {endProgress}");
@@ -353,8 +352,6 @@ namespace WpfApp9
 
             Debug.WriteLine($"Items sorted. Order: {string.Join(", ", sortedDragItems.Select(i => i.DeviceType))}");
 
-           
-            // 전원 제어 대상 (더미 아이템 포함)
             sortedDragItems = sortedDragItems.FindAll(a => a.IsPower == true).ToList();
             int totalItems = sortedDragItems.Count;
             Debug.WriteLine($"Filtered power-controllable items. Total: {totalItems}");
@@ -366,7 +363,6 @@ namespace WpfApp9
                 var item = sortedDragItems[i];
                 Debug.WriteLine($"Processing item {i + 1}/{totalItems}: {item.DeviceType} (IsDummy: {item.IsDummy})");
 
-                // 특정 디바이스 타입 사이에 딜레이 추가 (더미 아이템도 고려)
                 if (onOff)
                 {
                     if (previousDeviceType.ToLower() == "프로젝터(appotronics)" && item.DeviceType.ToLower() == "relay")
@@ -423,10 +419,6 @@ namespace WpfApp9
                     Debug.WriteLine($"Skipping dummy item: {item.DeviceType}");
                 }
 
-                double progress = startProgress + (endProgress - startProgress) * ((i + 1) / (double)totalItems);
-                Dispatcher.Invoke(() => PowerProgressBar.Value = progress);
-                Debug.WriteLine($"Updated progress bar. Current progress: {progress:F2}%");
-
                 await Task.Delay(200);
                 previousDeviceType = item.DeviceType;
             }
@@ -439,6 +431,7 @@ namespace WpfApp9
 
             Debug.WriteLine("SortAndProcessDragItems completed");
         }
+
 
         private async Task AddDelay(double startProgress, double endProgress)
         {
@@ -474,14 +467,49 @@ namespace WpfApp9
         {
             Logger.Log2("전체 전원 ON");
             PowerStatusText.Text = "전원 ON";
-            await OnDevice();
+            await ControlAllDevices(true);
         }
 
         private async void TotalPowerBtnOff_Click(object sender, RoutedEventArgs e)
         {
             Logger.Log2("전체 전원 OFF");
             PowerStatusText.Text = "전원 OFF";
-            await OffDevice();
+            await ControlAllDevices(false);
+        }
+
+        private async Task ControlAllDevices(bool turnOn)
+        {
+            UpdateAllDevicesCurrentState(turnOn);
+            PowerOverlay.Visibility = Visibility.Visible;
+            PowerProgressBar.Value = 0;
+
+            var progressTask = UpdateProgressBarAsync(0, 100, Progress_duration);
+            var deviceControlTask = ProcessDevicesAsync(turnOn);
+
+            await Task.WhenAll(progressTask, deviceControlTask);
+
+         
+
+            PowerOverlay.Visibility = Visibility.Collapsed;
+        }
+
+        private async Task UpdateProgressBarAsync(double startValue, double endValue, double durationSeconds)
+        {
+            DateTime startTime = DateTime.Now;
+            while ((DateTime.Now - startTime).TotalSeconds < durationSeconds)
+            {
+                double progress = (DateTime.Now - startTime).TotalSeconds / durationSeconds;
+                double currentValue = startValue + (endValue - startValue) * progress;
+                PowerProgressBar.Value = Math.Min(currentValue, 100);
+                await Task.Delay(50); // 50ms마다 업데이트
+            }
+            PowerProgressBar.Value = endValue;
+        }
+
+        private async Task ProcessDevicesAsync(bool turnOn)
+        {
+            var items = dragItems.Select(a => a.Configuration).ToList();
+            await SortAndProcessDragItems(items, turnOn, 0, 100);
         }
 
         private async Task ProcessProjector(ItemConfiguration item, bool onOff)
@@ -889,7 +917,7 @@ namespace WpfApp9
             return new int[] { startRow, startCol };
         }
 
-        private void SaveItemConfigurations()
+        public void SaveItemConfigurations()
         {
             List<ItemConfiguration> configurations = dragItems.Select(item => item.Configuration).ToList();
             string jsonString = JsonConvert.SerializeObject(configurations, Formatting.Indented);
@@ -1254,5 +1282,6 @@ namespace WpfApp9
         public int ZIndex { get; set; }
         public string VncPw { get; set; }
         public bool IsDummy { get; set; }
+        public bool IsCurrentState { get; set; }
     }
 }

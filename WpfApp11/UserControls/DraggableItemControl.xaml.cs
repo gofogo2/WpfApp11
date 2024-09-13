@@ -61,7 +61,7 @@ namespace WpfApp9
             else if (Configuration.DeviceType.ToLower() == "프로젝터(pjlink)")
             {
                 //UpdatePowerState(false);
-                isControllingProjectors = false;
+                //isControllingProjectors = false;
                 _ = Status();
 
             }
@@ -69,7 +69,7 @@ namespace WpfApp9
             {
                 //UpdatePowerState(false);
                 dlpProjectorHelper = new DlpProjectorHelper(Configuration.IpAddress);
-                isControllingAPPOProjectors = false;
+                //isControllingAPPOProjectors = false;
                 _ = AppotronicsStatus();
             }
             else if (Configuration.DeviceType == "PDU")
@@ -196,10 +196,11 @@ namespace WpfApp9
         }
 
         bool isControllingAPPOProjectors = false;
-      
-        
-        
-        
+
+
+
+
+
 
         private async Task AppotronicsStatus()
         {
@@ -211,7 +212,15 @@ namespace WpfApp9
                     {
                         string status = await dlpProjectorHelper.GetPowerStatusAsync();
                         Debug.WriteLine($"APPO {Configuration.IpAddress} - {status}");
-                        UpdatePowerState(status == "Powered On");
+                        bool isPoweredOn = status == "Powered On";
+                        UpdatePowerState(isPoweredOn);
+
+                        // 여기에 새로운 로직 추가
+                        if (Configuration.IsCurrentState && !isPoweredOn)
+                        {
+                            Debug.WriteLine($"APPO {Configuration.IpAddress} - 자동 전원 켜기 시도");
+                            await AutoPowerOnAppotronics();
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -221,7 +230,38 @@ namespace WpfApp9
                         dlpProjectorHelper = new DlpProjectorHelper(Configuration.IpAddress);
                     }
                 }
-                await Task.Delay(10000); // 5초 대기
+                await Task.Delay(10000); // 10초 대기
+            }
+        }
+
+
+        private async Task AutoPowerOnAppotronics()
+        {
+            Logger.Log2($"######### APPO {Configuration.IpAddress} - 자동 전원 켜기 시도 ################");
+            try
+            {
+                isControllingAPPOProjectors = true;
+                await Task.Delay(commonDelay);
+                bool success = await APPOControlProjector(true);
+                if (success)
+                {
+                    Debug.WriteLine($"APPO {Configuration.IpAddress} - 자동 전원 켜기 성공");
+                    Logger.Log2($"APPO {Configuration.IpAddress} - 자동 전원 켜기 성공");
+                }
+                else
+                {
+                    Debug.WriteLine($"APPO {Configuration.IpAddress} - 자동 전원 켜기 실패");
+                    Logger.Log2($"APPO {Configuration.IpAddress} - 자동 전원 켜기 실패");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"APPO {Configuration.IpAddress} - 자동 전원 켜기 중 오류 발생: {ex.Message}");
+                Logger.Log2($"APPO {Configuration.IpAddress} - 자동 전원 켜기 중 오류 발생: {ex.Message}");
+            }
+            finally
+            {
+                isControllingAPPOProjectors = false;
             }
         }
 
@@ -511,9 +551,17 @@ namespace WpfApp9
             }
         }
 
+        private void SaveConfiguration()
+        {
+            var mainWindow = Window.GetWindow(this) as MainWindow;
+            mainWindow?.SaveItemConfigurations();
+        }
+
         private async void pow_on(object sender, RoutedEventArgs e)
         {
             isDoing = true;
+            Configuration.IsCurrentState = true;
+            SaveConfiguration();
             string result = "Success";
             try
             {
@@ -555,6 +603,7 @@ namespace WpfApp9
                     await UdpHelper.Instance.SendHexAsync(hex, false, int.Parse(Configuration.port), Configuration.IpAddress);
                 }
                 isDoing = false;
+             
             }
             catch (Exception ex)
             {
@@ -639,6 +688,8 @@ pow_off_appo()
 
         private async void pow_off(object sender, RoutedEventArgs e)
         {
+            Configuration.IsCurrentState = false;
+            SaveConfiguration();
             string result = "Success";
             try
             {

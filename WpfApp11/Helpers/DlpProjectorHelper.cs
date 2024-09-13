@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using System.Text;
 using System.Diagnostics;
+using WpfApp11.Helpers;
 
 public class DlpProjectorHelper : IDisposable
 {
@@ -27,35 +28,44 @@ public class DlpProjectorHelper : IDisposable
 
     private async Task EnsureConnectedAsync()
     {
-        if (client == null || !client.Connected)
+        const int MaxRetries = 1; // 명시적으로 최대 재시도 횟수 설정
+        for (int retry = 0; retry < MaxRetries; retry++)
         {
-            for (int retry = 0; retry < MaxRetries; retry++)
+            try
             {
-                try
+                if (client != null)
                 {
-                    if (client != null)
-                    {
-                        client.Close();
-                        client.Dispose();
-                    }
-                    client = new TcpClient();
-                    await client.ConnectAsync(projectorIp, ProjectorPort);
-                    if (client.Connected)
-                    {
-                        break;
-                    }
+                    client.Close();
+                    client.Dispose();
                 }
-                catch (Exception ex)
+                client = new TcpClient();
+
+                // 연결 시도 시 타임아웃 설정
+                var connectTask = client.ConnectAsync(projectorIp, ProjectorPort);
+                if (await Task.WhenAny(connectTask, Task.Delay(5000)) != connectTask)
                 {
-                    Debug.WriteLine($"Connection attempt {retry + 1} failed: {ex.Message}");
-                    if (retry == MaxRetries - 1)
-                    {
-                        throw new Exception("Failed to connect after multiple attempts", ex);
-                    }
-                    await Task.Delay(1000 * (retry + 1)); // Exponential backoff
+                    throw new TimeoutException($"Connection attempt timed out for {projectorIp}:{ProjectorPort}");
+                }
+
+                await connectTask; // 실제 예외를 발생시키기 위해
+
+                if (client.Connected)
+                {
+                    Debug.WriteLine($"Successfully connected to {projectorIp}:{ProjectorPort} on attempt {retry + 1}");
+                    return; // 연결 성공 시 메서드 종료
                 }
             }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Connection attempt {retry + 1} failed for {projectorIp}:{ProjectorPort}: {ex.Message}");
+                if (retry == MaxRetries - 1)
+                {
+                    throw new Exception($"Failed to connect to {projectorIp}:{ProjectorPort} after {MaxRetries} attempts", ex);
+                }
+                await Task.Delay(1000 * (retry + 1)); // Exponential backoff
+            }
         }
+        throw new Exception($"Failed to connect to {projectorIp}:{ProjectorPort} after {MaxRetries} attempts");
     }
 
     public async Task<bool> SendPowerOnCommandAsync()
@@ -109,25 +119,28 @@ public class DlpProjectorHelper : IDisposable
             throw new ObjectDisposedException(nameof(DlpProjectorHelper));
         }
 
-        for (int retry = 0; retry < MaxRetries; retry++)
-        {
+        //for (int retry = 0; retry < MaxRetries; retry++)
+        //{
             try
             {
                 await EnsureConnectedAsync();
                 string response = await SendCommandAsync(command);
                 Debug.WriteLine($"{operationType} Response: {response}");
+                Logger.Log2($"{operationType} Response: {response}");
                 return ParsePowerStatus(response);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error in {operationType} (Attempt {retry + 1}): {ex.Message}");
-                if (retry == MaxRetries - 1)
-                {
-                    return "Error";
-                }
-                await Task.Delay(1000 * (retry + 1)); // Exponential backoff
+            Logger.Log2($"Error in {operationType} Response: {ex.Message}");
+            //Debug.WriteLine($"Error in {operationType} (Attempt {retry + 1}): {ex.Message}");
+            //if (retry == MaxRetries - 1)
+            //{
+            //    return "Error";
+            //}
+            //await Task.Delay(1000 * (retry + 1)); // Exponential backoff
+            return "Error";
             }
-        }
+        //}
         return "Error";
     }
 
