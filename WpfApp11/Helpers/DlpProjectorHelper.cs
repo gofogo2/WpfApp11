@@ -126,12 +126,12 @@ public class DlpProjectorHelper : IDisposable
                 await EnsureConnectedAsync();
                 string response = await SendCommandAsync(command);
                 Debug.WriteLine($"{operationType} Response: {response}");
-                Logger.Log2($"{operationType} Response: {response}");
+                //Logger.Log2($"{operationType} Response: {response}");
                 return ParsePowerStatus(response);
             }
             catch (Exception ex)
             {
-            Logger.Log2($"Error in {operationType} Response: {ex.Message}");
+            Logger.LogError($"Error in {operationType} Response: {ex.Message}");
             //Debug.WriteLine($"Error in {operationType} (Attempt {retry + 1}): {ex.Message}");
             //if (retry == MaxRetries - 1)
             //{

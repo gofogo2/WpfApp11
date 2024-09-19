@@ -140,6 +140,15 @@ namespace WpfApp11.Helpers
                 case "VW_MSG_CUSTOM":
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
                     break;
+
+                case "VW_CEO_MUTEOFF":
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
+                    break;
+
+                case "VW_CEO_MUTEON":
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
+                    break;
+
                 case "VW_CEO":
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
                     SendSerial(Serial.VW.ToString(), VW.LIGHT_OFF.ToString());
@@ -182,6 +191,15 @@ namespace WpfApp11.Helpers
                 case "EV_IDLE":
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.48", 8020);
                     break;
+
+                case "EV_VIDEO_MUTEOFF":
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.48", 8020);
+                    break;
+
+                case "EV_VIDEO_MUTEON":
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.48", 8020);
+                    break;
+
                 case "EV_VIDEO":
                     SendSerial(Serial.EL.ToString(), EL.OPEN1.ToString());
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.48", 8020);
@@ -204,6 +222,15 @@ namespace WpfApp11.Helpers
                 case "CEO_IDLE":
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
                     break;
+
+                case "CEO_SOLUTION_MUTEOFF":
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
+                    break;
+
+                case "CEO_SOLUTION_MUTEON":
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
+                    break;
+
                 case "CEO_SOLUTION":
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
                     break;

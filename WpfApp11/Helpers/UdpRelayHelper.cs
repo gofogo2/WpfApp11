@@ -55,7 +55,7 @@ namespace WpfApp11.Helpers
                 }
                 catch (Exception exception)
                 {
-                    Logger.Log2($"Error : {exception.Message}");
+                    Logger.LogError($"Error : {exception.Message}");
                     Console.WriteLine(exception.ToString());
                 }
                 return null;
@@ -74,7 +74,7 @@ namespace WpfApp11.Helpers
                 }
                 catch (Exception exception)
                 {
-                    Logger.Log2($"Error : {exception.Message}");
+                    Logger.LogError($"Error : {exception.Message}");
                     Console.WriteLine(exception.ToString());
                 }
                 return null;
@@ -183,7 +183,7 @@ namespace WpfApp11.Helpers
                     }
                     catch (Exception e)
                     {
-                        Logger.Log2($"Error : {e.Message}");
+                        Logger.LogError($"Error : {e.Message}");
                         Debug.WriteLine($"SendByteAsync error: {e.Message}");
                     }
                 });
@@ -211,7 +211,7 @@ namespace WpfApp11.Helpers
                 }
                 catch (Exception e)
                 {
-                    Logger.Log2($"Error : {e.Message}");
+                    Logger.LogError($"Error : {e.Message}");
                     Debug.WriteLine($"ReceiveAsync error: {e.Message}");
                     await Task.Delay(1000); // 오류 발생 시 1초 대기 후 재시도
                     await ReceiveAsync(port);

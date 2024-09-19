@@ -536,7 +536,7 @@ namespace WpfApp9
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error processing projector: {ex.Message}");
-                Logger.Log2($"Error processing projector: {ex.Message}");
+                Logger.LogError($"Error processing projector: {ex.Message}");
             }
         }
 
@@ -563,7 +563,7 @@ namespace WpfApp9
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error processing projector: {ex.Message}");
-                Logger.Log2($"Error processing projector: {ex.Message}");
+                Logger.LogError($"Error processing projector: {ex.Message}");
             }
         }
 
@@ -583,7 +583,7 @@ namespace WpfApp9
                 }
             }catch(Exception e)
             {
-                Logger.Log2($"Error processing PC: {e.Message}");
+                Logger.LogError($"Error processing PC: {e.Message}");
             }
             Task.Delay(200);
         }
@@ -612,7 +612,7 @@ namespace WpfApp9
                 await UdpHelper.Instance.SendHexAsync(hex, false, int.Parse(item.port), item.IpAddress);
             }catch(Exception e)
             {
-                Logger.Log2($"Error : {e.Message}");
+                Logger.LogError($"Error : {e.Message}");
             }
         }
 
@@ -630,7 +630,7 @@ namespace WpfApp9
             }
             catch (Exception e)
             {
-                Logger.Log2($"Error : {e.Message}");
+                Logger.LogError($"Error : {e.Message}");
             }
         }
 
@@ -649,7 +649,7 @@ namespace WpfApp9
                 }
             }catch(Exception e)
             {
-                Logger.Log2($"Error : {e.Message}");
+                Logger.LogError($"Error : {e.Message}");
             }
         }
 

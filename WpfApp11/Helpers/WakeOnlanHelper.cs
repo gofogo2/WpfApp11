@@ -36,7 +36,7 @@ namespace Launcher_SE.Helpers
             int reterned_value = this.Send(bytes, 1024);
         }catch(Exception e)
             {
-                Logger.Log2($"Error : {e.Message}");
+                Logger.LogError($"Error : {e.Message}");
             }
 }
 
@@ -57,7 +57,7 @@ namespace Launcher_SE.Helpers
                 int reterned_value = this.Send(bytes, 1024);
             }catch(Exception e)
             {
-                Logger.Log2($"Error : {e.Message}");
+                Logger.LogError($"Error : {e.Message}");
             }
         }
 

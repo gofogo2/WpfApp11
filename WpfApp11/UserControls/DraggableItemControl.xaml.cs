@@ -608,7 +608,7 @@ namespace WpfApp9
             catch (Exception ex)
             {
                 result = $"Error: {ex.Message}";
-                Logger.Log2($"Error: {ex.Message}");
+                Logger.LogError($"Error: {ex.Message}");
             }
 
             Logger.Log(Configuration.Name, Configuration.DeviceType, "Power On", result);
@@ -732,7 +732,7 @@ pow_off_appo()
             catch (Exception ex)
             {
                 result = $"Error: {ex.Message}";
-                Logger.Log2($"Error: {ex.Message}");
+                Logger.LogError($"Error: {ex.Message}");
             }
 
             Logger.Log(Configuration.Name, Configuration.DeviceType, "Power Off", result);
