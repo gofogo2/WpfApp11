@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OSC_Test.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -261,31 +262,15 @@ namespace WpfApp11.Helpers
                     break;
 
                 case "SCP_IDLE":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
-                    break;
                 case "SCP_VIDEO0":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
-                    break;
                 case "SCP_VIDEO1":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
-                    break;
                 case "SCP_VIDEO2":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
-                    break;
                 case "SCP_VIDEO3":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
-                    break;
                 case "SCP_VIDEO4":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
-                    break;
                 case "SCP_VIDEO5":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
-                    break;
                 case "SCP_VIDEO6":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
-                    break;
                 case "SCP_VIDEO7":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
+                    OSCSenderHelper.Instance.Send("192.168.0.91", code);
                     break;
                 case "DC_IDLE":
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
