@@ -22,7 +22,7 @@ namespace WpfApp9
     {
         private DlpProjectorHelper dlpProjectorHelper;
         public WakeOnLan wol;
-        private int PingInterval =6000; // 5초마다 핑 체크
+        private int PingInterval =10000; // 5초마다 핑 체크
         private CancellationTokenSource pduStatusCancellationTokenSource;
         private CancellationTokenSource pingCancellationTokenSource;
         string vncViewerPath = @"C:\Program Files\TightVNC\tvnviewer.exe"; // TightVNC 뷰어 경로
@@ -67,10 +67,10 @@ namespace WpfApp9
             }
            else if (Configuration.DeviceType.ToLower() == "프로젝터(appotronics)")
             {
-                //UpdatePowerState(false);
-                dlpProjectorHelper = new DlpProjectorHelper(Configuration.IpAddress);
-                //isControllingAPPOProjectors = false;
-                _ = AppotronicsStatus();
+                ////UpdatePowerState(false);
+                //dlpProjectorHelper = new DlpProjectorHelper(Configuration.IpAddress);
+                ////isControllingAPPOProjectors = false;
+                //_ = AppotronicsStatus();
             }
             else if (Configuration.DeviceType == "PDU")
             {
@@ -226,7 +226,6 @@ namespace WpfApp9
                     {
                         Debug.WriteLine($"Error checking status for {Configuration.IpAddress}: {ex.Message}");
                         // 연결 문제가 발생했을 때 dlpProjectorHelper를 재생성
-                        dlpProjectorHelper.Dispose();
                         dlpProjectorHelper = new DlpProjectorHelper(Configuration.IpAddress);
                     }
                 }
@@ -756,8 +755,8 @@ pow_off_appo()
 
                 Debug.WriteLine($"프로젝터 {Configuration.IpAddress} 전원 {(powerOn ? "켜기" : "끄기")} 결과: {result}");
 
-                string status = await dlpProjectorHelper.GetPowerStatusAsync();
-                Debug.WriteLine($"프로젝터 {Configuration.IpAddress} 상태: {status}");
+                //string status = await dlpProjectorHelper.GetPowerStatusAsync();
+                //Debug.WriteLine($"프로젝터 {Configuration.IpAddress} 상태: {status}");
 
                 return result;
             }

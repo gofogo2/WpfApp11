@@ -63,6 +63,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Helpers\DlpProjectorHelper.cs" />
+    <Compile Include="Helpers\DlpProjectorHelper2.cs" />
+    <Compile Include="Helpers\DlpProjectorHelper3.cs" />
     <Compile Include="Helpers\GlobalMessageService.cs" />
     <Compile Include="Helpers\Logger.cs" />
     <Compile Include="Helpers\OSCSenderHelper.cs" />
