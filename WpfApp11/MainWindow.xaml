@@ -162,7 +162,7 @@
                 </ToggleButton>
             </StackPanel>
             <TextBlock Grid.Column="1" FontFamily="{StaticResource NotoSansFontBoldFamily}"  Text="TITLE" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" x:Name="p_title" FontSize="48" />
-            <TextBlock Grid.Column="1" FontFamily="{StaticResource NotoSansFontBoldFamily}" Foreground="Red" Text="v 0.2" VerticalAlignment="Top" HorizontalAlignment="Left" x:Name="sdfdsf" FontSize="12"  />
+            <!--<TextBlock Grid.Column="1" FontFamily="{StaticResource NotoSansFontBoldFamily}" Foreground="Red" Text="v 0.2" VerticalAlignment="Top" HorizontalAlignment="Left" x:Name="sdfdsf" FontSize="12"  />-->
             <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
                 <!--<Image Source="Images/pow_on.png"   Width="150" Height="69"  MouseLeftButtonDown="TotalPowerBtnOn_Click" />-->
 

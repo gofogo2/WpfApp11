@@ -365,7 +365,7 @@ namespace WpfApp9
 
                 if (onOff)
                 {
-                    if (previousDeviceType.ToLower() == "프로젝터(appotronics)" && item.DeviceType.ToLower() == "relay")
+                    if (previousDeviceType.ToLower() == "프로젝터(appotronics)" && item.DeviceType.ToLower() == "relay")    
                     {
                         Debug.WriteLine($"Adding delay of {powerInterva01}ms between 프로젝터(appotronics) and relay");
                         await Task.Delay(powerInterva01);
