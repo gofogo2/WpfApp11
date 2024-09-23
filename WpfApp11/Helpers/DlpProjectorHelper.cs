@@ -8,8 +8,8 @@ using WpfApp11.Helpers;
 public class DlpProjectorHelper : IDisposable
 {
     private const int ProjectorPort = 4352;
-    private const int TimeoutMilliseconds = 3000;
-    private const int MaxRetries = 1;
+    private const int TimeoutMilliseconds = 5000;
+    private const int MaxRetries = 3;
     private readonly string projectorIp;
     private TcpClient client;
     private bool isDisposed = false;
@@ -125,7 +125,7 @@ public class DlpProjectorHelper : IDisposable
             {
                 await EnsureConnectedAsync();
                 string response = await SendCommandAsync(command);
-           //     Debug.WriteLine($"{operationType} Response: {response}");
+                Debug.WriteLine($"{operationType} Response: {response}");
                 //Logger.Log2($"{operationType} Response: {response}");
                 return ParsePowerStatus(response);
             }
