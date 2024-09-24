@@ -54,9 +54,9 @@ namespace WpfApp11.Helpers
         SerialHelper serialHelper03;
         public ProtocolHelper()
         {
-            serialHelper01 = new SerialHelper("COM1");
-            serialHelper02 = new SerialHelper("COM2");
-            serialHelper03 = new SerialHelper("COM3");
+            serialHelper01 = new SerialHelper("COM3");
+            serialHelper02 = new SerialHelper("COM5");
+            serialHelper03 = new SerialHelper("COM2");
             
         }
 
@@ -76,28 +76,34 @@ namespace WpfApp11.Helpers
             switch (index)
             {
                 case 0:
-                    SendSerial(Serial.VW.ToString(), VW.LIGHT_ON.ToString());
+                    SendSerial(Serial.VW.ToString(), ((int)VW.LIGHT_ON).ToString());
                     break;
                 case 1:
-                    SendSerial(Serial.VW.ToString(), VW.LIGHT_OFF.ToString());
+                    SendSerial(Serial.VW.ToString(), ((int)VW.LIGHT_OFF).ToString());
                     break;
                 case 2:
-                    SendSerial(Serial.EL.ToString(), EL.OPENALL.ToString());
+                    SendSerial(Serial.EL.ToString(), ((int)EL.OPENALL).ToString());
                     break;
                 case 3:
-                    SendSerial(Serial.EL.ToString(), EL.CLOSEALL.ToString());
+                    SendSerial(Serial.EL.ToString(), ((int)EL.CLOSEALL).ToString());
                     break;
                 case 4:
+                    SendSerial(Serial.CL.ToString(), ((int)CL.AIR_ON).ToString());
                     break;
                 case 5:
+                    SendSerial(Serial.CL.ToString(), ((int)CL.AIR_OFF).ToString());
                     break;
                 case 6:
+                    SendSerial(Serial.CL.ToString(), ((int)CL.BL_UP).ToString());
                     break;
                 case 7:
+                    SendSerial(Serial.CL.ToString(), ((int)CL.BL_DOWN).ToString());
                     break;
                 case 8:
+                    SendSerial(Serial.CL.ToString(), ((int)CL.LIGHT_ON).ToString());
                     break;
                 case 9:
+                    SendSerial(Serial.CL.ToString(), ((int)CL.LIGHT_OFF).ToString());
                     break;
 
                 default:
@@ -110,19 +116,19 @@ namespace WpfApp11.Helpers
             switch (index)
             {
                 case "VW":
-                    Logger.Log2("Send Serial-COM01:" + msg);
+                    Logger.Log2("Send Serial-COM03:" + msg);
                     serialHelper01.OpenConnection();
                     serialHelper01.SendData(msg);
                     serialHelper01.CloseConnection();
                     break;
                 case "CL":
-                    Logger.Log2("Send Serial-COM02:" + msg);
+                    Logger.Log2("Send Serial-COM05:" + msg);
                     serialHelper02.OpenConnection();
                     serialHelper02.SendData(msg);
                     serialHelper02.CloseConnection();
                     break;
                 case "EL":
-                    Logger.Log2("Send Serial-COM03:" + msg);
+                    Logger.Log2("Send Serial-COM06:" + msg);
                     serialHelper03.OpenConnection();
                     serialHelper03.SendData(msg);
                     serialHelper03.CloseConnection();
@@ -143,20 +149,20 @@ namespace WpfApp11.Helpers
                 case "IDLE_ALL":
                     break;
                 case "IDLE_VW":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
-                    SendSerial(Serial.VW.ToString(), VW.LIGHT_ON.ToString());
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.16", 8020);
+                    SendSerial(Serial.VW.ToString(), ((int)VW.LIGHT_ON).ToString());
                     break;
                 case "IDLE_AI":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
-                    SendSerial(Serial.EL.ToString(), EL.CLOSEALL.ToString());
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.16", 8020);
+                    SendSerial(Serial.EL.ToString(), ((int)EL.CLOSEALL).ToString());
                     break;
                 case "IDLE_HO":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
-                    SendSerial(Serial.CL.ToString(), CL.LIGHT_OFF.ToString());
-                    SendSerial(Serial.CL.ToString(), CL.BL_DOWN.ToString());
-                    SendSerial(Serial.CL.ToString(), CL.AIR_OFF.ToString());
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.16", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.16", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.16", 8020);
+                    SendSerial(Serial.CL.ToString(), ((int)CL.LIGHT_OFF).ToString());
+                    SendSerial(Serial.CL.ToString(), ((int)CL.BL_DOWN).ToString());
+                    SendSerial(Serial.CL.ToString(), ((int)CL.AIR_OFF).ToString());
 
                     break;
                 case "IDLE_CL":
@@ -191,55 +197,55 @@ namespace WpfApp11.Helpers
                     SendSerial(Serial.VW.ToString(), VW.LIGHT_OFF.ToString());
                     break;
                 case "VW_REPORT":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.16", 8020);
                     break;
                 case "VW_BLEND":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.16", 8020);
                     SendSerial(Serial.VW.ToString(), VW.LIGHT_OFF.ToString());
                     break;
 
 
                 case "EN_OPEN":
-                    SendSerial(Serial.EL.ToString(), EL.OPEN1.ToString());
+                    SendSerial(Serial.EL.ToString(), ((int)EL.OPEN1).ToString());
                     break;
                 case "EN_CLOSE":
-                    SendSerial(Serial.EL.ToString(), EL.CLOSE1.ToString());
+                    SendSerial(Serial.EL.ToString(), ((int)EL.CLOSE1).ToString());
                     break;
                 case "EX_OPEN":
-                    SendSerial(Serial.EL.ToString(), EL.OPEN2.ToString());
+                    SendSerial(Serial.EL.ToString(), ((int)EL.OPEN2).ToString());
                     break;
                 case "EX_CLOSE":
-                    SendSerial(Serial.EL.ToString(), EL.CLOSE2.ToString());
+                    SendSerial(Serial.EL.ToString(), ((int)EL.CLOSE2).ToString());
                     break;
                 case "EX_ALL":
-                    SendSerial(Serial.EL.ToString(), EL.OPENALL.ToString());
+                    SendSerial(Serial.EL.ToString(), ((int)EL.OPENALL).ToString());
                     break;
                 case "EN_ALL":
-                    SendSerial(Serial.EL.ToString(), EL.CLOSEALL.ToString());
+                    SendSerial(Serial.EL.ToString(), ((int)EL.CLOSEALL).ToString());
                     break;
                 case "FACE_IDLE":
                   
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.39", 8020);
                     break;
                 case "FACE_RECO":
                     SendSerial(Serial.EL.ToString(), EL.OPEN1.ToString());
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.39", 8020);
                     break;
                 case "EV_IDLE":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.48", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.18", 8020);
                     break;
 
                 case "EV_VIDEO_MUTEOFF":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.48", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.18", 8020);
                     break;
 
                 case "EV_VIDEO_MUTEON":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.48", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.18", 8020);
                     break;
 
                 case "EV_VIDEO":
                     SendSerial(Serial.EL.ToString(), EL.OPEN1.ToString());
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.48", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.18", 8020);
                     break;
 
                 case "EV_VIDEO_END":
@@ -257,44 +263,44 @@ namespace WpfApp11.Helpers
                     SendSerial(Serial.CL.ToString(), CL.BL_DOWN.ToString());
                     break;
                 case "CEO_IDLE":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.37", 8020);
                     break;
 
                 case "CEO_SOLUTION_MUTEOFF":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.37", 8020);
                     break;
 
                 case "CEO_SOLUTION_MUTEON":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.37", 8020);
                     break;
 
                 case "CEO_SOLUTION":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.37", 8020);
                     break;
                 case "CEO_DEMO":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.37", 8020);
                     break;
                 case "MB_IDLE":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.36", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.35", 8020);
                     break;
                 case "MB_DEMO":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.36", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.35", 8020);
                     break;
                 case "WS_IDLE":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.134", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.34", 8020);
                     break;
                 case "WS_DEMO":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.134", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.34", 8020);
                     break;
 
 
                 case "CL_IDLE":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.14", 8020);
                     break;
                 case "CL_VIDEO":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.14", 8020);
                     break;
 
                 case "SCP_IDLE":
@@ -306,7 +312,7 @@ namespace WpfApp11.Helpers
                 case "SCP_VIDEO5":
                 case "SCP_VIDEO6":
                 case "SCP_VIDEO7":
-                    OSCSenderHelper.Instance.Send("192.168.0.91", code);
+                    OSCSenderHelper.Instance.Send("192.168.0.15", code);
                     break;
                 case "DC_IDLE":
                 case "DC_VIDEO_1":
@@ -318,13 +324,13 @@ namespace WpfApp11.Helpers
                 case "DC_VIDEO_7":
                 case "DC_VIDEO_8":
                 case "DC_VIDEO_FULL":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.152", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.15", 8020);
                     break;
                 case "MSP_IDLE":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.13", 8020);
                     break;
                 case "MSP_DEMO":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.13", 8020);
                     break;
 
                 default:

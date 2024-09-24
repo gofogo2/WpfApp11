@@ -71,8 +71,8 @@ namespace WpfApp9
             InitializeComponent();
             Loaded += MainWindow_Loaded;
             //늘 주석
-            //pl = new ProtocolHelper();
-            //pl.Start();
+            pl = new ProtocolHelper();
+            pl.Start();
 
             clickTimer = new DispatcherTimer();
             clickTimer.Interval = TimeSpan.FromMilliseconds(200);
@@ -756,52 +756,52 @@ namespace WpfApp9
 
             if (e.Key == Key.D0)
             {
-                //pl.SendSerialTest
+                pl.SerialTest(0);
                 return;
             }
             else if (e.Key == Key.D1)
             {
-                
+                pl.SerialTest(1);
                 return;
             }
             else if (e.Key == Key.D2)
             {
-                pl.Instance_PacketReceived("DC_VIDEO_2");
+                pl.SerialTest(2);
                 return;
             }
             else if (e.Key == Key.D3)
             {
-                pl.Instance_PacketReceived("DC_VIDEO_3");
+                pl.SerialTest(3);
                 return;
             }
             else if (e.Key == Key.D4)
             {
-                pl.Instance_PacketReceived("DC_VIDEO_4");
+                pl.SerialTest(4);
                 return;
             }
             else if (e.Key == Key.D5)
             {
-                pl.Instance_PacketReceived("DC_VIDEO_5");
+                pl.SerialTest(5);
                 return;
             }
             else if (e.Key == Key.D6)
             {
-                pl.Instance_PacketReceived("DC_VIDEO_6");
+                pl.SerialTest(6);
                 return;
             }
             else if (e.Key == Key.D7)
             {
-                pl.Instance_PacketReceived("DC_VIDEO_7");
+                pl.SerialTest(7);
                 return;
             }
             else if (e.Key == Key.D8)
             {
-                pl.Instance_PacketReceived("DC_VIDEO_8");
+                pl.SerialTest(8);
                 return;
             }
             else if (e.Key == Key.D9)
             {
-                pl.Instance_PacketReceived("DC_VIDEO_FULL");
+                pl.SerialTest(9);
                 return;
             }
         }
