@@ -69,8 +69,7 @@ namespace WpfApp9
             {
                 
                 dlpProjectorHelper = new DlpProjectorHelper3(Configuration.IpAddress);
-              
-                //_ = AppotronicsStatus();
+                _ = AppotronicsStatus();
             }
             else if (Configuration.DeviceType == "PDU")
             {

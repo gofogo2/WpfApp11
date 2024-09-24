@@ -71,21 +71,58 @@ namespace WpfApp11.Helpers
             ProtocolUdpHelper.Instance.PacketReceived -= Instance_PacketReceived; ;
         }
 
+        public void SerialTest(int index)
+        {
+            switch (index)
+            {
+                case 0:
+                    SendSerial(Serial.VW.ToString(), VW.LIGHT_ON.ToString());
+                    break;
+                case 1:
+                    SendSerial(Serial.VW.ToString(), VW.LIGHT_OFF.ToString());
+                    break;
+                case 2:
+                    SendSerial(Serial.EL.ToString(), EL.OPENALL.ToString());
+                    break;
+                case 3:
+                    SendSerial(Serial.EL.ToString(), EL.CLOSEALL.ToString());
+                    break;
+                case 4:
+                    break;
+                case 5:
+                    break;
+                case 6:
+                    break;
+                case 7:
+                    break;
+                case 8:
+                    break;
+                case 9:
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
         public void SendSerial(string index, string msg)
         {
             switch (index)
             {
                 case "VW":
+                    Logger.Log2("Send Serial-COM01:" + msg);
                     serialHelper01.OpenConnection();
                     serialHelper01.SendData(msg);
                     serialHelper01.CloseConnection();
                     break;
                 case "CL":
+                    Logger.Log2("Send Serial-COM02:" + msg);
                     serialHelper02.OpenConnection();
                     serialHelper02.SendData(msg);
                     serialHelper02.CloseConnection();
                     break;
                 case "EL":
+                    Logger.Log2("Send Serial-COM03:" + msg);
                     serialHelper03.OpenConnection();
                     serialHelper03.SendData(msg);
                     serialHelper03.CloseConnection();
@@ -133,25 +170,24 @@ namespace WpfApp11.Helpers
                 
                 
                 case "VW_IDLE":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.16", 8020);
                     break;
                 case "VW_MSG_NORMAL":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.16", 8020);
                     break;
                 case "VW_MSG_CUSTOM":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.16", 8020);
                     break;
 
                 case "VW_CEO_MUTEOFF":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.16", 8020);
                     break;
 
                 case "VW_CEO_MUTEON":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.16", 8020);
                     break;
 
-                case "VW_CEO":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
+                case "VW_CEO_END":
                     SendSerial(Serial.VW.ToString(), VW.LIGHT_OFF.ToString());
                     break;
                 case "VW_REPORT":

@@ -756,12 +756,12 @@ namespace WpfApp9
 
             if (e.Key == Key.D0)
             {
-                pl.Instance_PacketReceived("DC_IDLE");
+                //pl.SendSerialTest
                 return;
             }
             else if (e.Key == Key.D1)
             {
-                pl.Instance_PacketReceived("DC_VIDEO_1");
+                
                 return;
             }
             else if (e.Key == Key.D2)
