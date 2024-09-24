@@ -64,6 +64,9 @@ namespace WpfApp9
         public int pingtime = 30;
         public int powerInterva01;
         public int powerInterva02;
+
+        public string web_name = "administrator";
+        public string web_pw = "password";
         bool first_init = false;
         ProtocolHelper pl;
         public MainWindow()
@@ -95,7 +98,7 @@ namespace WpfApp9
             FileExplorerControl.CloseRequested += FileExplorerControl_CloseRequested;
 
             pow_timer.Tick += Pow_timer_Tick;
-            pow_timer.Interval = TimeSpan.FromSeconds(30);
+            pow_timer.Interval = TimeSpan.FromSeconds(40);
 
             first_init = true;
 
@@ -234,6 +237,16 @@ namespace WpfApp9
                 {
                     powerInterva02 = int.Parse(_powerInterval02.ToString());
                 }
+
+                if (settings.TryGetValue("Web_name", out var webname) && vncpw is string webnames)
+                {
+                    web_name = webnames;
+                }
+
+                if (settings.TryGetValue("Web_Password", out var webpw) && vncpw is string webpws)
+                {
+                    web_pw = webpws;
+                }
             }
         }
 
@@ -250,7 +263,9 @@ namespace WpfApp9
                 { "VNC_Password", vnc_pw},
                 { "Status_Check_Interval", pingtime},
                 { "PowerInterval01", powerInterva01},
-                { "PowerInterval02", powerInterva02}
+                { "PowerInterval02", powerInterva02},
+                {"Web_name", web_name },
+                {"Web_Password", web_pw }
             };
 
             string json = JsonConvert.SerializeObject(settings, Formatting.Indented);
@@ -275,11 +290,14 @@ namespace WpfApp9
             pow_timer.Stop();
         }
 
+        bool go_pow = false;
+
         private async void Pow_timer_Tick(object sender, EventArgs e)
         {
             DateTime now = DateTime.Now;
             string[] days = { "월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일" };
             string currentDay;
+
             if ((int)now.DayOfWeek == 0)
             {
                 currentDay = days[6];
@@ -288,18 +306,28 @@ namespace WpfApp9
             {
                 currentDay = days[(int)now.DayOfWeek - 1];
             }
-                if (AutoPowerSettingsControl.pow_schedule[currentDay].IsEnabled)
+
+
+            if (AutoPowerSettingsControl.pow_schedule[currentDay].IsEnabled)
             {
-                string currentTime = now.ToString("HH:mm");
-                if (currentTime == AutoPowerSettingsControl.pow_schedule[currentDay].StartTime.ToString().Substring(0, 5))
+                if (go_pow == false)
                 {
-                    Logger.Log2($"자동 전원 관리 전원 ON - {currentDay}");
-                    await OnDevice();
+                    go_pow = true;
+                    string currentTime = now.ToString("HH:mm");
+                    if (currentTime == AutoPowerSettingsControl.pow_schedule[currentDay].StartTime.ToString().Substring(0, 5))
+                    {
+                        Logger.Log2($"자동 전원 관리 전원 ON - {currentDay}");
+                        await OnDevice();
+                    }
+                    else if (currentTime == AutoPowerSettingsControl.pow_schedule[currentDay].EndTime.ToString().Substring(0, 5))
+                    {
+                        Logger.Log2($"자동 전원 관리 전원 OFF - {currentDay}");
+                        await OffDevice();
+                    }
                 }
-                else if (currentTime == AutoPowerSettingsControl.pow_schedule[currentDay].EndTime.ToString().Substring(0, 5))
+                else
                 {
-                    Logger.Log2($"자동 전원 관리 전원 OFF - {currentDay}");
-                    await OffDevice();
+                    go_pow = false;
                 }
             }
         }

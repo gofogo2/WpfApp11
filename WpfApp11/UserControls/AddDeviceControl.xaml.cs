@@ -186,7 +186,7 @@ namespace WpfApp11.UserControls
 
 
 
-            tempconfig.Name = NameTextBox.Text.ToUpper();
+            tempconfig.Name = NameTextBox.Text;
             tempconfig.DeviceType = ((TextBlock)((ComboBoxItem)DeviceTypeComboBox.SelectedItem).Content).Text.ToString();
             tempconfig.MacAddress = MacAddressTextBox.Text;
             tempconfig.IpAddress = IpAddressTextBox.Text;

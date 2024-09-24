@@ -20,6 +20,7 @@ public class WebApiHelper
     {
         _httpClient = new HttpClient();
         _httpClient.Timeout = TimeSpan.FromSeconds(30);
+        setData();
     }
 
     public static WebApiHelper Instance
@@ -33,18 +34,33 @@ public class WebApiHelper
                     if (_instance == null)
                     {
                         _instance = new WebApiHelper();
+                        
                     }
                 }
             }
             return _instance;
         }
     }
+    void setData()
+    {
+        var main = Application.Current.MainWindow as WpfApp9.MainWindow;
+        _username = main.web_name;
+        _password = main.web_pw;
+
+    }
+
+   
 
     public void Initialize(string baseUrl, string username, string password)
     {
         _baseUrl = baseUrl;
         _username = username;
         _password = password;
+
+
+
+
+
     }
 
     private async Task<string> PostAsync(string endpoint, Dictionary<string, string> additionalParams)
