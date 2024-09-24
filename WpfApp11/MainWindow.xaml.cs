@@ -238,12 +238,12 @@ namespace WpfApp9
                     powerInterva02 = int.Parse(_powerInterval02.ToString());
                 }
 
-                if (settings.TryGetValue("Web_name", out var webname) && vncpw is string webnames)
+                if (settings.TryGetValue("Web_name", out var webname) && webname is string webnames)
                 {
                     web_name = webnames;
                 }
 
-                if (settings.TryGetValue("Web_Password", out var webpw) && vncpw is string webpws)
+                if (settings.TryGetValue("Web_Password", out var webpw) && webname is string webpws)
                 {
                     web_pw = webpws;
                 }
