@@ -95,7 +95,7 @@ namespace WpfApp11.Helpers
             }
         }
 
-        private void Instance_PacketReceived(string code)
+        public void Instance_PacketReceived(string code)
         {
             Logger.Log2(code);
 
@@ -247,10 +247,10 @@ namespace WpfApp11.Helpers
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
                     break;
                 case "WS_IDLE":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.37", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.134", 8020);
                     break;
                 case "WS_DEMO":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.37", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.134", 8020);
                     break;
 
 
@@ -273,10 +273,16 @@ namespace WpfApp11.Helpers
                     OSCSenderHelper.Instance.Send("192.168.0.91", code);
                     break;
                 case "DC_IDLE":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
-                    break;
-                case "DC_VIDEO":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);
+                case "DC_VIDEO_1":
+                case "DC_VIDEO_2":
+                case "DC_VIDEO_3":
+                case "DC_VIDEO_4":
+                case "DC_VIDEO_5":
+                case "DC_VIDEO_6":
+                case "DC_VIDEO_7":
+                case "DC_VIDEO_8":
+                case "DC_VIDEO_FULL":
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.152", 8020);
                     break;
                 case "MSP_IDLE":
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.91", 8020);

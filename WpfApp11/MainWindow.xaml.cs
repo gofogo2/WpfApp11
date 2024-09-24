@@ -65,13 +65,13 @@ namespace WpfApp9
         public int powerInterva01;
         public int powerInterva02;
         bool first_init = false;
-
+        ProtocolHelper pl;
         public MainWindow()
         {
             InitializeComponent();
             Loaded += MainWindow_Loaded;
             //늘 주석
-            //ProtocolHelper pl = new ProtocolHelper();
+            //pl = new ProtocolHelper();
             //pl.Start();
 
             clickTimer = new DispatcherTimer();
@@ -748,9 +748,60 @@ namespace WpfApp9
 
         protected override async void OnKeyUp(KeyEventArgs e)
         {
-            if (e.Key == Key.Escape)
+            //if (e.Key == Key.Escape)
+            //{
+            //    this.Close();
+            //    return;
+            //}
+
+            if (e.Key == Key.D0)
             {
-                this.Close();
+                pl.Instance_PacketReceived("DC_IDLE");
+                return;
+            }
+            else if (e.Key == Key.D1)
+            {
+                pl.Instance_PacketReceived("DC_VIDEO_1");
+                return;
+            }
+            else if (e.Key == Key.D2)
+            {
+                pl.Instance_PacketReceived("DC_VIDEO_2");
+                return;
+            }
+            else if (e.Key == Key.D3)
+            {
+                pl.Instance_PacketReceived("DC_VIDEO_3");
+                return;
+            }
+            else if (e.Key == Key.D4)
+            {
+                pl.Instance_PacketReceived("DC_VIDEO_4");
+                return;
+            }
+            else if (e.Key == Key.D5)
+            {
+                pl.Instance_PacketReceived("DC_VIDEO_5");
+                return;
+            }
+            else if (e.Key == Key.D6)
+            {
+                pl.Instance_PacketReceived("DC_VIDEO_6");
+                return;
+            }
+            else if (e.Key == Key.D7)
+            {
+                pl.Instance_PacketReceived("DC_VIDEO_7");
+                return;
+            }
+            else if (e.Key == Key.D8)
+            {
+                pl.Instance_PacketReceived("DC_VIDEO_8");
+                return;
+            }
+            else if (e.Key == Key.D9)
+            {
+                pl.Instance_PacketReceived("DC_VIDEO_FULL");
                 return;
             }
         }
