@@ -11,7 +11,7 @@ namespace WpfApp11.Helpers
     class DlpProjectorHelper2 : IDisposable
     {
         private const int ProjectorPort = 4352;
-        private const int DefaultTimeout = 20000; // 5초 타임아웃
+        private const int DefaultTimeout = 11000; // 5초 타임아웃
         private const int MaxRetries = 1; // 최대 재시도 횟수
         private const int MaxPoolSize = 5; // 최대 연결 풀 크기
 

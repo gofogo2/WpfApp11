@@ -160,6 +160,10 @@ ON/OFF/REBOOT 버튼 이미지 공통
 
 
 #2024-09-25
+
+[ ] 
+[ ] 하단 가로 스크롤이 너무 두껍다
+[ ] 아래 방식으로 수정
 {
   "CMSTitle": "pc",
   "ContentsPath": "C:\\GL-MEDIA",

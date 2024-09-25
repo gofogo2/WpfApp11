@@ -8,7 +8,7 @@ using WpfApp11.Helpers;
 public class DlpProjectorHelper : IDisposable
 {
     private const int ProjectorPort = 4352;
-    private const int TimeoutMilliseconds = 5000;
+    private const int TimeoutMilliseconds = 11000;
     private const int MaxRetries = 3;
     private readonly string projectorIp;
     private TcpClient client;
