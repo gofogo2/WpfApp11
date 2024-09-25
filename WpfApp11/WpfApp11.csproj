@@ -34,6 +34,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>ic.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="FluentFTP, Version=50.1.0.0, Culture=neutral, PublicKeyToken=f4af092b1d8df44f, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentFTP.50.1.0\lib\net472\FluentFTP.dll</HintPath>
@@ -263,6 +266,10 @@
     <Resource Include="Images\icons\icon_folder.png" />
     <Resource Include="Images\Arrow_left_basic.png" />
     <Resource Include="Images\Arrow_right_basic.png" />
+    <Resource Include="Images\icons\cmsicon.png" />
+    <Resource Include="cmsicon.ico" />
+    <Resource Include="ic.ico" />
+    <Resource Include="Images\ic.ico" />
     <Content Include="Settings\Setup-IIS-FTP.ps1">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
