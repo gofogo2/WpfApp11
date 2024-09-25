@@ -90,14 +90,14 @@
         </Style>
 
         <Style x:Key="FlatHorizontalScrollBarStyle" TargetType="{x:Type ScrollBar}">
-            <Setter Property="Background" Value="#D9D9D9"/>
+            <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderBrush" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Height" Value="4"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ScrollBar}">
-                        <Grid x:Name="Bg" SnapsToDevicePixels="true">
+                        <Grid x:Name="Bg" SnapsToDevicePixels="true" Height="8">
                             <Border Background="{TemplateBinding Background}" CornerRadius="8"/>
                             <Track x:Name="PART_Track" IsDirectionReversed="false" IsEnabled="{TemplateBinding IsMouseOver}">
                                 <Track.DecreaseRepeatButton>

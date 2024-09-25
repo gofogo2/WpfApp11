@@ -46,7 +46,7 @@ namespace WpfApp9
         private const double DoubleClickTime = 300; // 밀리초
         private double powerProgress = 0;
 
-        private double Progress_duration = 50;
+        private double Progress_duration = 5000;
         public bool isvnc = false;
         public bool isftp = false;
 
@@ -61,7 +61,7 @@ namespace WpfApp9
         public string vnc_pw = "0909";
         public string local_path = @"C:\GL-MEDIA";
 
-        public int pingtime = 30;
+        public int pingtime = 30000;
         public int powerInterva01;
         public int powerInterva02;
 
@@ -209,23 +209,23 @@ namespace WpfApp9
                 {
                     local_path = local_path_value;
                 }
-                if (settings.TryGetValue("Progress_duration", out var progressDurationValue) && progressDurationValue is double progressDuration)
+                if (settings.TryGetValue("AutoPowerEnabled", out var progressDurationValue) && progressDurationValue is double progressDuration)
                 {
                     Progress_duration = progressDuration;
                 }
-                if (settings.TryGetValue("useVNC", out var vnc_value) && vnc_value is bool vncvalue)
+                if (settings.TryGetValue("UseVNC", out var vnc_value) && vnc_value is bool vncvalue)
                 {
                     isvnc = vncvalue;
                 }
-                if (settings.TryGetValue("useFTP", out var ftp_value) && ftp_value is bool ftpvalue)
+                if (settings.TryGetValue("UseFTP", out var ftp_value) && ftp_value is bool ftpvalue)
                 {
                     isftp = ftpvalue;
                 }
-                if (settings.TryGetValue("VNC_Password", out var vncpw) && vncpw is string vncpw2)
+                if (settings.TryGetValue("VNCPassword", out var vncpw) && vncpw is string vncpw2)
                 {
                     vnc_pw = vncpw2;
                 }
-                if (settings.TryGetValue("Status_Check_Interval", out var ping_timer))
+                if (settings.TryGetValue("StatusCheckInterval", out var ping_timer))
                 {
                     pingtime = int.Parse(ping_timer.ToString());
                 }
@@ -238,12 +238,12 @@ namespace WpfApp9
                     powerInterva02 = int.Parse(_powerInterval02.ToString());
                 }
 
-                if (settings.TryGetValue("Web_name", out var webname) && webname is string webnames)
+                if (settings.TryGetValue("WebName", out var webname) && webname is string webnames)
                 {
                     web_name = webnames;
                 }
 
-                if (settings.TryGetValue("Web_Password", out var webpw) && webname is string webpws)
+                if (settings.TryGetValue("WebPassword", out var webpw) && webname is string webpws)
                 {
                     web_pw = webpws;
                 }
@@ -257,15 +257,15 @@ namespace WpfApp9
                 { "CMSTitle", local_pc_name },
                 { "ContentsPath", local_path },
                 { "AutoPowerEnabled", AutoPowerToggle.IsChecked ?? false },
-                { "Progress_duration", Progress_duration },
-                { "useVNC", isvnc },
-                { "useFTP", isftp},
-                { "VNC_Password", vnc_pw},
-                { "Status_Check_Interval", pingtime},
+                { "ProgressDuration", Progress_duration },
+                { "UseVNC", isvnc },
+                { "UseFTP", isftp},
+                { "VNCPassword", vnc_pw},
+                { "StatusCheckInterval", pingtime},
                 { "PowerInterval01", powerInterva01},
                 { "PowerInterval02", powerInterva02},
-                {"Web_name", web_name },
-                {"Web_Password", web_pw }
+                {"WebName", web_name },
+                {"WebPassword", web_pw }
             };
 
             string json = JsonConvert.SerializeObject(settings, Formatting.Indented);
@@ -524,9 +524,9 @@ namespace WpfApp9
         private async Task UpdateProgressBarAsync(double startValue, double endValue, double durationSeconds)
         {
             DateTime startTime = DateTime.Now;
-            while ((DateTime.Now - startTime).TotalSeconds < durationSeconds)
+            while ((DateTime.Now - startTime).TotalMilliseconds < durationSeconds)
             {
-                double progress = (DateTime.Now - startTime).TotalSeconds / durationSeconds;
+                double progress = (DateTime.Now - startTime).TotalMilliseconds / durationSeconds;
                 double currentValue = startValue + (endValue - startValue) * progress;
                 PowerProgressBar.Value = Math.Min(currentValue, 100);
                 await Task.Delay(50); // 50ms마다 업데이트
@@ -1062,7 +1062,7 @@ namespace WpfApp9
 
         private async Task AnimateProgressBar(bool isOn)
         {
-            double animationDuration = Progress_duration * 0.7;
+            double animationDuration = Progress_duration * 1;
             var watch = System.Diagnostics.Stopwatch.StartNew();
 
             while (watch.Elapsed.TotalSeconds < animationDuration)

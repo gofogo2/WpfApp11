@@ -22,7 +22,7 @@ namespace WpfApp9
     {
         private DlpProjectorHelper3 dlpProjectorHelper;
         public WakeOnLan wol;
-        private int PingInterval =6000; // 5초마다 핑 체크
+        private int PingInterval = 6000; // 5초마다 핑 체크
         private CancellationTokenSource pduStatusCancellationTokenSource;
         private CancellationTokenSource pingCancellationTokenSource;
         string vncViewerPath = @"C:\Program Files\TightVNC\tvnviewer.exe"; // TightVNC 뷰어 경로
@@ -43,11 +43,18 @@ namespace WpfApp9
 
             var main = Application.Current.MainWindow as MainWindow;
 
-            PingInterval = main.pingtime * 1000;
+            //PingInterval = main.pingtime * 1000;
 
-            if (PingInterval < 10000)
+            //if (PingInterval < 10000)
+            //{
+            //    PingInterval = 10000;
+            //}
+
+            PingInterval = main.pingtime;
+
+            if (PingInterval < 900000)
             {
-                PingInterval = 10000;
+                PingInterval = 900000;
             }
 
 
@@ -428,9 +435,9 @@ namespace WpfApp9
 
         private void UpdateUI()
         {
-            if (Configuration.Name.Length > 15)
+            if (Configuration.Name.Length > 22)
             {
-                TitleTextBlock.Text = Configuration.Name.Substring(0, 13) + "..";
+                TitleTextBlock.Text = Configuration.Name.Substring(0, 20) + "..";
             }
             else
             {
