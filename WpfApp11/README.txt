@@ -159,6 +159,44 @@ ON/OFF/REBOOT 버튼 이미지 공통
 수정하면 템플릿때매 구조가 변경 작업이 많이필요함
 
 
+#2024-09-25
+{
+  "CMSTitle": "pc",
+  "ContentsPath": "C:\\GL-MEDIA",
+  "AutoPowerEnabled": false,
+  "Progress_duration": 50.0,
+  "useVNC": false,
+  "useFTP": false,
+  "VNC_Password": "0909",
+  "Status_Check_Interval": 30,
+  "PowerInterval01": 0,
+  "PowerInterval02": 0,
+  "Web_name": "1",
+  "Web_Password": "1"
+}
+
+요거 
+
+{
+  "CMSTitle": "pc",
+  "ContentsPath": "C:\\GL-MEDIA",
+  "AutoPowerEnabled": false,
+  "ProgressDuration": 50.0,
+  "UseVNC": false,
+  "UseFTP": false,
+  "VNCPassword": "0909",
+  "StatusCheckInterval": 30,
+  "PowerInterval01": 0,
+  "PowerInterval02": 0,
+  "WebName": "1",
+  "WebPassword": "1"
+}
+
+이렇게 네이밍 변경 해주고
+
+"ProgressDuration": 50.0, 
+"StatusCheckInterval": 30, 이것들도 밀리 세컨즈로 바꿔줘
+
 #
 -릴레이는 상태체크 안한다
 -pdu는 상태체크한다
