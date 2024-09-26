@@ -52,9 +52,9 @@ namespace WpfApp9
 
             PingInterval = main.pingtime;
 
-            if (PingInterval < 900000)
+            if (PingInterval < 10000)
             {
-                PingInterval = 900000;
+                PingInterval = 10000;
             }
 
 

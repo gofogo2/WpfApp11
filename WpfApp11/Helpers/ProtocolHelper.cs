@@ -147,6 +147,16 @@ namespace WpfApp11.Helpers
             switch (code)
             {
                 case "IDLE_ALL":
+                    SendSerial(Serial.CL.ToString(), ((int)CL.LIGHT_OFF).ToString());
+                    SendSerial(Serial.CL.ToString(), ((int)CL.AIR_OFF).ToString());
+                    SendSerial(Serial.CL.ToString(), ((int)CL.BL_DOWN).ToString());
+                    ProtocolUdpHelper.Instance.SendWithIpAsync("OF_OFF", "192.168.0.37", 8020);
+
+                    ProtocolUdpHelper.Instance.SendWithIpAsync("VW_IDLE", "192.168.0.16", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync("VW_IDLE", "192.168.0.19", 8020);
+                    SendSerial(Serial.VW.ToString(), ((int)VW.LIGHT_ON).ToString());
+
+
                     break;
                 case "IDLE_VW":
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.16", 8020);
@@ -177,46 +187,50 @@ namespace WpfApp11.Helpers
                 
                 case "VW_IDLE":
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.16", 8020);
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.16", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.19", 8020);
+                    SendSerial(Serial.VW.ToString(), ((int)VW.LIGHT_ON).ToString());
                     break;
                 case "VW_MSG_NORMAL":
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.16", 8020);
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.16", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.19", 8020);
+                    SendSerial(Serial.VW.ToString(), ((int)VW.LIGHT_ON).ToString());
                     break;
                 case "VW_MSG_CUSTOM":
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.16", 8020);
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.16", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.19", 8020);
+                    SendSerial(Serial.VW.ToString(), ((int)VW.LIGHT_ON).ToString());
                     break;
 
                 case "VW_CEO_MUTEOFF":
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.16", 8020);
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.16", 8020);
-                    SendSerial(Serial.VW.ToString(), VW.LIGHT_OFF.ToString());
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.19", 8020);
+                    SendSerial(Serial.VW.ToString(), ((int)VW.LIGHT_OFF).ToString());
                     break;
 
                 case "VW_CEO_MUTEON":
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.16", 8020);
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.16", 8020);
-                    SendSerial(Serial.VW.ToString(), VW.LIGHT_OFF.ToString());
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.19", 8020);
+                    SendSerial(Serial.VW.ToString(), ((int)VW.LIGHT_OFF).ToString());
                     break;
                 case "VW_BRAND":
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.16", 8020);
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.16", 8020);
-                   
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.19", 8020);
+                    SendSerial(Serial.VW.ToString(), ((int)VW.LIGHT_OFF).ToString());
                     break;
                 case "VW_CEO_END":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.16", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.19", 8020);
+                    SendSerial(Serial.VW.ToString(), ((int)VW.LIGHT_ON).ToString());
                     break;
                 case "VW_BRAND_END":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.16", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.19", 8020);
+                    SendSerial(Serial.VW.ToString(), ((int)VW.LIGHT_ON).ToString());
                     break;
 
                 case "VW_REPORT":
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.16", 8020);
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.16", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.19", 8020);
+                    SendSerial(Serial.VW.ToString(), ((int)VW.LIGHT_ON).ToString());
                     break;
-              
-
 
                 case "EN_OPEN":
                     SendSerial(Serial.EL.ToString(), ((int)EL.OPEN1).ToString());
@@ -266,15 +280,15 @@ namespace WpfApp11.Helpers
                     break;
 
                 case "OF_ON":
-                    SendSerial(Serial.CL.ToString(), CL.LIGHT_ON.ToString());
-                    SendSerial(Serial.CL.ToString(), CL.AIR_ON.ToString());
-                    SendSerial(Serial.CL.ToString(), CL.BL_UP.ToString());
+                    SendSerial(Serial.CL.ToString(), ((int)CL.LIGHT_ON).ToString());
+                    SendSerial(Serial.CL.ToString(), ((int)CL.AIR_ON).ToString());
+                    SendSerial(Serial.CL.ToString(), ((int)CL.BL_UP).ToString());
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.37", 8020);
                     break;
                 case "OF_OFF":
-                    SendSerial(Serial.CL.ToString(), CL.LIGHT_OFF.ToString());
-                    SendSerial(Serial.CL.ToString(), CL.AIR_OFF.ToString());
-                    SendSerial(Serial.CL.ToString(), CL.BL_DOWN.ToString());
+                    SendSerial(Serial.CL.ToString(), ((int)CL.LIGHT_OFF).ToString());
+                    SendSerial(Serial.CL.ToString(), ((int)CL.AIR_OFF).ToString());
+                    SendSerial(Serial.CL.ToString(), ((int)CL.BL_DOWN).ToString());
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.37", 8020);
                     break;
                 case "CEO_IDLE":
@@ -312,22 +326,38 @@ namespace WpfApp11.Helpers
 
 
                 case "CL_IDLE":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.14", 8020);
+                    OSCSenderHelper.Instance.Send("192.168.0.14", "1");
                     break;
                 case "CL_VIDEO":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.14", 8020);
+                    OSCSenderHelper.Instance.Send("192.168.0.14", "2");
                     break;
 
                 case "SCP_IDLE":
+                    OSCSenderHelper.Instance.Send("192.168.0.12", "1");
+                    break;
                 case "SCP_VIDEO0":
+                    OSCSenderHelper.Instance.Send("192.168.0.12", "2");
+                    break;
                 case "SCP_VIDEO1":
+                    OSCSenderHelper.Instance.Send("192.168.0.12", "3");
+                    break;
                 case "SCP_VIDEO2":
+                    OSCSenderHelper.Instance.Send("192.168.0.12", "4");
+                    break;
                 case "SCP_VIDEO3":
+                    OSCSenderHelper.Instance.Send("192.168.0.12", "5");
+                    break;
                 case "SCP_VIDEO4":
+                    OSCSenderHelper.Instance.Send("192.168.0.12", "6");
+                    break;
                 case "SCP_VIDEO5":
+                    OSCSenderHelper.Instance.Send("192.168.0.12", "7");
+                    break;
                 case "SCP_VIDEO6":
+                    OSCSenderHelper.Instance.Send("192.168.0.12", "8");
+                    break;
                 case "SCP_VIDEO7":
-                    OSCSenderHelper.Instance.Send("192.168.0.15", code);
+                    OSCSenderHelper.Instance.Send("192.168.0.12", "9");
                     break;
                 case "DC_IDLE":
                 case "DC_VIDEO_1":
