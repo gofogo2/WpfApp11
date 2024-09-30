@@ -255,8 +255,10 @@ namespace WpfApp11.Helpers
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.39", 8020);
                     break;
                 case "FACE_RECO":
-                    SendSerial(Serial.EL.ToString(), EL.OPEN1.ToString());
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.39", 8020);
+                    break;
+                case "FACE_RECO_END":
+                    SendSerial(Serial.EL.ToString(), EL.OPEN1.ToString());
                     break;
                 case "EV_IDLE":
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.11", 8020);

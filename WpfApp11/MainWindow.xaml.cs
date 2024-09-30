@@ -21,6 +21,7 @@ using System.Diagnostics;
 using Launcher_SE.Helpers;
 using WpfApp11;
 using static System.Net.Mime.MediaTypeNames;
+using OSC_Test.Helpers;
 
 namespace WpfApp9
 {
@@ -776,62 +777,68 @@ namespace WpfApp9
 
         protected override async void OnKeyUp(KeyEventArgs e)
         {
-            //if (e.Key == Key.Escape)
-            //{
-            //    this.Close();
-            //    return;
-            //}
+            if (e.Key == Key.Escape)
+            {
+                this.Close();
+                return;
+            }
 
-            //if (e.Key == Key.D0)
-            //{
-            //    pl.SerialTest(0);
-            //    return;
-            //}
-            //else if (e.Key == Key.D1)
-            //{
-            //    pl.SerialTest(1);
-            //    return;
-            //}
-            //else if (e.Key == Key.D2)
-            //{
-            //    pl.SerialTest(2);
-            //    return;
-            //}
-            //else if (e.Key == Key.D3)
-            //{
-            //    pl.SerialTest(3);
-            //    return;
-            //}
-            //else if (e.Key == Key.D4)
-            //{
-            //    pl.SerialTest(4);
-            //    return;
-            //}
-            //else if (e.Key == Key.D5)
-            //{
-            //    pl.SerialTest(5);
-            //    return;
-            //}
-            //else if (e.Key == Key.D6)
-            //{
-            //    pl.SerialTest(6);
-            //    return;
-            //}
-            //else if (e.Key == Key.D7)
-            //{
-            //    pl.SerialTest(7);
-            //    return;
-            //}
-            //else if (e.Key == Key.D8)
-            //{
-            //    pl.SerialTest(8);
-            //    return;
-            //}
-            //else if (e.Key == Key.D9)
-            //{
-            //    pl.SerialTest(9);
-            //    return;
-            //}
+
+            if (e.Key == Key.P)
+            {
+                OSCSenderHelper.Instance.Send("192.168.0.14", "2");
+                return;
+            }
+            else if (e.Key == Key.D0)
+            {
+                OSCSenderHelper.Instance.Send("192.168.0.14", "1");
+                return;
+            }
+            else if (e.Key == Key.D1)
+            {
+                OSCSenderHelper.Instance.Send("192.168.0.12", "1");
+                return;
+            }
+            else if (e.Key == Key.D2)
+            {
+                OSCSenderHelper.Instance.Send("192.168.0.12", "2");
+                return;
+            }
+            else if (e.Key == Key.D3)
+            {
+                OSCSenderHelper.Instance.Send("192.168.0.12", "3");
+                return;
+            }
+            else if (e.Key == Key.D4)
+            {
+                OSCSenderHelper.Instance.Send("192.168.0.12", "4");
+                return;
+            }
+            else if (e.Key == Key.D5)
+            {
+                OSCSenderHelper.Instance.Send("192.168.0.12", "5");
+                return;
+            }
+            else if (e.Key == Key.D6)
+            {
+                OSCSenderHelper.Instance.Send("192.168.0.12", "6");
+                return;
+            }
+            else if (e.Key == Key.D7)
+            {
+                OSCSenderHelper.Instance.Send("192.168.0.12", "7");
+                return;
+            }
+            else if (e.Key == Key.D8)
+            {
+                OSCSenderHelper.Instance.Send("192.168.0.12", "8");
+                return;
+            }
+            else if (e.Key == Key.D9)
+            {
+                OSCSenderHelper.Instance.Send("192.168.0.12", "9");
+                return;
+            }
         }
 
         private async Task ControlProjector(string ipAddress, bool powerOn)
