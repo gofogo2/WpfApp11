@@ -244,7 +244,7 @@ namespace WpfApp9
                     web_name = webnames;
                 }
 
-                if (settings.TryGetValue("WebPassword", out var webpw) && webname is string webpws)
+                if (settings.TryGetValue("WebPassword", out var webpw) && webpw is string webpws)
                 {
                     web_pw = webpws;
                 }
