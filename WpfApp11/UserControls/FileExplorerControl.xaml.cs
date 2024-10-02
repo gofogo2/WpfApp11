@@ -325,11 +325,11 @@ namespace WpfApp9
             try
             {
                 ////원래====================================================================
-                Uri ftpUri = new Uri(target_ftp);
-                string host = ftpUri.Host;
-                string username = "ftpuser";
-                string password = "1";
-                _ftpClient = new FtpClient(host, username, password);
+                //Uri ftpUri = new Uri(target_ftp);
+                //string host = ftpUri.Host;
+                //string username = "ftpuser";
+                //string password = "1";
+                //_ftpClient = new FtpClient(host, username, password);
                 ////====================================================================
 
 
@@ -337,11 +337,11 @@ namespace WpfApp9
 
 
                 //임시 ====================================================================
-                //Uri ftpUri = new Uri("ftp://121.131.142.148:12923");
-                //string host = ftpUri.Host;
-                //string username = "engium";
-                //string password = "1";
-                //_ftpClient = new FtpClient(host, username, password, 12923);
+                Uri ftpUri = new Uri("ftp://121.131.142.148:12923");
+                string host = ftpUri.Host;
+                string username = "engium";
+                string password = "1";
+                _ftpClient = new FtpClient(host, username, password, 12923);
                 //====================================================================
 
 
@@ -1548,36 +1548,49 @@ namespace WpfApp9
         {
             Transferpopup.Visibility = Visibility.Visible;
             TransferProgressBar.Visibility = Visibility.Visible;
-
+            temp_before_value = 0;
             TransferProgressBar.Value = 0;
             TransferProgressText.Text = "0%";
 
             long totalSize = selectedItems.Sum(item => CalculateTotalSize(item.FullPath));
+            List<long> file_size = new List<long>();
+
+            for (int i = 0; i < selectedItems.Count; i++)
+            {
+                file_size.Add(CalculateTotalSize(selectedItems[i].FullPath));
+            }
+
+
+            int transfercount = 0;
+
             var progress = new TransferProgress();
 
             try
             {
                 foreach (var item in selectedItems)
                 {
+                    long before_value = 0;
+                    if (transfercount != 0)
+                    {
+                        for (int k = 0; k < transfercount; k++)
+                        {
+                            before_value += file_size[k];
+                        }
+                    }
+
+
                     await TransferItemAsync(item, _currentFtpPath, totalSize, progress);
+                    transfercount++;
                 }
 
                 if (check_finish == true)
                 {
-
-
-
-
-
-
-
 
                     confirm_dialog dialog = new confirm_dialog
                     {
                         Owner = Application.Current.MainWindow,
 
                     };
-
 
 
 
@@ -1589,10 +1602,6 @@ namespace WpfApp9
 
                     }
 
-
-
-
-                    //MessageBox.Show("전송이 완료되었습니다.", "알림", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
 
             }
@@ -1694,9 +1703,14 @@ namespace WpfApp9
                     Transferpopup.Visibility = Visibility.Visible;
                     TransferProgressBar.Visibility = Visibility.Visible;
                     TransferProgressBar.Value = 0;
+                    temp_before_value = 0;
                     TransferProgressText.Text = "0%";
 
                     long totalSize = await Task.Run(() => selectedItems.Sum(item => _ftpClient.GetFileSize(item.FullPath)));
+
+                    
+
+
                     var progress = new TransferProgress();
 
                     try
@@ -1742,6 +1756,7 @@ namespace WpfApp9
                         Transferpopup.Visibility = Visibility.Collapsed;
                         TransferProgressBar.Visibility = Visibility.Collapsed;
                         TransferProgressText.Text = "";
+
                         LoadLocalDirectory(_currentLocalPath_real);
                     }
 
@@ -1755,6 +1770,7 @@ namespace WpfApp9
                 TransferProgressBar.Visibility = Visibility.Visible;
                 TransferProgressBar.Value = 0;
                 TransferProgressText.Text = "0%";
+                temp_before_value = 0;
 
                 long totalSize = await Task.Run(() => selectedItems.Sum(item => _ftpClient.GetFileSize(item.FullPath)));
                 var progress = new TransferProgress();
@@ -1809,6 +1825,8 @@ namespace WpfApp9
 
         }
 
+
+
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             CloseRequested?.Invoke(this, EventArgs.Empty);
@@ -1816,14 +1834,15 @@ namespace WpfApp9
 
 
         bool check_finish = false;
+
+
+        long temp_before_value = 0;
         private async Task TransferItemAsync(FileSystemItem item, string destPath, long totalSize, TransferProgress progress)
         {
             try
             {
-
                 if (item.Type == "File")
                 {
-                    
                     try
                     {
                         var ftpPath = Path.Combine(destPath, item.Name).Replace("\\", "/");
@@ -1834,7 +1853,7 @@ namespace WpfApp9
                                 _ftpClient.UploadFile(item.FullPath, ftpPath, FtpRemoteExists.Overwrite, true, FtpVerify.None, ftpProgress =>
                                 {
                                     check_finish = true;
-                                    progress.TransferredSize = ftpProgress.TransferredBytes;
+                                    progress.TransferredSize = ftpProgress.TransferredBytes + temp_before_value;
                                     UpdateProgress(progress.TransferredSize, totalSize);
                                 });
                             }
@@ -1852,6 +1871,8 @@ namespace WpfApp9
                                
                                 check_finish = false;
                             }
+
+                            temp_before_value = progress.TransferredSize;
                         });
                     }
                     catch (Exception ex)
@@ -1900,7 +1921,7 @@ namespace WpfApp9
 
 
 
-
+        
 
         private async Task FtpToLocalTransferItemAsync(FileSystemItem item, string destPath, long totalSize, TransferProgress progress)
         {
@@ -1918,7 +1939,7 @@ namespace WpfApp9
                             _ftpClient.DownloadFile(localPath, item.FullPath, FtpLocalExists.Overwrite,  FtpVerify.None, ftpProgress =>
                             {
                                 check_finish = true;
-                                progress.TransferredSize = ftpProgress.TransferredBytes;
+                                progress.TransferredSize = ftpProgress.TransferredBytes + temp_before_value;
                                 UpdateProgress(progress.TransferredSize, totalSize);
                             });
                         }
@@ -1936,6 +1957,7 @@ namespace WpfApp9
 
                             check_finish = false;
                         }
+                        temp_before_value = progress.TransferredSize;
                     });
                 }
                 catch (Exception ex)

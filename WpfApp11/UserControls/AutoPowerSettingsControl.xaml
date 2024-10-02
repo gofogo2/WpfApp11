@@ -265,7 +265,7 @@
 
                 <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
                     <StackPanel x:Name="DaySettingsPanel" Margin="10" HorizontalAlignment="Center" >
-                        <TextBlock Text="자동 전원 시간 설정" FontSize="32" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,120,0,80" Foreground="White" FontFamily="{StaticResource NotoSansFontBoldFamily}"/>
+                        <TextBlock Text="자동 전원 시간 설정" FontSize="32" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,80,0,80" Foreground="White" FontFamily="{StaticResource NotoSansFontBoldFamily}"/>
                         <!--<local:DaySettingControl x:Name="w" Margin="10" />-->
                         <Border  BorderBrush="#888888" BorderThickness="2" CornerRadius="5" Background="#8D8D8D" x:Name="allDay_bg" Width="720" Height="50">
                             <Grid >

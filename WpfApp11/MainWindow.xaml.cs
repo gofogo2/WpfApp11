@@ -335,11 +335,23 @@ namespace WpfApp9
 
         private void UpdateAllDevicesCurrentState(bool state)
         {
-            foreach (var item in dragItems)
+            //============== 추가==============
+            if (state == false)
             {
-                if(item.Configuration.IsPower == true)
-                item.Configuration.IsCurrentState = state;
+                foreach (var item in dragItems)
+                {
+                    item.Configuration.IsCurrentState = state;
+                }
             }
+            else
+            {
+                foreach (var item in dragItems)
+                {
+                    if (item.Configuration.IsPower == true)
+                        item.Configuration.IsCurrentState = state;
+                }
+            }
+          
             SaveItemConfigurations();
         }
 
@@ -381,7 +393,17 @@ namespace WpfApp9
 
             Debug.WriteLine($"Items sorted. Order: {string.Join(", ", sortedDragItems.Select(i => i.DeviceType))}");
 
+
+
             sortedDragItems = sortedDragItems.FindAll(a => a.IsPower == true).ToList();
+
+
+            if (onOff == false)
+            {
+                sortedDragItems = sortedDragItems.FindAll(a => a.IsPower == true || a.IsPower == false).ToList();
+            }
+
+
             int totalItems = sortedDragItems.Count;
             Debug.WriteLine($"Filtered power-controllable items. Total: {totalItems}");
 
@@ -1129,6 +1151,7 @@ namespace WpfApp9
             addDeviceWindow.addbtn.Visibility = Visibility.Visible;
             addDeviceWindow.editbtn.Visibility = Visibility.Collapsed;
             addDeviceWindow.title.Text = "장비 등록";
+            addDeviceWindow.InitialStateCheckBox.IsChecked = true;
             addDeviceWindow.DeviceTypeComboBox.IsEnabled = true;
         }
 
@@ -1153,6 +1176,7 @@ namespace WpfApp9
                 addDeviceWindow.addbtn.Visibility = Visibility.Visible;
                 addDeviceWindow.editbtn.Visibility = Visibility.Collapsed;
                 addDeviceWindow.title.Text = "장비 등록";
+                addDeviceWindow.InitialStateCheckBox.IsChecked = true;
                 addDeviceWindow.DeviceTypeComboBox.IsEnabled = true;
 
 

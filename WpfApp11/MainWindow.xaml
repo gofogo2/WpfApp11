@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WpfApp9" xmlns:usercontrols="clr-namespace:WpfApp11.UserControls"
           
         mc:Ignorable="d"  WindowState="Normal" MinWidth="1280" MinHeight="720"
-        Title="CMS" Height="1080" Width="1920"
+        Title="CMS" Height="972" Width="1728"
         Icon="Images/ic.ico">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>

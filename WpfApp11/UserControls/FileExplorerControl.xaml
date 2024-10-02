@@ -38,7 +38,7 @@
         <Grid>
             
         <Grid.RowDefinitions>
-            <RowDefinition Height="240"/>
+            <RowDefinition Height="190"/>
             <RowDefinition Height="620"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="100"/>
@@ -88,7 +88,7 @@
             </Grid.ColumnDefinitions>
 
             <!-- 로컬 파일 시스템 패널 -->
-                <Border Grid.Column="0" Width="610" Margin="200,0,0,0" BorderThickness="1" CornerRadius="5" BorderBrush="#888888" Background="#CCCCCC">
+                <Border Grid.Column="0" Width="610" Margin="150,0,0,0" BorderThickness="1" CornerRadius="5" BorderBrush="#888888" Background="#CCCCCC">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="50"/>
@@ -142,7 +142,7 @@
           
 
             <!-- FTP 파일 시스템 패널 -->
-                <Border Grid.Column="2" Width="610" Margin="-200,0,0,0" Background="#CCCCCC" BorderBrush="#888888" BorderThickness="1" CornerRadius="5">
+                <Border Grid.Column="2" Width="610" Margin="-150,0,0,0" Background="#CCCCCC" BorderBrush="#888888" BorderThickness="1" CornerRadius="5">
                     <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="50"/>
