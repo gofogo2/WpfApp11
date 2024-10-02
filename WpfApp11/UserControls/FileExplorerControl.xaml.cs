@@ -325,11 +325,11 @@ namespace WpfApp9
             try
             {
                 ////원래====================================================================
-                Uri ftpUri = new Uri(target_ftp);
-                string host = ftpUri.Host;
-                string username = "ftpuser";
-                string password = "1";
-                _ftpClient = new FtpClient(host, username, password);
+                //Uri ftpUri = new Uri(target_ftp);
+                //string host = ftpUri.Host;
+                //string username = "ftpuser";
+                //string password = "1";
+                //_ftpClient = new FtpClient(host, username, password);
                 ////====================================================================
 
 
@@ -337,11 +337,11 @@ namespace WpfApp9
 
 
                 //임시 ====================================================================
-                //Uri ftpUri = new Uri("ftp://121.131.142.148:12923");
-                //string host = ftpUri.Host;
-                //string username = "engium";
-                //string password = "1";
-                //_ftpClient = new FtpClient(host, username, password, 12923);
+                Uri ftpUri = new Uri("ftp://121.131.142.148:12923");
+                string host = ftpUri.Host;
+                string username = "engium";
+                string password = "1";
+                _ftpClient = new FtpClient(host, username, password, 12923);
                 //====================================================================
 
 
@@ -1708,7 +1708,41 @@ namespace WpfApp9
 
                     long totalSize = await Task.Run(() => selectedItems.Sum(item => _ftpClient.GetFileSize(item.FullPath)));
 
-                    
+
+
+                    for (int j = 0; j < selectedItems.Count; j++)
+                    {
+
+
+                        if (selectedItems[j].Type == "Folder")
+                        {
+                            for (int i = 0; i < foldername.Count; i++)
+                            {
+                                if (foldername[i] == selectedItems[j].Name)
+                                {
+                                    var erer = _ftpClient.GetListing(selectedItems[j].FullPath);
+
+                                    foreach (var item in erer)
+                                    {
+
+                                        string tsts = item.Type == FtpObjectType.Directory ? "Folder" : "File";
+                                        if (tsts == "File")
+                                        {
+                                            totalSize += _ftpClient.GetFileSize(item.FullName);
+                                        }
+                                        else
+                                        {
+                                            totalSize = getfoldersize(totalSize, item, tsts);
+                                        }
+
+
+
+                                    }
+                                }
+                            }
+                        }
+                    }
+
 
 
                     var progress = new TransferProgress();
@@ -1773,6 +1807,52 @@ namespace WpfApp9
                 temp_before_value = 0;
 
                 long totalSize = await Task.Run(() => selectedItems.Sum(item => _ftpClient.GetFileSize(item.FullPath)));
+
+
+
+
+
+
+
+
+
+
+                for (int j = 0; j < selectedItems.Count; j++)
+                {
+                    if (selectedItems[j].Type == "Folder")
+                    {
+
+                        var erer = _ftpClient.GetListing(selectedItems[j].FullPath);
+
+                        foreach (var item in erer)
+                        {
+
+                            string tsts = item.Type == FtpObjectType.Directory ? "Folder" : "File";
+                            if (tsts == "File")
+                            {
+                                totalSize += _ftpClient.GetFileSize(item.FullName);
+                            }
+                            else
+                            {
+                                totalSize = getfoldersize(totalSize, item, tsts);
+                            }
+
+                        }
+                    }
+                }
+
+
+
+
+
+
+
+
+
+
+
+
+
                 var progress = new TransferProgress();
 
                 try
@@ -1825,6 +1905,27 @@ namespace WpfApp9
 
         }
 
+        private long getfoldersize(long totalSize, FtpListItem item, string tsts)
+        {
+            var ererwe = _ftpClient.GetListing(item.FullName);
+
+            foreach (var itemw in ererwe)
+            {
+
+                string tstsd = itemw.Type == FtpObjectType.Directory ? "Folder" : "File";
+                if (tstsd == "File")
+                {
+                    totalSize += _ftpClient.GetFileSize(itemw.FullName);
+                }
+                else
+                {
+                    totalSize = getfoldersize(totalSize, itemw, tstsd);
+                }
+
+            }
+
+            return totalSize;
+        }
 
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
