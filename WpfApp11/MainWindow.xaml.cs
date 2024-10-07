@@ -25,9 +25,6 @@ using OSC_Test.Helpers;
 
 namespace WpfApp9
 {
-
-
-
     public partial class MainWindow : Window
     {
         public LogViewerWindow logViewer;
@@ -75,8 +72,8 @@ namespace WpfApp9
             InitializeComponent();
             Loaded += MainWindow_Loaded;
             //늘 주석
-            pl = new ProtocolHelper();
-            pl.Start();
+            //pl = new ProtocolHelper();
+            //pl.Start();
 
             clickTimer = new DispatcherTimer();
             clickTimer.Interval = TimeSpan.FromMilliseconds(200);

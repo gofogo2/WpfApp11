@@ -51,17 +51,13 @@ namespace WpfApp11.Helpers
             DOWN=2
         }
 
-
-
         //비전월 조명
         SerialHelper serialHelper01;
-
         //라운지 조명 / 블라인드 / 공청기
         SerialHelper serialHelper02;
-
         //엘레베이터
         SerialHelper serialHelper03;
-
+        //
         SerialHelper serialHelper04;
         public ProtocolHelper()
         {
@@ -395,6 +391,7 @@ namespace WpfApp11.Helpers
                 case "DC_VIDEO_8":
                 case "DC_VIDEO_FULL":
                 case "DC_SHOW":
+                case "DC_HOME":
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.15", 8020);
                     SendSerial(Serial.DATACENTER.ToString(), ((int)DATACENTER_DOOR.DOWN).ToString());
                     break;
