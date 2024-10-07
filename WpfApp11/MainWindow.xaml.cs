@@ -75,8 +75,8 @@ namespace WpfApp9
             InitializeComponent();
             Loaded += MainWindow_Loaded;
             //늘 주석
-            //pl = new ProtocolHelper();
-            //pl.Start();
+            pl = new ProtocolHelper();
+            pl.Start();
 
             clickTimer = new DispatcherTimer();
             clickTimer.Interval = TimeSpan.FromMilliseconds(200);
@@ -395,12 +395,16 @@ namespace WpfApp9
 
 
 
-            sortedDragItems = sortedDragItems.FindAll(a => a.IsPower == true).ToList();
+            //sortedDragItems = sortedDragItems.FindAll(a => a.IsPower == true).ToList();
 
 
             if (onOff == false)
             {
                 sortedDragItems = sortedDragItems.FindAll(a => a.IsPower == true || a.IsPower == false).ToList();
+            }
+            else
+            {
+                sortedDragItems = sortedDragItems.FindAll(a => a.IsPower == true).ToList();
             }
 
 

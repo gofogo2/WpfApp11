@@ -14,7 +14,8 @@ namespace WpfApp11.Helpers
         {
             VW=1,
             CL=2,
-            EL=3
+            EL=3,
+            DATACENTER=4
         }
 
         enum  VW{
@@ -39,7 +40,15 @@ namespace WpfApp11.Helpers
             OPEN2=3,
             CLOSE2=4,
             OPENALL=5,
-            CLOSEALL=6
+            CLOSEALL=6,
+            LIGHT_ON=7,
+            LIGHT_OFF = 8,
+        }
+
+        enum DATACENTER_DOOR
+        {
+            UP=1,
+            DOWN=2
         }
 
 
@@ -52,12 +61,15 @@ namespace WpfApp11.Helpers
 
         //엘레베이터
         SerialHelper serialHelper03;
+
+        SerialHelper serialHelper04;
         public ProtocolHelper()
         {
             serialHelper01 = new SerialHelper("COM3");
             serialHelper02 = new SerialHelper("COM5");
             serialHelper03 = new SerialHelper("COM2");
-            
+            serialHelper04 = new SerialHelper("COM4");
+
         }
 
         public void Start()
@@ -128,10 +140,16 @@ namespace WpfApp11.Helpers
                     serialHelper02.CloseConnection();
                     break;
                 case "EL":
-                    Logger.Log2("Send Serial-COM06:" + msg);
+                    Logger.Log2("Send Serial-COM02:" + msg);
                     serialHelper03.OpenConnection();
                     serialHelper03.SendData(msg);
                     serialHelper03.CloseConnection();
+                    break;
+                case "DATACENTER":
+                    Logger.Log2("Send Serial-COM04:" + msg);
+                    serialHelper04.OpenConnection();
+                    serialHelper04.SendData(msg);
+                    serialHelper04.CloseConnection();
                     break;
                 default:
                     break;
@@ -364,6 +382,9 @@ namespace WpfApp11.Helpers
                     OSCSenderHelper.Instance.Send("192.168.0.12", "9");
                     break;
                 case "DC_IDLE":
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.15", 8020);
+                    SendSerial(Serial.DATACENTER.ToString(), ((int)DATACENTER_DOOR.UP).ToString());
+                    break;
                 case "DC_VIDEO_1":
                 case "DC_VIDEO_2":
                 case "DC_VIDEO_3":
@@ -373,7 +394,9 @@ namespace WpfApp11.Helpers
                 case "DC_VIDEO_7":
                 case "DC_VIDEO_8":
                 case "DC_VIDEO_FULL":
+                case "DC_SHOW":
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.15", 8020);
+                    SendSerial(Serial.DATACENTER.ToString(), ((int)DATACENTER_DOOR.DOWN).ToString());
                     break;
                 case "MSP_IDLE":
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.13", 8020);

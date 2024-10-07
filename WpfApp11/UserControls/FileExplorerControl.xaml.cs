@@ -325,11 +325,11 @@ namespace WpfApp9
             try
             {
                 ////원래====================================================================
-                //Uri ftpUri = new Uri(target_ftp);
-                //string host = ftpUri.Host;
-                //string username = "ftpuser";
-                //string password = "1";
-                //_ftpClient = new FtpClient(host, username, password);
+                Uri ftpUri = new Uri(target_ftp);
+                string host = ftpUri.Host;
+                string username = "ftpuser";
+                string password = "1";
+                _ftpClient = new FtpClient(host, username, password);
                 ////====================================================================
 
 
@@ -337,11 +337,11 @@ namespace WpfApp9
 
 
                 //임시 ====================================================================
-                Uri ftpUri = new Uri("ftp://121.131.142.148:12923");
-                string host = ftpUri.Host;
-                string username = "engium";
-                string password = "1";
-                _ftpClient = new FtpClient(host, username, password, 12923);
+                //Uri ftpUri = new Uri("ftp://121.131.142.148:12923");
+                //string host = ftpUri.Host;
+                //string username = "engium";
+                //string password = "1";
+                //_ftpClient = new FtpClient(host, username, password, 12923);
                 //====================================================================
 
 
