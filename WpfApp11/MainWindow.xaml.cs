@@ -72,8 +72,8 @@ namespace WpfApp9
             InitializeComponent();
             Loaded += MainWindow_Loaded;
             //늘 주석
-            //pl = new ProtocolHelper();
-            //pl.Start();
+            pl = new ProtocolHelper();
+            pl.Start();
 
             clickTimer = new DispatcherTimer();
             clickTimer.Interval = TimeSpan.FromMilliseconds(200);

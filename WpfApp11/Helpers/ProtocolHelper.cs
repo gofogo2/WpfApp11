@@ -281,19 +281,22 @@ namespace WpfApp11.Helpers
                     break;
 
                 case "EV_VIDEO_MUTEOFF":
+                    SendSerial(Serial.EL.ToString(), ((int)EL.LIGHT_OFF).ToString());
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.11", 8020);
                     break;
 
                 case "EV_VIDEO_MUTEON":
+                    SendSerial(Serial.EL.ToString(), ((int)EL.LIGHT_OFF).ToString());
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.11", 8020);
                     break;
 
                 case "EV_VIDEO":
-                    SendSerial(Serial.EL.ToString(), EL.OPEN1.ToString());
+                    SendSerial(Serial.EL.ToString(), ((int)EL.LIGHT_OFF).ToString());
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.11", 8020);
                     break;
 
                 case "EV_VIDEO_END":
+                    SendSerial(Serial.EL.ToString(), ((int)EL.LIGHT_ON).ToString());
                     SendSerial(Serial.EL.ToString(), ((int)EL.OPEN2).ToString());
                     break;
 
