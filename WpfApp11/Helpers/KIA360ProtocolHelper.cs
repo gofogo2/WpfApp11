@@ -40,7 +40,7 @@ namespace WpfApp11.Helpers
                 case "JOURNEY_PLAY":
                 case "JOURNEY_PAUSE":
                 case "JOURNEY_RESTART":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.110", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.1.210", 8020);
                     break;
 
                 case "MANI_PLAY1":
@@ -49,12 +49,12 @@ namespace WpfApp11.Helpers
                 case "MANI_PLAY2":
                 case "MANI_PAUSE2":
                 case "MANI_RESTART2":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.120", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.1.130", 8020);
                     break;
                 case "MOMENT_PLAY":
                 case "MOMENT_PAUSE":
                 case "MOMENT_RESTART":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.121", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.1.131", 8020);
                     break;
                 case "HIGHT_PLAY1":
                 case "HIGHT_PAUSE1":
@@ -62,12 +62,12 @@ namespace WpfApp11.Helpers
                 case "HIGHT_PLAY2":
                 case "HIGHT_PAUSE2":
                 case "HIGHT_RESTART2":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.122", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.1.132", 8020);
                     break;
                 case "PRO_PLAY":
                 case "PRO_PAUSE":
                 case "PRO_RESTART":
-                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.123", 8020);
+                    ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.1.133", 8020);
                     break;
                 default:
                     break;
