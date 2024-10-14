@@ -26,8 +26,6 @@ namespace WpfApp11.Helpers
             ProtocolUdpHelper.Instance.PacketReceived -= Instance_PacketReceived; ;
         }
 
-
-
         public void Instance_PacketReceived(string code)
         {
             Logger.Log2(code);

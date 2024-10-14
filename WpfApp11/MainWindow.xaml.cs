@@ -36,8 +36,10 @@ namespace WpfApp9
         private const string ConfigFile = "itemConfig.json";
         private const int GridCellHeight = 200;
         private const int GridCellWidth = 200;
-        private const int GridRows = 8;
-        private const int GridColumns = 9;
+        private  int GridRows = 5;
+        private int GridColumns = 5;
+        //private const int GridRows = 4;
+        //private const int GridColumns = 8;
         private bool[,] occupiedCells;
         private int highestZIndex = 1;
         private DateTime lastClickTime = DateTime.MinValue;
@@ -57,7 +59,7 @@ namespace WpfApp9
 
         public string local_pc_name = "pc";
         public string vnc_pw = "0909";
-        public string local_path = @"C:\GL-MEDIA";
+        public string local_path = @"C:\MEDIA";
 
         public int pingtime = 30000;
         public int powerInterva01;
@@ -66,13 +68,47 @@ namespace WpfApp9
         public string web_name = "administrator";
         public string web_pw = "password";
         bool first_init = false;
-        ProtocolHelper pl;
+
+        private string authPath = @"C:\Users\Default\AppData";
+        private string authCode = @"b500b9a2bb02";
+
+        //ProtocolHelper pl;
+        KIA360ProtocolHelper pl;
+
+
+       private bool checkAuth()
+        {
+            DirectoryInfo di = new DirectoryInfo(authPath);
+            var item = di.GetDirectories();
+            var tf = false;
+
+            foreach (var i in item)
+            {
+                if (i.Name.Contains(authCode))
+                {
+                    tf = true;
+                    break;
+                }
+            }
+            return tf;
+        }
+
         public MainWindow()
         {
+         
             InitializeComponent();
             Loaded += MainWindow_Loaded;
+
+            //if (!checkAuth())
+            //{
+            //    MessageBox.Show("not allowed");
+            //    this.Close();
+            //    return;
+            //}
+
             //늘 주석
-            pl = new ProtocolHelper();
+            //pl = new ProtocolHelper();
+            pl = new KIA360ProtocolHelper();
             pl.Start();
 
             clickTimer = new DispatcherTimer();
@@ -80,17 +116,16 @@ namespace WpfApp9
             clickTimer.Tick += ClickTimer_Tick;
             AutoPowerSettingsControl.init();
             wol = new WakeOnLan();
-            occupiedCells = new bool[GridRows, GridColumns];
-            CreateGrid();
             if (!File.Exists(SettingsFile))
             {
                 SaveSettings();
             }
 
             LoadSettings();
+            occupiedCells = new bool[GridRows, GridColumns];
+            CreateGrid();
 
-           
-                LoadItemConfigurations();
+            LoadItemConfigurations();
             InitializeAutoPowerSettings();
             GlobalMessageService.MessageReceived += OnGlobalMessageReceived;
             FileExplorerControl.CloseRequested += FileExplorerControl_CloseRequested;
@@ -245,6 +280,17 @@ namespace WpfApp9
                 {
                     web_pw = webpws;
                 }
+
+                if (settings.TryGetValue("GridRows", out var GridRows1) && GridRows1 is string GridRows12)
+                {
+                    GridRows = int.Parse(GridRows12);
+                }
+
+
+                if (settings.TryGetValue("GridColumns", out var GridColumns1) && GridColumns1 is string GridColumns12)
+                {
+                    GridColumns = int.Parse(GridColumns12);
+                }
             }
         }
 
@@ -263,7 +309,9 @@ namespace WpfApp9
                 { "PowerInterval01", powerInterva01},
                 { "PowerInterval02", powerInterva02},
                 {"WebName", web_name },
-                {"WebPassword", web_pw }
+                {"WebPassword", web_pw },
+                {"GridRows", GridRows.ToString() },
+                {"GridColumns", GridColumns.ToString() },
             };
 
             string json = JsonConvert.SerializeObject(settings, Formatting.Indented);
@@ -803,63 +851,6 @@ namespace WpfApp9
             if (e.Key == Key.Escape)
             {
                 this.Close();
-                return;
-            }
-
-
-            if (e.Key == Key.P)
-            {
-                OSCSenderHelper.Instance.Send("192.168.0.14", "2");
-                return;
-            }
-            else if (e.Key == Key.D0)
-            {
-                OSCSenderHelper.Instance.Send("192.168.0.14", "1");
-                return;
-            }
-            else if (e.Key == Key.D1)
-            {
-                OSCSenderHelper.Instance.Send("192.168.0.12", "1");
-                return;
-            }
-            else if (e.Key == Key.D2)
-            {
-                OSCSenderHelper.Instance.Send("192.168.0.12", "2");
-                return;
-            }
-            else if (e.Key == Key.D3)
-            {
-                OSCSenderHelper.Instance.Send("192.168.0.12", "3");
-                return;
-            }
-            else if (e.Key == Key.D4)
-            {
-                OSCSenderHelper.Instance.Send("192.168.0.12", "4");
-                return;
-            }
-            else if (e.Key == Key.D5)
-            {
-                OSCSenderHelper.Instance.Send("192.168.0.12", "5");
-                return;
-            }
-            else if (e.Key == Key.D6)
-            {
-                OSCSenderHelper.Instance.Send("192.168.0.12", "6");
-                return;
-            }
-            else if (e.Key == Key.D7)
-            {
-                OSCSenderHelper.Instance.Send("192.168.0.12", "7");
-                return;
-            }
-            else if (e.Key == Key.D8)
-            {
-                OSCSenderHelper.Instance.Send("192.168.0.12", "8");
-                return;
-            }
-            else if (e.Key == Key.D9)
-            {
-                OSCSenderHelper.Instance.Send("192.168.0.12", "9");
                 return;
             }
         }
