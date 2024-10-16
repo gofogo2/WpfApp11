@@ -380,6 +380,9 @@ namespace WpfApp11.Helpers
                 case "SCP_VIDEO7":
                     OSCSenderHelper.Instance.Send("192.168.0.12", "9");
                     break;
+                case "SCP_VIDEO8":
+                    OSCSenderHelper.Instance.Send("192.168.0.12", "10");
+                    break;
                 case "DC_IDLE":
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.15", 8020);
                     SendSerial(Serial.DATACENTER.ToString(), ((int)DATACENTER_DOOR.UP).ToString());
