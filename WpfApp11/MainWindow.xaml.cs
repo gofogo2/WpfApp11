@@ -593,6 +593,64 @@ namespace WpfApp9
             PowerOverlay.Visibility = Visibility.Collapsed;
         }
 
+
+      
+
+        public async Task device_on_progress(string device_type)
+        {
+            PowerStatusText.Text = "전원 ON";
+            PowerOverlay.Visibility = Visibility.Visible;
+            PowerProgressBar.Value = 0;
+
+            double duration = 1000;
+
+            if (device_type == "pc")
+            {
+                duration = 1000;
+            }
+            else
+            {
+                duration = 10000;
+            }
+
+            var progressTask = UpdateProgressBarAsync(0, 100, duration);
+
+            await Task.WhenAll(progressTask);
+
+
+
+            PowerOverlay.Visibility = Visibility.Collapsed;
+        }
+
+
+        public async Task device_off_progress(string device_type)
+        {
+            PowerStatusText.Text = "전원 OFF";
+            PowerOverlay.Visibility = Visibility.Visible;
+            PowerProgressBar.Value = 0;
+
+            double duration = 1000;
+
+            if (device_type == "pc")
+            {
+                duration = 1000;
+            }
+            else
+            {
+                duration = 10000;
+            }
+
+            var progressTask = UpdateProgressBarAsync(0, 100, duration);
+
+            await Task.WhenAll(progressTask);
+
+
+
+            PowerOverlay.Visibility = Visibility.Collapsed;
+        }
+
+
+
         private async Task UpdateProgressBarAsync(double startValue, double endValue, double durationSeconds)
         {
             DateTime startTime = DateTime.Now;
