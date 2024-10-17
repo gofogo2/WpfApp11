@@ -617,7 +617,7 @@ namespace WpfApp9
 
             await Task.WhenAll(progressTask);
 
-
+            MessageBox.Show("전원이 켜졌습니다");
 
             PowerOverlay.Visibility = Visibility.Collapsed;
         }
@@ -645,7 +645,7 @@ namespace WpfApp9
             await Task.WhenAll(progressTask);
 
 
-
+            MessageBox.Show("전원이 꺼졌습니다");
             PowerOverlay.Visibility = Visibility.Collapsed;
         }
 
