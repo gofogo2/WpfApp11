@@ -402,6 +402,7 @@ namespace WpfApp11.Helpers
                     SendSerial(Serial.DATACENTER.ToString(), ((int)DATACENTER_DOOR.DOWN).ToString());
                     break;
                 case "DC_PPT":
+                case "DC_OFF":
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.15", 8020);
                     break;
                 case "MSP_IDLE":
