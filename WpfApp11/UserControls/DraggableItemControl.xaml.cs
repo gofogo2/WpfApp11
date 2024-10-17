@@ -566,6 +566,12 @@ namespace WpfApp9
 
         private async void pow_on(object sender, RoutedEventArgs e)
         {
+
+            var main = Application.Current.MainWindow as MainWindow;
+
+
+            await main.device_on_progress(Configuration.DeviceType.ToLower());
+
             isDoing = true;
             Configuration.IsCurrentState = true;
             SaveConfiguration();
@@ -628,7 +634,7 @@ namespace WpfApp9
             }
 
             Logger.Log(Configuration.Name, Configuration.DeviceType, "Power On", result);
-            MessageBox.Show("전원이 켜졌습니다");
+            //MessageBox.Show("전원이 켜졌습니다");
         }
 
         private async Task ControlProjector(string ipAddress, bool powerOn)
@@ -706,6 +712,12 @@ pow_off_appo()
         {
             Configuration.IsCurrentState = false;
             SaveConfiguration();
+
+            var main = Application.Current.MainWindow as MainWindow;
+
+
+            await main.device_off_progress(Configuration.DeviceType.ToLower());
+
             string result = "Success";
             try
             {
@@ -753,7 +765,7 @@ pow_off_appo()
             }
 
             Logger.Log(Configuration.Name, Configuration.DeviceType, "Power Off", result);
-            MessageBox.Show("전원이 꺼졌습니다.");
+           // MessageBox.Show("전원이 꺼졌습니다.");
         }
 
 
