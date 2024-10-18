@@ -242,7 +242,7 @@ namespace WpfApp9
                 {
                     local_path = local_path_value;
                 }
-                if (settings.TryGetValue("AutoPowerEnabled", out var progressDurationValue) && progressDurationValue is double progressDuration)
+                if (settings.TryGetValue("ProgressDuration", out var progressDurationValue) && progressDurationValue is double progressDuration)
                 {
                     Progress_duration = progressDuration;
                 }
