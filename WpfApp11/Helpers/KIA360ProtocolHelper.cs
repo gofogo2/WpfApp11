@@ -17,7 +17,6 @@ namespace WpfApp11.Helpers
 
         public void Start()
         {
-
             ProtocolUdpHelper.Instance.PacketReceived -= Instance_PacketReceived; ;
             ProtocolUdpHelper.Instance.PacketReceived += Instance_PacketReceived; ;
         }
