@@ -564,13 +564,158 @@ namespace WpfApp9
             mainWindow?.SaveItemConfigurations();
         }
 
+
+
+        private async Task device_on_progress(MainWindow main, string device_type)
+        {
+            try
+            {
+                await Application.Current.Dispatcher.InvokeAsync(() =>
+                {
+                    main.PowerStatusText.Text = "전원 ON";
+                    main.PowerOverlay.Visibility = Visibility.Visible;
+                    main.PowerProgressBar.Value = 0;
+                });
+
+                double duration = 10000;
+
+                if (device_type == "프로젝터(pjlink)")
+                {
+                    duration = main.Progress_duration_personal;
+                }
+                else if (device_type == "프로젝터(appotronics)")
+                {
+                    duration = main.Progress_duration_personal;
+                }
+                else
+                {
+                    duration = 1000;
+                }
+               
+
+
+                // 프로그레스바 업데이트를 별도의 Task로 실행
+                _ = Task.Run(async () =>
+                {
+                    await UpdateProgressBarAsyncs(main, 0, 100, duration);
+
+
+
+                    // 프로그레스바 작업이 완료되면 오버레이 숨기기
+                    await Application.Current.Dispatcher.InvokeAsync(() =>
+                    {
+                        main.PowerOverlay.Visibility = Visibility.Collapsed;
+                    });
+                });
+            }
+            catch (Exception ex)
+            {
+               
+            }
+        }
+
+
+        private async Task device_off_progress(MainWindow main, string device_type)
+        {
+            try
+            {
+                await Application.Current.Dispatcher.InvokeAsync(() =>
+                {
+                    main.PowerStatusText.Text = "전원 OFF";
+                    main.PowerOverlay.Visibility = Visibility.Visible;
+                    main.PowerProgressBar.Value = 0;
+                });
+                double duration = 10000;
+
+                if (device_type == "프로젝터(pjlink)")
+                {
+                    duration = main.Progress_duration_personal;
+                }
+                else if (device_type == "프로젝터(appotronics)")
+                {
+                    duration = main.Progress_duration_personal;
+                }
+                else
+                {
+                    duration = 1000;
+                }
+
+
+
+                // 프로그레스바 업데이트를 별도의 Task로 실행
+                _ = Task.Run(async () =>
+                {
+                    await UpdateProgressBarAsyncs(main, 0, 100, duration);
+
+                    // 프로그레스바 작업이 완료되면 오버레이 숨기기
+                    await Application.Current.Dispatcher.InvokeAsync(() =>
+                    {
+                        main.PowerOverlay.Visibility = Visibility.Collapsed;
+                    });
+                });
+            }
+            catch (Exception ex)
+            {
+                // 예외 처리
+            }
+        }
+
+
+
+        private async Task UpdateProgressBarAsyncs(MainWindow main, double startValue, double endValue, double durationSeconds)
+        {
+           
+            double currentValue = startValue;
+            int totalSteps = 100;  // 총 스텝 수
+            double increment = (endValue - startValue) / totalSteps;  // 각 스텝당 증가값
+            double stepDelay = durationSeconds / totalSteps;  // 각 스텝 사이의 대기 시간
+
+            while (currentValue <= endValue)
+            {
+                bool isCompleted = false;
+
+                await Application.Current.Dispatcher.InvokeAsync(() =>
+                {
+                    main.PowerProgressBar.Value = Math.Min(currentValue, 100);
+
+                    if (currentValue >= 100)
+                    {
+                        main.PowerOverlay.Visibility = Visibility.Collapsed;
+                        isCompleted = true;
+                        if (main.PowerStatusText.Text == "전원 OFF")
+                        {
+                            MessageBox.Show("전원이 꺼졌습니다");
+                        }
+                        else
+                        {
+                            MessageBox.Show("전원이 켜졌습니다");
+                        }
+                        
+                    }
+                });
+
+                if (isCompleted)
+                    break;
+
+                currentValue += increment;
+                await Task.Delay((int)stepDelay);  // duration 시간에 맞춰 대기
+            }
+        }
+    
+
+
         private async void pow_on(object sender, RoutedEventArgs e)
         {
 
             var main = Application.Current.MainWindow as MainWindow;
 
 
-            await main.device_on_progress(Configuration.DeviceType.ToLower());
+            var progressTask = Task.Run(async () =>
+            {
+                await device_on_progress(main, Configuration.DeviceType.ToLower());
+            });
+
+
 
             isDoing = true;
             Configuration.IsCurrentState = true;
@@ -707,6 +852,7 @@ pow_off_appo()
         }
 
 
+      
 
         private async void pow_off(object sender, RoutedEventArgs e)
         {
@@ -716,7 +862,10 @@ pow_off_appo()
             var main = Application.Current.MainWindow as MainWindow;
 
 
-            await main.device_off_progress(Configuration.DeviceType.ToLower());
+            var progressTask = Task.Run(async () =>
+            {
+                await device_off_progress(main, Configuration.DeviceType.ToLower());
+            });
 
             string result = "Success";
             try
@@ -765,7 +914,7 @@ pow_off_appo()
             }
 
             Logger.Log(Configuration.Name, Configuration.DeviceType, "Power Off", result);
-           // MessageBox.Show("전원이 꺼졌습니다.");
+            //MessageBox.Show("전원이 꺼졌습니다.");
         }
 
 

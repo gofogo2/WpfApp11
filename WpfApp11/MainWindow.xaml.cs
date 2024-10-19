@@ -47,6 +47,8 @@ namespace WpfApp9
         private double powerProgress = 0;
 
         private double Progress_duration = 5000;
+
+        public double Progress_duration_personal = 5000;
         public bool isvnc = false;
         public bool isftp = false;
 
@@ -291,6 +293,11 @@ namespace WpfApp9
                 {
                     GridColumns = int.Parse(GridColumns12);
                 }
+
+                if (settings.TryGetValue("ProgressDurationPersonal", out var progressDurationValue_p) && progressDurationValue_p is double progressDuration_p)
+                {
+                    Progress_duration_personal = progressDuration_p;
+                }
             }
         }
 
@@ -312,6 +319,7 @@ namespace WpfApp9
                 {"WebPassword", web_pw },
                 {"GridRows", GridRows.ToString() },
                 {"GridColumns", GridColumns.ToString() },
+                 {"ProgressDurationPersonal", Progress_duration_personal },
             };
 
             string json = JsonConvert.SerializeObject(settings, Formatting.Indented);
@@ -593,61 +601,6 @@ namespace WpfApp9
             PowerOverlay.Visibility = Visibility.Collapsed;
         }
 
-
-      
-
-        public async Task device_on_progress(string device_type)
-        {
-            PowerStatusText.Text = "전원 ON";
-            PowerOverlay.Visibility = Visibility.Visible;
-            PowerProgressBar.Value = 0;
-
-            double duration = 1000;
-
-            if (device_type == "pc")
-            {
-                duration = 1000;
-            }
-            else
-            {
-                duration = 10000;
-            }
-
-            var progressTask = UpdateProgressBarAsync(0, 100, duration);
-
-            await Task.WhenAll(progressTask);
-
-            MessageBox.Show("전원이 켜졌습니다");
-
-            PowerOverlay.Visibility = Visibility.Collapsed;
-        }
-
-
-        public async Task device_off_progress(string device_type)
-        {
-            PowerStatusText.Text = "전원 OFF";
-            PowerOverlay.Visibility = Visibility.Visible;
-            PowerProgressBar.Value = 0;
-
-            double duration = 1000;
-
-            if (device_type == "pc")
-            {
-                duration = 1000;
-            }
-            else
-            {
-                duration = 10000;
-            }
-
-            var progressTask = UpdateProgressBarAsync(0, 100, duration);
-
-            await Task.WhenAll(progressTask);
-
-
-            MessageBox.Show("전원이 꺼졌습니다");
-            PowerOverlay.Visibility = Visibility.Collapsed;
-        }
 
 
 
