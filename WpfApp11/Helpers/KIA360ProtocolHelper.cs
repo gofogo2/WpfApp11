@@ -28,7 +28,6 @@ namespace WpfApp11.Helpers
         public void Instance_PacketReceived(string code)
         {
             Logger.Log2(code);
-
             code = code.ToUpper().Trim();
 
             switch (code)

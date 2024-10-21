@@ -581,11 +581,11 @@ namespace WpfApp9
 
                 if (device_type == "프로젝터(pjlink)")
                 {
-                    duration = main.Progress_duration_personal;
+                    duration = main.Progress_duration_projector;
                 }
                 else if (device_type == "프로젝터(appotronics)")
                 {
-                    duration = main.Progress_duration_personal;
+                    duration = main.Progress_duration_projector;
                 }
                 else
                 {
@@ -629,11 +629,11 @@ namespace WpfApp9
 
                 if (device_type == "프로젝터(pjlink)")
                 {
-                    duration = main.Progress_duration_personal;
+                    duration = main.Progress_duration_projector;
                 }
                 else if (device_type == "프로젝터(appotronics)")
                 {
-                    duration = main.Progress_duration_personal;
+                    duration = main.Progress_duration_projector;
                 }
                 else
                 {

@@ -48,7 +48,7 @@ namespace WpfApp9
 
         private double Progress_duration = 5000;
 
-        public double Progress_duration_personal = 5000;
+        public double Progress_duration_projector = 5000;
         public bool isvnc = false;
         public bool isftp = false;
 
@@ -294,9 +294,9 @@ namespace WpfApp9
                     GridColumns = int.Parse(GridColumns12);
                 }
 
-                if (settings.TryGetValue("ProgressDurationPersonal", out var progressDurationValue_p) && progressDurationValue_p is double progressDuration_p)
+                if (settings.TryGetValue("ProjectorProgressDuration", out var progressDurationValue_p) && progressDurationValue_p is double progressDuration_p)
                 {
-                    Progress_duration_personal = progressDuration_p;
+                    Progress_duration_projector = progressDuration_p;
                 }
             }
         }
@@ -319,7 +319,7 @@ namespace WpfApp9
                 {"WebPassword", web_pw },
                 {"GridRows", GridRows.ToString() },
                 {"GridColumns", GridColumns.ToString() },
-                 {"ProgressDurationPersonal", Progress_duration_personal },
+                 {"ProjectorProgressDuration", Progress_duration_projector },
             };
 
             string json = JsonConvert.SerializeObject(settings, Formatting.Indented);
