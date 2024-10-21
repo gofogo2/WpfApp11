@@ -12,7 +12,7 @@ namespace WpfApp11.Helpers
        
         public KIA360ProtocolHelper()
         {
-       
+            
         }
 
         public void Start()
@@ -32,7 +32,6 @@ namespace WpfApp11.Helpers
 
             switch (code)
             {
-
                 case "JOURNEY_PLAY":
                 case "JOURNEY_PAUSE":
                 case "JOURNEY_RESTART":

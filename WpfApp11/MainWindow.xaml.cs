@@ -101,17 +101,17 @@ namespace WpfApp9
             InitializeComponent();
             Loaded += MainWindow_Loaded;
 
-            //if (!checkAuth())
-            //{
-            //    MessageBox.Show("not allowed");
-            //    this.Close();
-            //    return;
-            //}
+            if (!checkAuth())
+            {
+                MessageBox.Show("not allowed");
+                this.Close();
+                return;
+            }
 
             //늘 주석
-            pl = new ProtocolHelper();
+            //pl = new ProtocolHelper();
            // pl = new KIA360ProtocolHelper();
-            pl.Start();
+            //pl.Start();
 
             clickTimer = new DispatcherTimer();
             clickTimer.Interval = TimeSpan.FromMilliseconds(200);
