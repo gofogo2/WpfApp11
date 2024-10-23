@@ -42,9 +42,15 @@ namespace WpfApp11.Helpers
                 case "MANI_PLAY1":
                 case "MANI_PAUSE1":
                 case "MANI_RESTART1":
+                case "MANI_MUTE1":
+                case "MANI_VOLUMEUP1":
+                case "MANI_VOLUMEDOWN1":
                 case "MANI_PLAY2":
                 case "MANI_PAUSE2":
                 case "MANI_RESTART2":
+                case "MANI_MUTE2":
+                case "MANI_VOLUMEUP2":
+                case "MANI_VOLUMEDOWN2":
                     Logger.Log2($"SEND : IP 192.168.1.130, code {code}, port 8020");
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.1.130", 8020);
                     break;
@@ -57,15 +63,24 @@ namespace WpfApp11.Helpers
                 case "HIGHT_PLAY1":
                 case "HIGHT_PAUSE1":
                 case "HIGHT_RESTART1":
+                case "HIGHT_MUTE1":
+                case "HIGHT_VOLUMEUP1":
+                case "HIGHT_VOLUMEDOWN1":
                 case "HIGHT_PLAY2":
                 case "HIGHT_PAUSE2":
                 case "HIGHT_RESTART2":
+                case "HIGHT_MUTE2":
+                case "HIGHT_VOLUMEUP2":
+                case "HIGHT_VOLUMEDOWN2":
                     Logger.Log2($"SEND : IP 192.168.1.132, code {code}, port 8020");
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.1.132", 8020);
                     break;
                 case "PRO_PLAY":
                 case "PRO_PAUSE":
                 case "PRO_RESTART":
+                case "PRO_MUTE":
+                case "PRO_VOLUMEUP":
+                case "PRO_VOLUMEDOWN":
                     Logger.Log2($"SEND : IP 192.168.1.133, code {code}, port 8020");
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.1.133", 8020);
                     break;
