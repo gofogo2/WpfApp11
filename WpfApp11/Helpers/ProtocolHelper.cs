@@ -217,18 +217,21 @@ namespace WpfApp11.Helpers
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.19", 8020);
                     SendSerial(Serial.VW.ToString(), ((int)VW.LIGHT_ON).ToString());
                     break;
-
+                case "VW_CEO_MUTEOFF_EN":
                 case "VW_CEO_MUTEOFF":
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.16", 8020);
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.19", 8020);
                     SendSerial(Serial.VW.ToString(), ((int)VW.LIGHT_OFF).ToString());
                     break;
 
+                case "VW_CEO_MUTEON_EN":   
                 case "VW_CEO_MUTEON":
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.16", 8020);
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.19", 8020);
                     SendSerial(Serial.VW.ToString(), ((int)VW.LIGHT_OFF).ToString());
                     break;
+
+                case "VW_BRAND_EN":
                 case "VW_BRAND":
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.16", 8020);
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.19", 8020);
@@ -243,6 +246,7 @@ namespace WpfApp11.Helpers
                     SendSerial(Serial.VW.ToString(), ((int)VW.LIGHT_ON).ToString());
                     break;
 
+                case "VW_REPORT_EN":
                 case "VW_REPORT":
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.16", 8020);
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.19", 8020);
@@ -280,12 +284,15 @@ namespace WpfApp11.Helpers
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.11", 8020);
                     break;
 
+                
                 case "EV_VIDEO_MUTEOFF":
+                case "EV_VIDEO_MUTEOFF_EN":
                     SendSerial(Serial.EL.ToString(), ((int)EL.LIGHT_OFF).ToString());
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.11", 8020);
                     break;
 
                 case "EV_VIDEO_MUTEON":
+                case "EV_VIDEO_MUTEON_EN":
                     SendSerial(Serial.EL.ToString(), ((int)EL.LIGHT_OFF).ToString());
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.11", 8020);
                     break;
@@ -317,10 +324,12 @@ namespace WpfApp11.Helpers
                     break;
 
                 case "CEO_SOLUTION_MUTEOFF":
+                case "CEO_SOLUTION_MUTEOFF_EN":
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.37", 8020);
                     break;
 
                 case "CEO_SOLUTION_MUTEON":
+                case "CEO_SOLUTION_MUTEON_EN":
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.37", 8020);
                     break;
 
@@ -383,6 +392,35 @@ namespace WpfApp11.Helpers
                 case "SCP_VIDEO8":
                     OSCSenderHelper.Instance.Send("192.168.0.12", "10");
                     break;
+
+                case "SCP_VIDEO0_EN":
+                    OSCSenderHelper.Instance.Send("192.168.0.12", "12");
+                    break;
+                case "SCP_VIDEO1_EN":
+                    OSCSenderHelper.Instance.Send("192.168.0.12", "13");
+                    break;
+                case "SCP_VIDEO2_EN":
+                    OSCSenderHelper.Instance.Send("192.168.0.12", "14");
+                    break;
+                case "SCP_VIDEO3_EN":
+                    OSCSenderHelper.Instance.Send("192.168.0.12", "15");
+                    break;
+                case "SCP_VIDEO4_EN":
+                    OSCSenderHelper.Instance.Send("192.168.0.12", "16");
+                    break;
+                case "SCP_VIDEO5_EN":
+                    OSCSenderHelper.Instance.Send("192.168.0.12", "17");
+                    break;
+                case "SCP_VIDEO6_EN":
+                    OSCSenderHelper.Instance.Send("192.168.0.12", "18");
+                    break;
+                case "SCP_VIDEO7_EN":
+                    OSCSenderHelper.Instance.Send("192.168.0.12", "19");
+                    break;
+                case "SCP_VIDEO8_EN":
+                    OSCSenderHelper.Instance.Send("192.168.0.12", "20");
+                    break;
+
                 case "DC_IDLE":
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.15", 8020);
                     SendSerial(Serial.DATACENTER.ToString(), ((int)DATACENTER_DOOR.UP).ToString());
@@ -398,11 +436,24 @@ namespace WpfApp11.Helpers
                 case "DC_VIDEO_FULL":
                 case "DC_SHOW":
                 case "DC_HOME":
+                case "DC_VIDEO_1_EN":
+                case "DC_VIDEO_2_EN":
+                case "DC_VIDEO_3_EN":
+                case "DC_VIDEO_4_EN":
+                case "DC_VIDEO_5_EN":
+                case "DC_VIDEO_6_EN":
+                case "DC_VIDEO_7_EN":
+                case "DC_VIDEO_8_EN":
+                case "DC_VIDEO_FULL_EN":
+                case "DC_SHOW_EN":
+                case "DC_HOME_EN":
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.15", 8020);
                     SendSerial(Serial.DATACENTER.ToString(), ((int)DATACENTER_DOOR.DOWN).ToString());
                     break;
                 case "DC_PPT":
                 case "DC_OFF":
+                case "DC_PPT_EN":
+                case "DC_OFF_EN":
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.15", 8020);
                     break;
                 case "MSP_IDLE":
