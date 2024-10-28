@@ -10,7 +10,7 @@ namespace WpfApp11.Helpers
  
     public static class Logger
     {
-        public static readonly string LogFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "device_logs.txt");
+        public static readonly string LogFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "device_logs"+ $"{DateTime.Now:yyyy-MM-dd}"+".txt");
         public static readonly string LogErrorFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "error_logs.txt");
 
         public static void Log(string deviceName, string deviceType, string action, string result)

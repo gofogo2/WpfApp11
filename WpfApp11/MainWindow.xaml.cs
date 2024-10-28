@@ -22,6 +22,7 @@ using Launcher_SE.Helpers;
 using WpfApp11;
 using static System.Net.Mime.MediaTypeNames;
 using OSC_Test.Helpers;
+using System.Text.RegularExpressions;
 
 namespace WpfApp9
 {
@@ -97,7 +98,6 @@ namespace WpfApp9
 
         public MainWindow()
         {
-         
             InitializeComponent();
             Loaded += MainWindow_Loaded;
 

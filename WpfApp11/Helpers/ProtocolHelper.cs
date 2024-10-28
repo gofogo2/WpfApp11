@@ -298,6 +298,7 @@ namespace WpfApp11.Helpers
                     break;
 
                 case "EV_VIDEO":
+                    Logger.Log2("192.168.0.11");
                     SendSerial(Serial.EL.ToString(), ((int)EL.LIGHT_OFF).ToString());
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.0.11", 8020);
                     break;
