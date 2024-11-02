@@ -75,8 +75,8 @@ namespace WpfApp9
         private string authPath = @"C:\Users\Default\AppData";
         private string authCode = @"b500b9a2bb02";
 
-        ProtocolHelper pl;
-        //KIA360ProtocolHelper pl;
+        //ProtocolHelper pl;
+        KIA360ProtocolHelper pl;
 
 
         private bool checkAuth()
@@ -109,8 +109,8 @@ namespace WpfApp9
             }
 
             //늘 주석
-            pl = new ProtocolHelper();
-            //pl = new KIA360ProtocolHelper();
+            //pl = new ProtocolHelper();
+            pl = new KIA360ProtocolHelper();
             pl.Start();
 
             clickTimer = new DispatcherTimer();
