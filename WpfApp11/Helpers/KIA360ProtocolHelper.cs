@@ -81,6 +81,12 @@ namespace WpfApp11.Helpers
                 case "PRO_MUTE":
                 case "PRO_VOLUMEUP":
                 case "PRO_VOLUMEDOWN":
+                case "PRO_PLAY2":
+                case "PRO_PAUSE2":
+                case "PRO_RESTART2":
+                case "PRO_MUTE2":
+                case "PRO_VOLUMEUP2":
+                case "PRO_VOLUMEDOWN2":
                     Logger.Log2($"SEND : IP 192.168.1.133, code {code}, port 8020");
                     ProtocolUdpHelper.Instance.SendWithIpAsync(code, "192.168.1.133", 8020);
                     break;
