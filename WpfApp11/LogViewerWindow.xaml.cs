@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using WpfApp11.Helpers;
 
 namespace WpfApp11
 {
@@ -26,7 +27,7 @@ namespace WpfApp11
         {
             InitializeComponent();
             logFilePath = logPath;
-
+            Logger.CreateD();
             fileWatcher = new FileSystemWatcher(System.IO.Path.GetDirectoryName(logFilePath));
             fileWatcher.Filter = System.IO.Path.GetFileName(logFilePath);
             fileWatcher.Changed += OnLogFileChanged;

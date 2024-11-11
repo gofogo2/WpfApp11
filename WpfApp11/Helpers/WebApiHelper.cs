@@ -6,6 +6,7 @@ using System.Windows;
 using System.Xml.Linq;
 using WpfApp11.Helpers;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
 
 public class WebApiHelper
 {
@@ -131,7 +132,7 @@ public class WebApiHelper
             }
             else
             {
-                Console.WriteLine("패턴이 일치하지 않습니다.");
+                Debug.WriteLine("패턴이 일치하지 않습니다.");
                 Logger.LogError($"Error : 패턴이 일치하지 않습니다.");
                 return new Dictionary<string, string> { { "Error", "Fail" } };
             }
@@ -139,7 +140,7 @@ public class WebApiHelper
         }
         catch (Exception e)
         {
-            Logger.LogError($"Error : {e.Message}");
+            Logger.LogError($"PDU Error : {e.Message}");
             return new Dictionary<string, string> { { "Error", "Fail" } };
             
         }

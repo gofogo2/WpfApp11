@@ -36,7 +36,7 @@ namespace Launcher_SE.Helpers
             int reterned_value = this.Send(bytes, 1024);
         }catch(Exception e)
             {
-                Logger.LogError($"Error : {e.Message}");
+                Logger.LogError($"TurnOnPC Error :mac-{macAddress} , {e.Message}");
             }
 }
 

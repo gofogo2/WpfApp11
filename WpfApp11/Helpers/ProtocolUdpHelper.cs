@@ -49,7 +49,7 @@ namespace WpfApp11.Helpers
             catch (Exception exception)
             {
                 Logger.LogError($"Error : {exception.Message}");
-                Console.WriteLine(exception.ToString());
+                Debug.WriteLine(exception.ToString());
             }
             return null;
         }
@@ -68,7 +68,7 @@ namespace WpfApp11.Helpers
             catch (Exception exception)
             {
                 Logger.LogError($"Error : {exception.Message}");
-                Console.WriteLine(exception.ToString());
+                Debug.WriteLine(exception.ToString());
             }
             return null;
         }

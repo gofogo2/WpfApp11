@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO.Ports;
 
 namespace WpfApp11.Helpers
@@ -32,7 +33,7 @@ namespace WpfApp11.Helpers
             catch (Exception ex)
             {
                 Logger.LogError($"Error : {ex.Message}");
-                Console.WriteLine($"Error opening serial port: {ex.Message}");
+                Debug.WriteLine($"Error opening serial port: {ex.Message}");
                 return false;
             }
         }
@@ -85,7 +86,7 @@ namespace WpfApp11.Helpers
             catch (Exception ex)
             {
                 Logger.LogError($"Error sending data : {ex.Message}");
-                Console.WriteLine($"Error sending data: {ex.Message}");
+                Debug.WriteLine($"Error sending data: {ex.Message}");
                 return false;
             }
         }

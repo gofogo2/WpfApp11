@@ -131,17 +131,13 @@ namespace WpfApp9
                             {
                                 if (p.ContainsKey("Error"))
                                 {
-                                    Logger.LogError("Fail");
                                     UpdatePowerState(false);
                                 }
                                 else
                                 {
-                                    Logger.Log2("Success:" + p);
-
                                     int channelNumber = Convert.ToInt32(Configuration.Channel);
                                     string formattedChannel = channelNumber.ToString("00");
                                     bool isOn = p[formattedChannel] == "ON";
-                                    Logger.Log2("Success isON:" + p);
                                     UpdatePowerState(isOn);
                                 }
                             }
@@ -385,7 +381,7 @@ namespace WpfApp9
             }
             catch (Exception e)
             {
-                Logger.Log2($"Ping 체크 시작 중 오류 발생: {e.Message}");
+                Logger.LogError($"Ping 체크 시작 중 오류 발생: {e.Message}");
             }
         }
 

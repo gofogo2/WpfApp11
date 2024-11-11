@@ -1960,13 +1960,13 @@ namespace WpfApp9
                             }
                             catch (System.Net.Sockets.SocketException ex)
                             {
-                                Console.WriteLine($"SocketException 발생: {ex.Message}");
+                                Debug.WriteLine($"SocketException 발생: {ex.Message}");
                                 check_finish = false;
                                 throw; // 예외를 호출자에게 전달
                             }
                             catch (Exception ex)
                             {
-                                Console.WriteLine($"업로드 중 오류 발생: {ex.Message}");
+                                Debug.WriteLine($"업로드 중 오류 발생: {ex.Message}");
                                 //MessageBox.Show($"전송 중 오류 발생: {ex.Message}", "오류", MessageBoxButton.OK, MessageBoxImage.Error);
 
                                
@@ -1978,7 +1978,7 @@ namespace WpfApp9
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine($"작업 실행 중 오류 발생: {ex.Message}");
+                        Debug.WriteLine($"작업 실행 중 오류 발생: {ex.Message}");
                         check_finish = false;
                     }
 
@@ -2046,13 +2046,13 @@ namespace WpfApp9
                         }
                         catch (System.Net.Sockets.SocketException ex)
                         {
-                            Console.WriteLine($"SocketException 발생: {ex.Message}");
+                            Debug.WriteLine($"SocketException 발생: {ex.Message}");
                             check_finish = false;
                             throw; // 예외를 호출자에게 전달
                         }
                         catch (Exception ex)
                         {
-                            Console.WriteLine($"업로드 중 오류 발생: {ex.Message}");
+                            Debug.WriteLine($"업로드 중 오류 발생: {ex.Message}");
                             //MessageBox.Show($"전송 중 오류 발생: {ex.Message}", "오류", MessageBoxButton.OK, MessageBoxImage.Error);
 
 
@@ -2063,7 +2063,7 @@ namespace WpfApp9
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"작업 실행 중 오류 발생: {ex.Message}");
+                    Debug.WriteLine($"작업 실행 중 오류 발생: {ex.Message}");
                     check_finish = false;
                 }
 

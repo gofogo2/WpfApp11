@@ -10,9 +10,18 @@ namespace WpfApp11.Helpers
  
     public static class Logger
     {
-        public static readonly string LogFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "device_logs"+ $"{DateTime.Now:yyyy-MM-dd}"+".txt");
-        public static readonly string LogPowerFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "power_logs" + $"{DateTime.Now:yyyy-MM-dd}" + ".txt");
-        public static readonly string LogErrorFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "error_logs.txt");
+        public static readonly string LogFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory+"Log\\", $"{DateTime.Now:yyyy-MM-dd}"+"_device_logs.txt");
+        public static readonly string LogPowerFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Log\\", $"{DateTime.Now:yyyy-MM-dd}" + "_power_logs.txt");
+        public static readonly string LogErrorFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "Log\\", $"{DateTime.Now:yyyy-MM-dd}" + "_error_logs.txt");
+
+
+        public static void CreateD()
+        {
+            if (!Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "Log"))
+            {
+                Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + "Log");
+            }
+        }
 
         public static void Log(string deviceName, string deviceType, string action, string result)
         {
@@ -20,6 +29,7 @@ namespace WpfApp11.Helpers
             
             try
             {
+                CreateD();
                 File.AppendAllText(LogFilePath, logMessage + Environment.NewLine);
             }
             catch (Exception ex)
@@ -34,6 +44,7 @@ namespace WpfApp11.Helpers
 
             try
             {
+                CreateD();
                 File.AppendAllText(LogFilePath, logMessage + Environment.NewLine);
             }
             catch (Exception ex)
@@ -48,6 +59,7 @@ namespace WpfApp11.Helpers
 
             try
             {
+                CreateD();
                 File.AppendAllText(LogPowerFilePath, logMessage + Environment.NewLine);
             }
             catch (Exception ex)
@@ -62,6 +74,7 @@ namespace WpfApp11.Helpers
 
             try
             {
+                CreateD();
                 File.AppendAllText(LogErrorFilePath, logMessage + Environment.NewLine);
             }
             catch (Exception ex)

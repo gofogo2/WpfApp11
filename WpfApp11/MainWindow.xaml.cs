@@ -202,6 +202,23 @@ namespace WpfApp9
             {
                 if (logViewer == null || !logViewer.IsVisible)
                 {
+                    logViewer = new LogViewerWindow(Logger.LogPowerFilePath);
+                    logViewer.Title = "PowerLogviewer";
+                    logViewer.Show();
+                }
+                else
+                {
+                    logViewer.Close();
+
+                    logViewer = new LogViewerWindow(Logger.LogPowerFilePath);
+                    logViewer.Title = "PowerLogviewer";
+                    logViewer.Show();
+                }
+            }
+            else if (e.Key == Key.F3)
+            {
+                if (logViewer == null || !logViewer.IsVisible)
+                {
                     logViewer = new LogViewerWindow(Logger.LogErrorFilePath);
                     logViewer.Title = "ErrorLogviewer";
                     logViewer.Show();
@@ -214,11 +231,6 @@ namespace WpfApp9
                     logViewer.Title = "ErrorLogviewer";
                     logViewer.Show();
                 }
-            }
-
-            else if (e.Key == Key.F3)
-            {
-                //GlobalMessageService.ShowMessage("helloworld");
             }
         }
 
