@@ -864,11 +864,20 @@ namespace WpfApp9
 
         private bool isControllingProjectors = false;
 
-        protected override async void OnKeyUp(KeyEventArgs e)
+        protected override void OnKeyUp(KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
             {
-                this.Close();
+                var result = MessageBox.Show(
+                    "종료하시겠습니까?",  // 메시지
+                    "종료 확인",          // 제목
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    this.Close();
+                }
                 return;
             }
         }
