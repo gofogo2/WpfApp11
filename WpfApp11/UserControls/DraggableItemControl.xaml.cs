@@ -244,7 +244,7 @@ namespace WpfApp9
 
         private async Task AutoPowerOnAppotronics()
         {
-            Logger.Log2($"######### APPO {Configuration.IpAddress} - 자동 전원 켜기 시도 ################");
+            //Logger.Log2($"######### APPO {Configuration.IpAddress} - 자동 전원 켜기 시도 ################");
             try
             {
                 isControllingAPPOProjectors = true;
@@ -252,19 +252,19 @@ namespace WpfApp9
                 bool success = await APPOControlProjector(true);
                 if (success)
                 {
-                    Debug.WriteLine($"APPO {Configuration.IpAddress} - 자동 전원 켜기 성공");
-                    Logger.Log2($"APPO {Configuration.IpAddress} - 자동 전원 켜기 성공");
+                    //Debug.WriteLine($"APPO {Configuration.IpAddress} - 자동 전원 켜기 성공");
+                    //Logger.Log2($"APPO {Configuration.IpAddress} - 자동 전원 켜기 성공");
                 }
                 else
                 {
-                    Debug.WriteLine($"APPO {Configuration.IpAddress} - 자동 전원 켜기 실패");
-                    Logger.Log2($"APPO {Configuration.IpAddress} - 자동 전원 켜기 실패");
+                    //Debug.WriteLine($"APPO {Configuration.IpAddress} - 자동 전원 켜기 실패");
+                    //Logger.Log2($"APPO {Configuration.IpAddress} - 자동 전원 켜기 실패");
                 }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"APPO {Configuration.IpAddress} - 자동 전원 켜기 중 오류 발생: {ex.Message}");
-                Logger.Log2($"APPO {Configuration.IpAddress} - 자동 전원 켜기 중 오류 발생: {ex.Message}");
+                //Debug.WriteLine($"APPO {Configuration.IpAddress} - 자동 전원 켜기 중 오류 발생: {ex.Message}");
+                //Logger.Log2($"APPO {Configuration.IpAddress} - 자동 전원 켜기 중 오류 발생: {ex.Message}");
             }
             finally
             {

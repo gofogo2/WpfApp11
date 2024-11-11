@@ -359,7 +359,7 @@ namespace WpfApp9
             {
                 _isconnect = false;
                 MessageBox.Show("FTP 연결 오류: " + ex.Message);
-                Logger.Log2("FTP 연결 오류: " + ex.Message);
+                Logger.LogError("FTP 연결 오류: " + ex.Message);
 
 
             }
@@ -565,7 +565,7 @@ namespace WpfApp9
                 }
                 catch (Exception ex)
                 {
-                    Logger.Log2(ex.Message);
+                    Logger.LogError(ex.Message);
                 }
             }
 
@@ -696,7 +696,7 @@ namespace WpfApp9
                 }
                 catch (Exception ex)
                 {
-                    Logger.Log2(ex.Message);
+                    Logger.LogError(ex.Message);
                 }
             }
             else

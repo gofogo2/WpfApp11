@@ -110,8 +110,8 @@ namespace WpfApp9
 
             //늘 주석
             //pl = new ProtocolHelper();
-            pl = new KIA360ProtocolHelper();
-            pl.Start();
+            //pl = new KIA360ProtocolHelper();
+            //pl.Start();
 
             clickTimer = new DispatcherTimer();
             clickTimer.Interval = TimeSpan.FromMilliseconds(200);
@@ -134,9 +134,7 @@ namespace WpfApp9
 
             pow_timer.Tick += Pow_timer_Tick;
             pow_timer.Interval = TimeSpan.FromSeconds(40);
-
             first_init = true;
-
 
             this.KeyDown += MainWindow_KeyDown;
         }
@@ -370,12 +368,12 @@ namespace WpfApp9
                     string currentTime = now.ToString("HH:mm");
                     if (currentTime == AutoPowerSettingsControl.pow_schedule[currentDay].StartTime.ToString().Substring(0, 5))
                     {
-                        Logger.Log2($"자동 전원 관리 전원 ON - {currentDay}");
+                        Logger.LogPower($"자동 전원 관리 전원 ON - {currentDay}");
                         await OnDevice();
                     }
                     else if (currentTime == AutoPowerSettingsControl.pow_schedule[currentDay].EndTime.ToString().Substring(0, 5))
                     {
-                        Logger.Log2($"자동 전원 관리 전원 OFF - {currentDay}");
+                        Logger.LogPower($"자동 전원 관리 전원 OFF - {currentDay}");
                         await OffDevice();
                     }
                 }
@@ -573,14 +571,14 @@ namespace WpfApp9
 
         private async void TotalPowerBtnOn_Click(object sender, RoutedEventArgs e)
         {
-            Logger.Log2("전체 전원 ON");
+            Logger.LogPower("전체 전원 ON");
             PowerStatusText.Text = "전원 ON";
             await ControlAllDevices(true);
         }
 
         private async void TotalPowerBtnOff_Click(object sender, RoutedEventArgs e)
         {
-            Logger.Log2("전체 전원 OFF");
+            Logger.LogPower("전체 전원 OFF");
             PowerStatusText.Text = "전원 OFF";
             await ControlAllDevices(false);
         }
@@ -600,9 +598,6 @@ namespace WpfApp9
 
             PowerOverlay.Visibility = Visibility.Collapsed;
         }
-
-
-
 
         private async Task UpdateProgressBarAsync(double startValue, double endValue, double durationSeconds)
         {
