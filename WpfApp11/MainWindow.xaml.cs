@@ -133,7 +133,7 @@ namespace WpfApp9
             FileExplorerControl.CloseRequested += FileExplorerControl_CloseRequested;
 
             pow_timer.Tick += Pow_timer_Tick;
-            pow_timer.Interval = TimeSpan.FromSeconds(40);
+            pow_timer.Interval = TimeSpan.FromSeconds(10);
             first_init = true;
 
             this.KeyDown += MainWindow_KeyDown;
@@ -356,6 +356,7 @@ namespace WpfApp9
 
         bool go_pow = false;
 
+        int pow_cnt = 0;
         private async void Pow_timer_Tick(object sender, EventArgs e)
         {
             DateTime now = DateTime.Now;
@@ -376,22 +377,37 @@ namespace WpfApp9
             {
                 if (go_pow == false)
                 {
-                    go_pow = true;
+                   
+
+
+                   
+                    
                     string currentTime = now.ToString("HH:mm");
                     if (currentTime == AutoPowerSettingsControl.pow_schedule[currentDay].StartTime.ToString().Substring(0, 5))
                     {
+                        go_pow = true;
                         Logger.LogPower($"자동 전원 관리 전원 ON - {currentDay}");
                         await OnDevice();
                     }
                     else if (currentTime == AutoPowerSettingsControl.pow_schedule[currentDay].EndTime.ToString().Substring(0, 5))
                     {
+                        go_pow = true;
                         Logger.LogPower($"자동 전원 관리 전원 OFF - {currentDay}");
                         await OffDevice();
                     }
                 }
                 else
                 {
-                    go_pow = false;
+                    pow_cnt++;
+                    Console.WriteLine("pow_cnt : " + pow_cnt);
+                    if (pow_cnt > 6)
+                    {
+                        pow_cnt = 0;
+                        go_pow = false;
+                       
+
+                    }
+                    
                 }
             }
         }
