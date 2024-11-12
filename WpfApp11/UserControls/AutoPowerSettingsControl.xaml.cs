@@ -297,8 +297,15 @@ namespace WpfApp9
 
         }
 
-        private void LoadSchedule()
+        public void LoadSchedule()
         {
+            DayCheckBox.IsChecked = false;
+            all_StartHourComboBox.SelectedIndex = -1;
+            all_StartMinuteComboBox.SelectedIndex = -1;
+
+            all_EndHourComboBox.SelectedIndex = -1;
+            all_EndMinuteComboBox.SelectedIndex = -1;
+
             if (File.Exists(ScheduleFile))
             {
                 string json = File.ReadAllText(ScheduleFile);

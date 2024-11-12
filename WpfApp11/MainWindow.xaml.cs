@@ -131,9 +131,10 @@ namespace WpfApp9
             InitializeAutoPowerSettings();
             GlobalMessageService.MessageReceived += OnGlobalMessageReceived;
             FileExplorerControl.CloseRequested += FileExplorerControl_CloseRequested;
-
-            pow_timer.Tick += Pow_timer_Tick;
+            
             pow_timer.Interval = TimeSpan.FromSeconds(10);
+            pow_timer.Tick += Pow_timer_Tick;
+          
             first_init = true;
 
             this.KeyDown += MainWindow_KeyDown;
@@ -377,11 +378,7 @@ namespace WpfApp9
             {
                 if (go_pow == false)
                 {
-                   
-
-
-                   
-                    
+                 
                     string currentTime = now.ToString("HH:mm");
                     if (currentTime == AutoPowerSettingsControl.pow_schedule[currentDay].StartTime.ToString().Substring(0, 5))
                     {
@@ -395,6 +392,88 @@ namespace WpfApp9
                         Logger.LogPower($"자동 전원 관리 전원 OFF - {currentDay}");
                         await OffDevice();
                     }
+
+
+
+                    if (currentTime == AutoPowerSettingsControl.pow_schedule[currentDay].StartTime.Add(TimeSpan.FromMinutes(10)).ToString().Substring(0, 5))
+                    {
+
+                        //if 꺼져있다면
+                        int half_count = 0;
+                        
+                        foreach (var item in dragItems)
+                        {
+                            if (item.Configuration.IsOn == false)
+                            {
+                                half_count++;
+                            }
+                        }
+
+                        int majority = dragItems.Count / 2;
+
+                        if (half_count > majority)
+                        {
+
+                            go_pow = true;
+                            Logger.LogPower($"자동 전원 관리 전원 ON 다시 실행- {currentDay}");
+                            await OnDevice();
+                        }
+
+
+                        //if (dragItems.Count != 0)
+                        //{
+                        //    if (dragItems[0].Configuration.IsOn == false)
+                        //    {
+
+                        //        go_pow = true;
+                        //        Logger.LogPower($"자동 전원 관리 전원 ON 다시 실행- {currentDay}");
+                        //        await OnDevice();
+                        //    }
+                        //}
+
+
+                     
+                    }
+                    else if (currentTime == AutoPowerSettingsControl.pow_schedule[currentDay].EndTime.Add(TimeSpan.FromMinutes(10)).ToString().Substring(0, 5))
+                    {
+
+                        int half_count = 0;
+
+                        foreach (var item in dragItems)
+                        {
+                            if (item.Configuration.IsOn == true)
+                            {
+                                half_count++;
+                            }
+                        }
+
+                        int majority = dragItems.Count / 2;
+
+                        if (half_count > majority)
+                        {
+                            go_pow = true;
+                            Logger.LogPower($"자동 전원 관리 전원 OFF 다시 실행- {currentDay}");
+                            await OffDevice();
+                        }
+
+
+                        //if 켜져있다면
+
+                        //if (dragItems.Count != 0)
+                        //{
+                        //    if (dragItems[0].Configuration.IsOn == true)
+                        //    {
+
+                        //        go_pow = true;
+                        //        Logger.LogPower($"자동 전원 관리 전원 OFF 다시 실행- {currentDay}");
+                        //        await OffDevice();
+                        //    }
+                        //}
+
+
+                       
+                    }
+
                 }
                 else
                 {
@@ -404,8 +483,6 @@ namespace WpfApp9
                     {
                         pow_cnt = 0;
                         go_pow = false;
-                       
-
                     }
                     
                 }
@@ -1320,6 +1397,7 @@ namespace WpfApp9
 
         private void ShowAutoPowerSettingsOverlay()
         {
+            AutoPowerSettingsControl.LoadSchedule();
             AutoPowerSettingsControl.Visibility = Visibility.Visible;
         }
 
