@@ -76,6 +76,7 @@
     </Window.Resources>
     
     <Grid x:Name="MainGrid" Background="#EEEEEE">
+        
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -88,7 +89,8 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-                <StackPanel Orientation="Horizontal" >
+            <TextBlock Grid.Column="0" Margin="0,-20,0,0" Foreground="DarkGray" >v 0.15</TextBlock>
+            <StackPanel Orientation="Horizontal" >
                 <Border Grid.Column="0" BorderBrush="DarkGray" BorderThickness="0.0" Padding="5">
                     <StackPanel Grid.Column="0" Orientation="Vertical" x:Name="sp_auto" >
                         <!--<TextBlock Text="자동 전원 설정" VerticalAlignment="Center"/>
