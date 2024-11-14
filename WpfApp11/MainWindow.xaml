@@ -89,7 +89,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0" Margin="0,-20,0,0" Foreground="DarkGray" >v 0.15</TextBlock>
+            <TextBlock Grid.Column="0" Margin="0,-20,0,0" Foreground="DarkGray" >v 0.18</TextBlock>
             <StackPanel Orientation="Horizontal" >
                 <Border Grid.Column="0" BorderBrush="DarkGray" BorderThickness="0.0" Padding="5">
                     <StackPanel Grid.Column="0" Orientation="Vertical" x:Name="sp_auto" >
