@@ -121,16 +121,16 @@ public class DlpProjectorHelper : IDisposable
 
         //for (int retry = 0; retry < MaxRetries; retry++)
         //{
-            try
-            {
-                await EnsureConnectedAsync();
-                string response = await SendCommandAsync(command);
-                Debug.WriteLine($"{operationType} Response: {response}");
-                //Logger.Log2($"{operationType} Response: {response}");
-                return ParsePowerStatus(response);
-            }
-            catch (Exception ex)
-            {
+        try
+        {
+            await EnsureConnectedAsync();
+            string response = await SendCommandAsync(command);
+            Debug.WriteLine($"{operationType} Response: {response}");
+            //Logger.Log2($"{operationType} Response: {response}");
+            return ParsePowerStatus(response);
+        }
+        catch (Exception ex)
+        {
             Logger.LogError($"Error in {operationType} Response: {ex.Message}");
             //Debug.WriteLine($"Error in {operationType} (Attempt {retry + 1}): {ex.Message}");
             //if (retry == MaxRetries - 1)
@@ -139,7 +139,7 @@ public class DlpProjectorHelper : IDisposable
             //}
             //await Task.Delay(1000 * (retry + 1)); // Exponential backoff
             return "Error";
-            }
+        }
         //}
         return "Error";
     }

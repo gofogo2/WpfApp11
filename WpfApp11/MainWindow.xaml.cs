@@ -37,7 +37,7 @@ namespace WpfApp9
         private const string ConfigFile = "itemConfig.json";
         private const int GridCellHeight = 200;
         private const int GridCellWidth = 200;
-        private  int GridRows = 5;
+        private int GridRows = 5;
         private int GridColumns = 5;
         //private const int GridRows = 4;
         //private const int GridColumns = 8;
@@ -131,10 +131,10 @@ namespace WpfApp9
             InitializeAutoPowerSettings();
             GlobalMessageService.MessageReceived += OnGlobalMessageReceived;
             FileExplorerControl.CloseRequested += FileExplorerControl_CloseRequested;
-            
+
             pow_timer.Interval = TimeSpan.FromSeconds(10);
             pow_timer.Tick += Pow_timer_Tick;
-          
+
             first_init = true;
 
             this.KeyDown += MainWindow_KeyDown;
@@ -143,7 +143,7 @@ namespace WpfApp9
         private void tt(object sender, EventArgs e)
         {
 
-           
+
             var canvas = sender as Canvas;
             if (canvas != null)
             {
@@ -227,7 +227,7 @@ namespace WpfApp9
                 else
                 {
                     logViewer.Close();
-                    
+
                     logViewer = new LogViewerWindow(Logger.LogErrorFilePath);
                     logViewer.Title = "ErrorLogviewer";
                     logViewer.Show();
@@ -378,7 +378,7 @@ namespace WpfApp9
             {
                 if (go_pow == false)
                 {
-                 
+
                     string currentTime = now.ToString("HH:mm");
                     if (currentTime == AutoPowerSettingsControl.pow_schedule[currentDay].StartTime.ToString().Substring(0, 5))
                     {
@@ -400,7 +400,7 @@ namespace WpfApp9
 
                         //if 꺼져있다면
                         int half_count = 0;
-                        
+
                         foreach (var item in dragItems)
                         {
                             if (item.Configuration.IsOn == false)
@@ -432,7 +432,7 @@ namespace WpfApp9
                         //}
 
 
-                     
+
                     }
                     else if (currentTime == AutoPowerSettingsControl.pow_schedule[currentDay].EndTime.Add(TimeSpan.FromMinutes(10)).ToString().Substring(0, 5))
                     {
@@ -471,7 +471,7 @@ namespace WpfApp9
                         //}
 
 
-                       
+
                     }
 
                 }
@@ -484,7 +484,7 @@ namespace WpfApp9
                         pow_cnt = 0;
                         go_pow = false;
                     }
-                    
+
                 }
             }
         }
@@ -507,7 +507,7 @@ namespace WpfApp9
                         item.Configuration.IsCurrentState = state;
                 }
             }
-          
+
             SaveItemConfigurations();
         }
 
@@ -576,7 +576,7 @@ namespace WpfApp9
 
                 if (onOff)
                 {
-                    if (previousDeviceType.ToLower() == "프로젝터(appotronics)" && item.DeviceType.ToLower() == "relay")    
+                    if (previousDeviceType.ToLower() == "프로젝터(appotronics)" && item.DeviceType.ToLower() == "relay")
                     {
                         Debug.WriteLine($"Adding delay of {powerInterva01}ms between 프로젝터(appotronics) and relay");
                         await Task.Delay(powerInterva01);
@@ -699,7 +699,7 @@ namespace WpfApp9
 
             await Task.WhenAll(progressTask, deviceControlTask);
 
-         
+
 
             PowerOverlay.Visibility = Visibility.Collapsed;
         }
@@ -727,9 +727,9 @@ namespace WpfApp9
         {
             try
             {
-                foreach(var ditem in dragItems)
+                foreach (var ditem in dragItems)
                 {
-                    if(ditem.Configuration.IpAddress == item.IpAddress)
+                    if (ditem.Configuration.IpAddress == item.IpAddress)
                     {
                         if (onOff)
                         {
@@ -739,10 +739,10 @@ namespace WpfApp9
                         {
                             await ditem.pow_off_pjlink();
                         }
-                        
+
                     }
                 }
-             
+
             }
             catch (Exception ex)
             {
@@ -784,15 +784,16 @@ namespace WpfApp9
             {
                 if (onOff)
                 {
-                    for(int i=0;i<5;i++)
-                    wol.TurnOnPC(item.MacAddress);
+                    for (int i = 0; i < 5; i++)
+                        wol.TurnOnPC(item.MacAddress);
                 }
                 else
                 {
                     for (int i = 0; i < 5; i++)
                         UdpHelper.Instance.SendWithIpAsync("power|0", item.IpAddress, 8889);
                 }
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 Logger.LogError($"Error processing PC: {e.Message}");
             }
@@ -812,7 +813,7 @@ namespace WpfApp9
         }
 
 
-        private async void OnRelay(ItemConfiguration item )
+        private async void OnRelay(ItemConfiguration item)
         {
             try
             {
@@ -821,7 +822,8 @@ namespace WpfApp9
                 string hex = $"525920{hexStr}20310D";
                 Logger.Log(item.IpAddress, item.port, "Power ON", hex);
                 await UdpHelper.Instance.SendHexAsync(hex, false, int.Parse(item.port), item.IpAddress);
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 Logger.LogError($"Error : {e.Message}");
             }
@@ -832,12 +834,12 @@ namespace WpfApp9
             try
             {
                 string hexStr = Utils.Instance.IntToHex(item.Channel);
-            Debug.WriteLine(hexStr);
+                Debug.WriteLine(hexStr);
 
 
-            string hex = $"525920{hexStr}20300D";
-            Logger.Log(item.IpAddress, item.port, "Power OFF", hex);
-            await UdpHelper.Instance.SendHexAsync(hex, false, int.Parse(item.port), item.IpAddress);
+                string hex = $"525920{hexStr}20300D";
+                Logger.Log(item.IpAddress, item.port, "Power OFF", hex);
+                await UdpHelper.Instance.SendHexAsync(hex, false, int.Parse(item.port), item.IpAddress);
             }
             catch (Exception e)
             {
@@ -858,7 +860,8 @@ namespace WpfApp9
                 {
                     _ = WebApiHelper.Instance.OffPDU(item.IpAddress, item.Channel);
                 }
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 Logger.LogError($"Error : {e.Message}");
             }
@@ -906,7 +909,7 @@ namespace WpfApp9
                         Height = 200,
                         Stroke = Brushes.White,
                         StrokeThickness = 1
-                        
+
                     };
                     Canvas.SetLeft(cell, j * GridCellWidth);
                     Canvas.SetTop(cell, i * GridCellHeight);
@@ -937,7 +940,7 @@ namespace WpfApp9
             itemControl.MouseLeftButtonUp += Item_MouseLeftButtonUp;
             itemControl.MouseMove += Item_MouseMove;
 
-            
+
             double left = (config.Column * GridCellWidth) + ItemMargin;
             double top = (config.Row * GridCellHeight) + ItemMargin;
 
@@ -1021,7 +1024,7 @@ namespace WpfApp9
             }
         }
 
-      
+
 
         public void ShowFileExplorer(string ftpAddress, string name)
         {
@@ -1173,7 +1176,7 @@ namespace WpfApp9
 
             LoadItemConfigurations();
         }
-      
+
         private void LoadItemConfigurations()
         {
             if (File.Exists(ConfigFile))
@@ -1199,7 +1202,7 @@ namespace WpfApp9
             }
         }
 
-     
+
 
         private async Task AnimateProgressBar(bool isOn)
         {
@@ -1254,7 +1257,7 @@ namespace WpfApp9
             OverlayGrid.Visibility = Visibility.Collapsed;
         }
 
-      
+
 
         private void add_devi(object sender, RoutedEventArgs e)
         {
