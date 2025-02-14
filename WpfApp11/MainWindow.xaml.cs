@@ -75,8 +75,8 @@ namespace WpfApp9
         private string authPath = @"C:\Users\Default\AppData";
         private string authCode = @"b500b9a2bb02";
 
-        //ProtocolHelper pl;
-        KIA360ProtocolHelper pl;
+        ProtocolHelper pl;
+        //KIA360ProtocolHelper pl;
 
 
         private bool checkAuth()
