@@ -690,6 +690,14 @@ namespace WpfApp9
 
         private async Task ControlAllDevices(bool turnOn)
         {
+            if (turnOn)
+            {
+                PowerStatusText.Text = "전원 ON";
+            }
+            else
+            {
+                PowerStatusText.Text = "전원 OFF";
+            }
             UpdateAllDevicesCurrentState(turnOn);
             PowerOverlay.Visibility = Visibility.Visible;
             PowerProgressBar.Value = 0;
