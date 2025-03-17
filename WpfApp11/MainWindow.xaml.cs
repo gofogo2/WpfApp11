@@ -75,7 +75,7 @@ namespace WpfApp9
         private string authPath = @"C:\Users\Default\AppData";
         private string authCode = @"b500b9a2bb02";
 
-        ProtocolHelper pl;
+        //ProtocolHelper pl;
         //KIA360ProtocolHelper pl;
 
 
@@ -591,13 +591,13 @@ namespace WpfApp9
                 {
                     if (previousDeviceType.ToLower() == "pc" && item.DeviceType.ToLower() == "pdu")
                     {
-                        Debug.WriteLine($"Adding delay of {powerInterva01}ms between pc and pdu");
-                        await Task.Delay(powerInterva01);
+                        Debug.WriteLine($"Adding delay of {powerInterva02}ms between pc and pdu");
+                        await Task.Delay(powerInterva02);
                     }
                     else if (previousDeviceType.ToLower() == "relay" && item.DeviceType.ToLower() == "프로젝터(appotronics)")
                     {
-                        Debug.WriteLine($"Adding delay of {powerInterva02}ms between relay and 프로젝터(appotronics)");
-                        await Task.Delay(powerInterva02);
+                        Debug.WriteLine($"Adding delay of {powerInterva01}ms between relay and 프로젝터(appotronics)");
+                        await Task.Delay(powerInterva01);
                     }
                 }
 
