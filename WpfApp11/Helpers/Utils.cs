@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Media;
 
 namespace WpfApp11.Helpers
 {
@@ -30,6 +33,23 @@ namespace WpfApp11.Helpers
                 }
                 return _instance;
             }
+        }
+
+        public bool checkAuth(string authPath,string authCode)
+        {
+            DirectoryInfo di = new DirectoryInfo(authPath);
+            var item = di.GetDirectories();
+            var tf = false;
+
+            foreach (var i in item)
+            {
+                if (i.Name.Contains(authCode))
+                {
+                    tf = true;
+                    break;
+                }
+            }
+            return tf;
         }
 
 

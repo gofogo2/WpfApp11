@@ -291,7 +291,7 @@
 
 
             <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" x:Name="editpanel" Visibility="Collapsed">
-                <Button  Width="80" Height="25" Margin="0,0,10,0" Click="item_delete" >
+                <Button  Width="80" Height="25" Margin="0,0,10,0" Click="ItemDelete" >
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
                             
@@ -299,7 +299,7 @@
                         </StackPanel>
                     </Button.Content>
                 </Button>
-                <Button  Width="80" Height="25" Click="editpanel_close" >
+                <Button  Width="80" Height="25" Click="CloseEditPanel" >
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="취소"/>
@@ -315,11 +315,11 @@
         <Border Grid.Row="2" BorderThickness="1" BorderBrush="#999999" Margin="20" CornerRadius="5" Background="White">
             <ScrollViewer  Style="{StaticResource FlatScrollViewerStyle}"  Grid.Row="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="Transparent">
                 <Grid x:Name="GridContainer" Background="White" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,10,0,10">
-                    <Canvas x:Name="GridCanvas" MouseRightButtonDown="tt" MouseLeftButtonDown="Canvas_MouseDown">
+                    <Canvas x:Name="GridCanvas" MouseRightButtonDown="Canvas_MouseRightDown" MouseLeftButtonDown="Canvas_MouseDown">
                         <Canvas.ContextMenu>
                             <ContextMenu Style="{StaticResource CustomContextMenuStyle}">
                             <!--<ContextMenu>-->
-                                <MenuItem Style="{StaticResource CustomMenuItemStyle}"   Click="add_devi" MouseEnter="MenuButton_MouseEnter" MouseLeave="MenuButton_MouseLeave"  FontFamily="{StaticResource NotoSansFontBoldFamily}">
+                                <MenuItem Style="{StaticResource CustomMenuItemStyle}"   Click="AddDevice" MouseEnter="MenuButton_MouseEnter" MouseLeave="MenuButton_MouseLeave"  FontFamily="{StaticResource NotoSansFontBoldFamily}">
                                     <MenuItem.Header>
                                         <TextBlock Text="장비 추가"  FontSize="16" FontFamily="{StaticResource NotoSansFontBoldFamily}" FontWeight="Bold"/>
                                     </MenuItem.Header>

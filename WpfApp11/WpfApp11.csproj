@@ -65,8 +65,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Helpers\DlpProjectorHelper.cs" />
-    <Compile Include="Helpers\DlpProjectorHelper2.cs" />
     <Compile Include="Helpers\DlpProjectorHelper3.cs" />
     <Compile Include="Helpers\GlobalMessageService.cs" />
     <Compile Include="Helpers\KIA360ProtocolHelper.cs" />
@@ -75,6 +73,7 @@
     <Compile Include="Helpers\PJLinkHelper.cs" />
     <Compile Include="Helpers\ProtocolHelper.cs" />
     <Compile Include="Helpers\ProtocolUdpHelper.cs" />
+    <Compile Include="Helpers\RelayHelper.cs" />
     <Compile Include="Helpers\SerialHelper.cs" />
     <Compile Include="Helpers\TcpHelper.cs" />
     <Compile Include="Helpers\UdpHelper.cs" />
@@ -220,6 +219,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="README.md" />
     <None Include="sample\itemConfig.json" />
     <None Include="sample\schedule.json" />
     <None Include="sample\settings.json" />

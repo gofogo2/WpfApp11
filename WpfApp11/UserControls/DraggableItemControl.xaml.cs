@@ -271,7 +271,7 @@ namespace WpfApp9
 
         public async Task APPOControlProjector(string ipAddress, bool powerOn)
         {
-            using (var projectorHelper = new DlpProjectorHelper(ipAddress))
+            using (var projectorHelper = new DlpProjectorHelper3(ipAddress))
             {
                 try
                 {

@@ -72,7 +72,7 @@ namespace WpfApp11.Helpers
         {
             if (isDisposed)
             {
-                throw new ObjectDisposedException(nameof(DlpProjectorHelper2));
+                throw new ObjectDisposedException(nameof(DlpProjectorHelper3));
             }
 
             for (int retry = 0; retry < MaxRetries; retry++)
@@ -103,7 +103,7 @@ namespace WpfApp11.Helpers
         {
             if (isDisposed)
             {
-                throw new ObjectDisposedException(nameof(DlpProjectorHelper2));
+                throw new ObjectDisposedException(nameof(DlpProjectorHelper3));
             }
 
             using (TcpClient client = await CreateConnectionAsync())

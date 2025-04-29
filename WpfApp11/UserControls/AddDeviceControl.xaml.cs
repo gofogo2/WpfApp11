@@ -118,7 +118,7 @@ namespace WpfApp11.UserControls
             //CreateDraggableItem(newConfig);
             //SaveItemConfigurations();
             //var main = Application.Current.MainWindow as MainWindow;
-            main.createitem(NewDeviceConfig);
+            main.CreateItem(NewDeviceConfig);
 
             main.add_device_ppanel.Visibility = Visibility.Collapsed;
 
